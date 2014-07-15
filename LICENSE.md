@@ -1,1 +1,1 @@
-Copying isn't allowed. All right reserved.
+Copying isn't allowed. All rights reserved.
