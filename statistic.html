@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="./css/style.css" rel="stylesheet" type="text/css">
+    <link href="./css/text.css" rel="stylesheet" type="text/css">
+    <link href="./css/statistic.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="./js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="./js/tools.js"></script>
+    <script type="text/javascript" src="./lang/lang.js"></script>
+    <script type="text/javascript" src="./js/statistic.js"></script>
+  </head>
+  
+  <body>
+	<div id="banner" style="width:100%;padding-top:5px;">
+	<div class="header-info">
+		<span class="b18"><script>d.write(STR_ACCOUNT_USER+": ");</script></span>
+		<a class="link b18" href="#"><script>d.write(STR_ACCOUNT_MGR+": ");</script></a>
+		<a class="link b18 logout" href="#"><script>d.write(STR_LOGIN_LOGOUT);</script></a>
+		<span id="datetime" class="b14" style="margin-left:20px;"></span>
+	</div>
+	</div>
+	
+    <div id="content-wrapper">
+        <div class="container-sidebar"></div>
+        <div id="content">
+        	<div height="600" class="data-wrapper">
+        		<div class="data-ChartWrapper">
+				<div class="data-ChartBox">
+					<canvas id="chart" width="600" height="500"></canvas>
+				</div>
+				<div class="data-ChartTab">
+					<table id="chartData" class="data-ChartTab mlBoxShadow">
+					<tr>
+						<th>分類</th><th>人數</th>
+					 </tr>
+
+					<tr style="color: #0DA068">
+					  <td>週六晚崇</td><td>90人</td>
+					</tr>
+
+					<tr style="color: #194E9C">
+					  <td>週日第一堂</td><td>100人</td>
+					</tr>
+
+					<tr style="color: #ED9C13">
+					  <td>週日第二堂</td><td>150人</td>
+					</tr>
+
+					<tr style="color: #ED5713">
+					  <td>週日第一堂</td><td>45人</td>
+					</tr>
+
+					<tr style="color: #057249">
+					  <td>小馬學苑</td><td>70人</td>
+					</tr>
+
+					<tr style="color: #5F91DC">
+					  <td>星期三晚崇</td><td>30人</td>
+					</tr>
+
+					<tr style="color: #F88E5D">
+					  <td>異像之子</td><td>80人</td>
+					</tr>
+				</table>
+			</div>
+			</div>
+			</div>
+
+			<div class="mlCtrlBox">
+				<a class="mlButton bB26" href="#"><script>d.write(STR_OK);</script></a>
+			</div>
+		</div>
+		
+		</div>
+    </div>
+  <!--
+    <div id="_wrapper">
+    </div>
+	-->
+  </body>
+
+</html>

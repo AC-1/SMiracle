@@ -1,0 +1,74 @@
+@charset "utf-8";
+.header-info
+{	position: absolute;
+	float: left;
+	right:1%; min-width:10px;
+}
+#content-wrapper {
+    position: relative;
+	margin: 41px auto;
+	width:90%;
+}
+#content {
+    position: relative;
+	border: 5px groove rgba(31,101,231,0.3);
+    background: rgba(221,221,221,0.8);
+	width:97%; height:100%;
+	margin-bottom: 190px;
+}
+
+
+.data-wrapper
+{   position: relative;
+	width:98%; min-height:100px; height: 100%;
+	border: 3px solid #CACACA;
+	margin: 20px auto;
+	background: #FFF;
+}
+.data-ChartWrapper
+{   position: relative;
+	width: 100%; height: 600px;
+}
+.data-ChartBox
+{	width: 600px;	height: 500px;
+	margin: 40px;
+	float: left;
+	cursor: pointer;
+}
+.data-ChartTab
+{	width: 300px;
+	margin: 20px 0 0 10px;
+	float: left;
+}
+
+#chart, #chartData {
+  border: 1px solid #333;
+  background: #ebedf2 url("../images/gradient.png") repeat-x 0 0;
+}
+
+#chartData {
+  width: 250px;
+}
+
+#chartData th, #chartData td {
+  padding: 0.5em;
+  border: 1px dotted #666;
+  text-align: left;
+}
+
+#chartData th {
+  border-bottom: 2px solid #333;
+  text-transform: uppercase;
+}
+
+#chartData td {
+  cursor: pointer;
+}
+
+#chartData td.highlight {
+  background: #e8e8e8;
+}
+
+#chartData tr:hover td {
+  background: #f0f0f0;
+}

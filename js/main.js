@@ -14,6 +14,12 @@ function sllcSetContentMenu(obj, data)
 		s += sprintf("<li><span>%s</span><div class='txtBoxBg'></div></li>", data[i].name);
 	$(obj).html("<ul>"+s+"</ul>");
 }
+function onOpenStatistic(obj, data)
+{	var iframes=window.parent.document.getElementsByTagName('IFRAME');
+	for (var i = 0; i < iframes.length; i++) {
+		if (iframes[i].contentWindow === window) iframes[i].src="./statistic.html";
+	}
+}
 function onSubmit(obj, data)
 {	var iframes=window.parent.document.getElementsByTagName('IFRAME');
 	for (var i = 0; i < iframes.length; i++) {
@@ -55,6 +61,10 @@ $(function()
 		} else if (event.type == 'mouseout'){
 			$(this).removeClass("tB24");
 		}
+		return false;
+	});
+	$(".goStatistic").on('click', function (ev){
+		onOpenStatistic();
 		return false;
 	});
 	$(".goPorfile").on('click', function (ev){
