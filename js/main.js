@@ -35,7 +35,7 @@ function onLogout(obj, data)
 
 $(function()
 {	sllcSetDateTime();
-	sllcSetContentMenu($("div#sidebar div:first-child"), sllcData);
+	sllcSetContentMenu($("div#menubar div:first-child"), sllcData);
 	
 	$("div").delegate('.content-menu ul li', 'click', function (ev){
 		$(this).parent().find('.selected-content').removeClass('selected-content');

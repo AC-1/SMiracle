@@ -1,32 +1,6 @@
 @charset "utf-8";
-#content-wrapper {
-    position: relative;
-	margin: 41px auto;
-	width:90%;
-}
-#content {
-    position: relative;
-	border: 5px groove rgba(31,101,231,0.3);
-    background: rgba(221,221,221,0.8);
-	width:97%; height:100%;
-	margin-bottom: 90px;
-	padding: 25px 15px;
-}
-
-.header-info
-{	position: absolute;
-	float: left;
-	right:1%; min-width:10px;
-}
-.data-wrapper
-{	position: relative;
-	width:100%; min-height:100px;
-	border: 1px solid #FFF;
-	margin-bottom: 35px;
-	padding: 9px 0px;
-}
 .data-wrapper p
-{	padding: 9px;
+{	padding: 9px; width: 100%;
 }
 .data-wrapper div
 {	padding: 0px 29px;
@@ -37,4 +11,5 @@
 	width:205px;	height:170px;
 	border: 3px solid #FFF;
     background: rgb(238,238,238);
+	 float:left;
 }
