@@ -124,6 +124,7 @@ footer {
 	float: left;
     border: 5px groove rgba(31,101,231,0.3);
     background: rgba(221,221,221,0.8);
+	margin-bottom: 90px;
 }
 .data-wrapper
 {	position: relative;

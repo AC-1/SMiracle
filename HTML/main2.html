@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <title>SLLC MiracleSystem</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="./css/style.css" rel="stylesheet" type="text/css">
+    <link href="./css/text.css" rel="stylesheet" type="text/css">
+    <link href="./css/main2.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="./js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="./js/tools.js"></script>
+    <script type="text/javascript" src="./lang/lang.js"></script>
+    <script type="text/javascript" src="./js/main.js"></script>
+	<script>
+	var sllcData=[
+		{"name":"兒童資料","data":[
+			{"name":"一年級"}, {"name":"二年級"}, {"name":"三年級"},{"name":"四年級"},{"name":"五年級"},{"name":"六年級"}]},
+		{"name":"牧區資料","data":[
+			{"name":"一年級"}, {"name":"二年級"}, {"name":"三年級"},{"name":"四年級"},{"name":"五年級"},{"name":"六年級"}]},
+		{"name":"統計與收尋","data":[
+			{"name":"一年級"}, {"name":"二年級"}, {"name":"三年級"},{"name":"四年級"},{"name":"五年級"},{"name":"六年級"}]},
+		{"name":"收尋與統計","data":[
+			{"name":"一年級"}, {"name":"二年級"}, {"name":"三年級"},{"name":"四年級"},{"name":"五年級"},{"name":"六年級"}]},
+		{"name":"統收與尋計","data":[
+			{"name":"一年級"}, {"name":"二年級"}, {"name":"三年級"},{"name":"四年級"},{"name":"五年級"},{"name":"六年級"}]},
+		{"name":"統計尋與收","data":[
+			{"name":"一年級"}, {"name":"二年級"}, {"name":"三年級"},{"name":"四年級"},{"name":"五年級"},{"name":"六年級"}]}
+	];
+	</script>
+  </head>
+  
+  <body>
+	<div id="infobar">
+		<span class="b18"><script>d.write(STR_ACCOUNT_USER+": ");</script></span>
+		<a class="link b18" href="#"><script>d.write(STR_ACCOUNT_MGR);</script></a>
+		<a class="link b18 logout" href="#"><script>d.write(STR_LOGIN_LOGOUT);</script></a>
+		<span id="datetime" class="b14"></span>
+	</div>
+	
+      <div id="content-wrapper">
+		<div id="statusbar" class="t18 container-statusbar"><span class='b12'> &#12299; </span><span class='b18'>&nbsp;<span></div>
+        <div id="menubar" class="t20">
+          <div class="content-menu-panel"></div>
+          <div class="content-menu-panel" style="display:none">
+            <ul class="content-menu">
+              <li><span>幼兒部</span><div></div></li>
+              <li><span>國小部</span><div></div></li>
+            </ul>
+        </div>
+        <div class="content-menu-panel">
+            <ul class="content-menu">
+              <li><span>一年級</span><div></div></li>
+              <li><span>二年級</span><div></div></li>
+              <li><span>三年級</span><div></div></li>
+              <li><span>四年級</span><div></div></li>
+              <li><span>五年級</span><div></div></li>
+              <li><span>六年級</span><div></div></li>
+            </ul>
+        </div>
+        <div class="content-menu-panel">
+            <ul class="content-menu">
+              <li class="goStatistic"><span>兒童資料</span><div></div></li>
+              <li><span>東東小組</span><div></div></li>
+              <li><span>西西小組</span><div></div></li>
+              <li><span>誠興小組</span><div></div></li>
+              <li><span>未分類</span><div></div></li>
+            </ul>
+        </div>
+		
+        <div class="content-menu-panel">
+            <ul class="content-menu">
+              <li class="goPorfile"><span>陳依依</span><div></div></li>
+              <li class="goPorfile"><span>陳珥貳</span><div></div></li>
+              <li class="goPorfile"><span>陳姍姍</span><div></div></li>
+            </ul>
+        </div>
+		</div>
+      </div>
+  </body>
+
+</html>

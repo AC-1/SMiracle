@@ -11,8 +11,8 @@ function sllcSetDateTime()
 function sllcSetContentMenu(obj, data)
 {	var i, s;
 	for (i=0,s=""; i<data.length; i++)
-		s += sprintf("<li><span>%s</span><div class='txtBoxBg'></div></li>", data[i].name);
-	$(obj).html("<ul>"+s+"</ul>");
+		s += sprintf("<li class=\"l%d\"><span>%s</span><div class='txtBoxBg'></div></li>", i+1, data[i].name);
+	$(obj).html("<ul class=\"content-menu\">"+s+"</ul>").css("display","block");
 }
 function onOpenStatistic(obj, data)
 {	var iframes=window.parent.document.getElementsByTagName('IFRAME');
@@ -37,12 +37,12 @@ $(function()
 {	sllcSetDateTime();
 	sllcSetContentMenu($("div#menubar div:first-child"), sllcData);
 	
-	$("div").delegate('.content-menu ul li', 'click', function (ev){
-		$(this).parent().find('.selected-content').removeClass('selected-content');
-		$(this).addClass("selected-content").removeClass("tB24");
+	$("div").delegate('.content-menu li', 'click', function (ev){
+		$(this).parent().find('.selected').removeClass('selected');
+		$(this).addClass("selected");
 		var i, p, s;
 		for (p = $(this).parent().parent(), s="", i=1; $(p).length; p = $(p).prev(), i+=1)
-		{	s = "<span class='b12'> &#12299; </span><a class='b18' href='#'>"+$(p).find("li.selected-content span").html()+"</a>" + s;}
+		{	s = "<span class='b12'> &#12299; </span><a class='b18' href='#'>"+$(p).find("li.selected span").html()+"</a>" + s;}
 		$("#statusbar").html(s);
 		$("#sidebar").css("width", i*201+"px");
 		p = $(this).parent().parent().next();
@@ -55,11 +55,11 @@ $(function()
 		else	$("footer").css("position", "absolute");
 		return false;
 	});
-	$("div").delegate('.content-menu ul li', 'mouseenter mouseleave', function (ev){
+	$("div").delegate('.content-menu li', 'mouseenter mouseleave', function (ev){
 		if (event.type == 'mouseover') {
-			if (!$(this).hasClass('selected-content')) $(this).addClass("tB24");
+			//if (!$(this).hasClass('content-selected')) $(this).addClass("tB24");
 		} else if (event.type == 'mouseout'){
-			$(this).removeClass("tB24");
+			//$(this).removeClass("tB24");
 		}
 		return false;
 	});

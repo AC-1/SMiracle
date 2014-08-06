@@ -24,6 +24,32 @@
 	margin: 15px 0 0 15px;
 	float: left;
 }
+.chart-title
+{
+	width: 100%;
+	text-align: center;
+}
+.csGeoCenter
+{
+	width: 96%;
+	margin: 5px auto;
+}
+.statistic-table
+{
+	width: 100%;
+	text-align: center;
+	border: 2px solid #ED9C13;
+	background: #CCC;
+}
+.statistic-table td
+{
+	padding: 6px;
+	background: #D0D0D0;
+}
+.statistic-table-tr
+{
+	border: 2px solid #5F91DC;
+}
 
 #chart, #chartData {
   border: 1px solid #333;
