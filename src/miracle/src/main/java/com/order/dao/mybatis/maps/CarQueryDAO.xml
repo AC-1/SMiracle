@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.order.dao.CarQueryDAO">
+
+	<!-- <cache /> -->
+
+	<resultMap id="carMap" type="Car">
+		<id property="id" column="ID" />
+		<result property="name" column="NAME" />
+	</resultMap>
+	
+	<resultMap id="carVOMap" type="CarVO">
+		<id property="id" column="ID" />
+		<result property="name" column="NAME" />
+	</resultMap>
+	
+	<sql id="colunms">
+		ID, NAME
+	</sql>
+	
+	
+	
+	<select id="findById" parameterType="map" resultMap="carMap">
+		select * from Car
+		where ID=#{id}
+	</select>
+	
+	<select id="findByIdName" parameterType="map" resultMap="carMap">
+		select * from Car
+		where ID=#{id} and NAME=#{name}
+	</select>
+	
+	<select id="findCarAll"  resultMap="carMap">
+		select id, name from Car
+	</select>
+	
+	<select id="findByCarModel" parameterType="Car" resultMap="carMap">
+		select * from Car
+		where ID=#{id} and NAME=#{name}
+	</select>
+	
+	<select id="findByCarVO" parameterType="CarVO" resultMap="carVOMap">
+		select * from Car
+		where ID=#{id} and NAME=#{name}
+	</select>
+	
+	
+	
+	
+	<select id="findAll" resultMap="carMap">
+		select <include refid="colunms" /> from CAR
+		order by ID
+	</select>
+
+	<select id="findByKey" parameterType="integer" resultMap="carMap">
+		select <include refid="colunms" /> from CAR
+		where ID=#{id}
+	</select>
+	
+
+</mapper>
