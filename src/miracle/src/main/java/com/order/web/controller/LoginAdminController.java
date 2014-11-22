@@ -204,13 +204,13 @@ public class LoginAdminController extends BaseController {
 		}else{
 			
 			vo = (Account)s.getAttribute("loginVo");
-			String shopId1 = vo.getUserId();
+			String userId1 = vo.getUserId();
 			String password1 = vo.getUserPw();
 			
 			String encPassword = sert.encrypt(password);//加密比對
 			
 			//因帳密和loginVo的session帳密傳進來輸入的不對，以新帳密所以重新檢查帳密
-			if(!userId.equals(shopId1) || !encPassword.equals(password1)){//密碼檢核和原來不對，進行下一步檢核
+			if(!userId.equals(userId1) || !encPassword.equals(password1)){//密碼檢核和原來不對，進行下一步檢核
 				//重新檢查是否有此帳號密碼
 				if (tls.chkEngOrNum(userId) && tls.chkEngOrNum(password)
 						&& !tls.chkReqValue(req, userId, 4, 30)
@@ -248,7 +248,7 @@ public class LoginAdminController extends BaseController {
 			}
 				
 			//以原有的loginVo session帳密登入進行取資料			
-			vo = loginService.queryUser(userId, sert.decrypt(password1));//重新取得資料
+			vo = loginService.queryUser(userId1, sert.decrypt(password1));//重新取得資料
 					
 			s.setMaxInactiveInterval(60 * 60 * IntHours);
 			s.setAttribute("loginVo",vo);//重新寫入session
