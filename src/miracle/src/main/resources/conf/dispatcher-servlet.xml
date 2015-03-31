@@ -13,49 +13,13 @@
 	">
 	<!--Handle requests for static resources -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
-	<!-- <mvc:resources mapping="/cbg-include/**" location="/resources/cbg-include/" />
-	<mvc:resources mapping="/js/**" location="/resources/js/" /> -->
-
-	<!-- Enable annotation driven controllers, validation etc... -->
-	<!-- <mvc:annotation-driven /> -->
-	<mvc:annotation-driven>
-        <mvc:message-converters register-defaults="true">
-        	<!-- 避免IE在ajax請求時，返回json出現下載 -->
-            <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-                <property name="supportedMediaTypes" value="text/html;charset=UTF-8" />
-            </bean>
-        </mvc:message-converters>
-   </mvc:annotation-driven>
-    
-    <!-- 國際中文化拦截器配置 -->
-	<!-- <mvc:interceptors>  
-	    <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />  
-	</mvc:interceptors> -->
-
-	<!-- The controllers will be automatically discovered and registered as beans -->
-	<!-- <context:component-scan base-package="com.taikoomotors.portal.web" />  -->
+	
 	
 	<!-- 国际化配置for i18n -->
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
 		<property name="defaultLocale" value="zh_TW" />
 	</bean>
 	
-	<!-- 避免IE在ajax請求時，返回json出現下載 -->
-   <!-- <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">     
-        <property name="supportedMediaTypes">
-            <list>
-                <value>application/json;charset=UTF-8</value>
-            </list>
-        </property>
-    </bean>
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">      
-        <property name="messageConverters">      
-            <list >      
-                <ref bean="jacksonMessageConverter" />      
-            </list>      
-        </property>      
-    </bean> -->  
-
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
@@ -81,39 +45,18 @@
 	</bean>
 	
 	<!-- 登入攔截、過濾器 -->
-	<mvc:interceptors>
+	<!-- <mvc:interceptors>
 	    <mvc:interceptor>
 	   		 <mvc:mapping path="/loginadmin/home"/>
-	         <!-- <mvc:mapping path="/index/security"/> -->
+	         <mvc:mapping path="/index/security"/>
 	         <bean class="com.order.web.controller.SecurityInterceptor"/>
 	    </mvc:interceptor>
 	 	<mvc:interceptor>
 	         <mvc:mapping path="/*/holy/**"/>
 	         <bean class="com.order.web.controller.SecurityInterceptorAll"/>
 		</mvc:interceptor>
-	</mvc:interceptors>
+	</mvc:interceptors> -->
 	
-   <!-- <bean id="propertiesLoader" class="com.taikoomotors.ep.taglib.PropertiesLoader" parent="messageSource">
-		<property name="useCodeAsDefaultMessage" value="true" />
-		<property name="basenames">
-			<list>
-				<value>/WEB-INF/conf/i18n/common</value>
-			</list>
-		</property>
-	</bean>  -->
-	
-	<!-- <bean id="customDateEditor" class="org.springframework.beans.propertyeditors.CustomDateEditor">
-		<constructor-arg>
-			<bean class="java.text.SimpleDateFormat">
-				<constructor-arg>
-					<value>yyyyMMdd</value>
-				</constructor-arg>
-			</bean>
-		</constructor-arg>
-		<constructor-arg>
-			<value>true</value>
-		</constructor-arg>
-	</bean> -->
 	
 	<!-- 發送Email配置 -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">

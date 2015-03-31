@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miracle.dao.CarTrsDAO">
+
+	<!-- <cache /> -->
+
+	<resultMap id="carMap" type="Car">
+		<id property="id" column="ID" />
+		<result property="name" column="NAME" />
+	</resultMap>
+	
+	
+	<sql id="colunms">
+		ID, NAME
+	</sql>
+	
+
+	<insert id="insertCar" parameterType="map">
+		insert into car ( ID, NAME )
+		values (#{id}, #{name})
+	</insert>
+	
+	<insert id="insertCarByCar" parameterType="Car">
+		insert into car ( ID, NAME )
+		values (#{id}, #{name})
+	</insert>
+	
+	<insert id="insertCarByCarVO" parameterType="CarVO">
+		insert into car ( ID, NAME )
+		values (#{id}, #{name})
+	</insert>
+	
+	<insert id="updateCarByCarVO" parameterType="CarVO">
+	    update car
+		set NAME=#{name}
+		where ID=#{id}
+	</insert>
+	
+	<insert id="updateCarByIdName" parameterType="map">
+	    update car
+		set NAME=#{name}
+		where ID=#{id}
+	</insert>
+	
+	<delete id="deleteCarById" parameterType="map">
+		delete from car
+		where ID=#{id}
+	</delete>
+
+	
+	<insert id="insert" parameterType="Car">
+		insert into CAR (<include refid="colunms" />)
+		values (#{id}, #{name,jdbcType=VARCHAR} )
+	</insert>
+	
+	<update id="update" parameterType="Car">
+		update CAR
+		set name=#{name,jdbcType=VARCHAR}
+		where ID=#{id}
+	</update>
+	
+	<delete id="deleteByKey" parameterType="integer">
+		delete from CAR
+		where ID=#{id}
+	</delete>
+	
+
+</mapper>

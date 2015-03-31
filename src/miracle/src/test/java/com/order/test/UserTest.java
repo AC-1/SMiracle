@@ -3,17 +3,19 @@ package com.order.test;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.order.mode.Car;
-import com.order.service.CarService;
-import com.order.util.SecretUtil;
-import com.order.util.email.Email;
-import com.order.util.email.MailUtil;
+import com.miracle.common.Email;
+import com.miracle.common.MailUtil;
+import com.miracle.common.SecretUtil;
+import com.miracle.dao.ChildrenQueryDAO;
+import com.miracle.mode.Contact;
+import com.miracle.mode.vo.PeopleVO;
 
  
  
@@ -21,14 +23,15 @@ import com.order.util.email.MailUtil;
 public class UserTest {
  
 //private CarService carService;
+private ChildrenQueryDAO childrenQueryDAO;
 private MailUtil mailUtil;
      
     @Before
     public void before(){                                                                    
         @SuppressWarnings("resource")
-        ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"classpath:conf/dataSource.xml"
-                ,"classpath:conf/dispatcher-servlet.xml" ,"classpath:conf/service-transaction.xml"});
+        ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"classpath:conf/root-context.xml"});
 //        carService = (CarService) context.getBean("CarService");
+        childrenQueryDAO = (ChildrenQueryDAO) context.getBean("childrenQueryDAO");
         mailUtil = (MailUtil) context.getBean("mailUtil");
     }
      
@@ -85,9 +88,11 @@ private MailUtil mailUtil;
     
     
     /** 查加解密處理*/
-    @Test
+//    @Test
     public void decode(){
     	try {
+    		UUID uuid = UUID.randomUUID();
+    		System.out.println(uuid.toString().length());
     		SecretUtil sert = new SecretUtil();
     		//密碼加密
     		String encryptPwd = sert.encrypt("222");
@@ -102,5 +107,14 @@ private MailUtil mailUtil;
 			
 			
 		}
+    }
+    
+    
+    @Test
+    public void Test(){
+//    	PeopleVO peopleVO = childrenQueryDAO.findPeopleData("P_222222222");
+    	
+    	List<Contact> contact = childrenQueryDAO.findContact("P_222222222");
+    	System.out.println(contact);
     }
 }

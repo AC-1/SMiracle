@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miracle.dao.UsersDao">
+
+	<!-- <cache /> -->
+
+	<resultMap id="usersMap" type="Users">
+		<result property="id" column="id" />
+		<result property="createDate" column="create_date" />
+		<result property="password" column="password" />
+		<result property="username" column="username" />
+	</resultMap>
+	
+	
+
+	<select id="findByUsersName" parameterType="string" resultMap="usersMap">
+		select id, create_date, password, username 
+		from users 
+		where username = #{usersName}
+	</select>
+	
+
+</mapper>

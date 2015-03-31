@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miracle.dao.ChildrenQueryDAO">
+
+	<!-- <cache /> -->
+	
+	<resultMap id="peopleVOMap" type="PeopleVO">
+		<result property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="gender" column="GENDER" />
+		<result property="birthday" column="BIRTHDAY" />
+		<result property="school" column="SCHOOL" />
+		<result property="grade" column="GRADE" />
+		<result property="groupName" column="GROUP_NAME" />
+		<result property="groupLeader" column="GROUP_LEADER" />
+		<result property="worshipName" column="WORSHIP_NAME" />
+		<result property="careWeekday" column="CARE_WEEKDAY" />
+		<result property="caretStime" column="CARE_STIME" />
+		<result property="caretEtime" column="CARE_ETIME" />
+	</resultMap>
+	
+	<resultMap id="contactMap" type="Contact">
+		<result property="name" column="NAME" />
+		<result property="tel1" column="TEL1" />
+		<result property="tel2" column="TEL2" />
+		<result property="addr" column="ADDR" />
+	</resultMap>
+
+	<select id="findPeopleData" parameterType="string" resultMap="peopleVOMap">
+		select A.ID, A.NAME, A.GENDER, A.SCHOOL, A.GRADE,
+		       UNIX_TIMESTAMP(A.BIRTHDAY) BIRTHDAY,
+		       B.NAME AS GROUP_NAME, B.LEADER AS GROUP_LEADER, C.NAME AS WORSHIP_NAME,
+		       D.WEEKDAY AS CARE_WEEKDAY, D.STIME AS CARE_STIME, D.ETIME AS CARE_ETIME
+		from people A
+		left join PEOPLE_GROUP B on A.GROUP = B.ID
+		left join WORSHIP C on A.WORSHIP = C.ID
+		left join CARE_TIME D on A.ID = D.PID 
+		where A.ID = #{peopleId}
+	</select>
+	
+	<select id="findContact" parameterType="string" resultMap="contactMap">
+		select NAME, TEL1, TEL2, ADDR
+		from CONTACT
+		where PID = #{peopleId}
+	</select>
+	
+
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/aop
+       	   http://www.springframework.org/schema/aop/spring-aop.xsd
+       	   http://www.springframework.org/schema/mvc 
+       	   http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    
+    
+	<context:property-placeholder
+        location="classpath*:/conf/*.properties" />    
+    
+	<aop:config proxy-target-class="true"/>
+	
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+        	<!-- 避免IE在ajax請求時，返回json出現下載 -->
+            <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                <property name="supportedMediaTypes" value="text/html;charset=UTF-8" />
+            </bean>
+        </mvc:message-converters>
+   </mvc:annotation-driven> 
+    
+    <context:annotation-config />
+    
+    
+    <context:component-scan base-package="com.miracle.web.controller">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    
+    <context:component-scan base-package="com.miracle.service">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+    
+    <context:component-scan base-package="com.miracle.security">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+    
+    <context:component-scan base-package="com.miracle.dao">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+	</context:component-scan>
+    
+    <context:component-scan base-package="com.miracle.common">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+	</context:component-scan>
+	
+	
+
+</beans>

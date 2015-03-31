@@ -32,9 +32,6 @@
     <init-param>
       <param-name>contextConfigLocation</param-name>
       <param-value>
-      classpath:conf/dataSource.xml;
-      classpath:conf/service-transaction.xml;
-      classpath:conf/dispatcher-servlet.xml
       </param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
@@ -46,11 +43,26 @@
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
-    		classpath:conf/dataSource.xml;
-			classpath:conf/service-transaction.xml;
-			classpath:conf/dispatcher-servlet.xml
+    		classpath:conf/root-context.xml;
 		</param-value>
   </context-param>
+  
+    <!-- spring security -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- spring security  -->
+	
+	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
+  
   <filter>
     <filter-name>SpringEncodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -67,19 +79,24 @@
     <filter-name>SpringEncodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  
   <welcome-file-list>
-  	<welcome-file>/views/loginadmin/loginShopAdminRedirect.jsp</welcome-file>
+  	<welcome-file>/</welcome-file>
   </welcome-file-list>
   <error-page>
     <error-code>404</error-code>
-    <location>/views/errorpage/errorPage.jsp</location>
+    <location>/error</location>
   </error-page>
   <error-page>
     <error-code>405</error-code>
-    <location>/views/errorpage/errorPage.jsp</location>
+    <location>/error</location>
   </error-page>
   <error-page>
     <error-code>500</error-code>
-    <location>/views/errorpage/errorPage.jsp</location>
+    <location>/error</location>
   </error-page>
+  <error-page>
+		<location>/error</location>
+  </error-page>
+  
 </web-app>

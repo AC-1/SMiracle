@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miracle.dao.LoginQueryDAO">
+
+	<!-- <cache /> -->
+
+	<resultMap id="loginMap" type="Account">
+		<result property="userId" column="USER_ID" />
+		<result property="userPw" column="USER_PW" />
+		<result property="userName" column="USER_NAME" />
+		<result property="userAge" column="USER_AGE" />
+		<result property="userBirthday" column="USER_BIRTHDAY" />
+	</resultMap>
+	
+	<select id="findByUserPassword" parameterType="map" resultMap="loginMap">
+		SELECT USER_ID, USER_PW, USER_NAME, USER_AGE, USER_BIRTHDAY
+		FROM ACCOUNT
+		WHERE USER_ID = #{userId} AND USER_PW = #{userPw}
+	</select>
+	
+
+</mapper>

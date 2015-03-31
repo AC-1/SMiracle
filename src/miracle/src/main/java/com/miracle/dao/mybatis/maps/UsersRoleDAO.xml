@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miracle.dao.UsersRoleDao">
+
+	<!-- <cache /> -->
+
+	<resultMap id="usersRoleMap" type="UsersRole">
+		<result property="id" column="id" />
+		<result property="role" column="role" />
+		<result property="rolename" column="rolename" />
+		<result property="username" column="username" />
+		<result property="userId" column="userId" />
+	</resultMap>
+	
+	
+
+	<select id="findByUserName" parameterType="string" resultMap="usersRoleMap">
+		select id, role, rolename, username, userId 
+		from users_role 
+		where username=#{userName}
+	</select>
+	
+
+</mapper>

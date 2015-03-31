@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50621
 File Encoding         : 65001
 
-Date: 2015-02-01 15:20:31
+Date: 2015-03-31 23:27:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -99,18 +99,36 @@ CREATE TABLE `care` (
 -- ----------------------------
 DROP TABLE IF EXISTS `care_time`;
 CREATE TABLE `care_time` (
-  `ID` char(32) NOT NULL,
+  `PID` char(32) NOT NULL,
   `WEEKDAY` tinyint(3) unsigned NOT NULL,
   `STIME` smallint(5) unsigned NOT NULL,
   `ETIME` smallint(5) unsigned NOT NULL,
   `CREATE` datetime NOT NULL,
   `LAST_UPDATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`PID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of care_time
 -- ----------------------------
+INSERT INTO `care_time` VALUES ('P_222222222', '7', '1700', '2000', '2015-03-29 17:11:42', '2015-03-29 17:11:45');
+
+-- ----------------------------
+-- Table structure for `comm`
+-- ----------------------------
+DROP TABLE IF EXISTS `comm`;
+CREATE TABLE `comm` (
+  `ID` char(32) NOT NULL,
+  `NAME` text NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of comm
+-- ----------------------------
+INSERT INTO `comm` VALUES ('WONMAIN0001', '姐一牧區');
+INSERT INTO `comm` VALUES ('WONMAIN0002', '姐二牧區');
+INSERT INTO `comm` VALUES ('WONMAIN0003', '姐三牧區');
 
 -- ----------------------------
 -- Table structure for `contact`
@@ -118,8 +136,11 @@ CREATE TABLE `care_time` (
 DROP TABLE IF EXISTS `contact`;
 CREATE TABLE `contact` (
   `ID` char(32) NOT NULL,
+  `PID` char(32) NOT NULL,
   `NAME` varchar(32) NOT NULL,
-  `TEL` varchar(12) NOT NULL,
+  `TEL1` varchar(12) NOT NULL,
+  `TEL2` varchar(12) NOT NULL,
+  `ADDR` varchar(256) NOT NULL,
   `CREATE` datetime NOT NULL,
   `LAST_UPDATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`)
@@ -128,6 +149,8 @@ CREATE TABLE `contact` (
 -- ----------------------------
 -- Records of contact
 -- ----------------------------
+INSERT INTO `contact` VALUES ('contact_12345678', 'P_222222222', '陳爸', '982328533', '978899555', '台北市信義區地寶路120號', '2015-03-29 16:56:16', '2015-03-29 17:09:29');
+INSERT INTO `contact` VALUES ('contact_12345679', 'P_222222222', '陳媽', '975577777', '982223333', '台北市中正區中正路12號', '2015-03-29 17:00:19', '2015-03-29 17:09:31');
 
 -- ----------------------------
 -- Table structure for `education`
@@ -144,24 +167,6 @@ CREATE TABLE `education` (
 
 -- ----------------------------
 -- Records of education
--- ----------------------------
-
--- ----------------------------
--- Table structure for `group`
--- ----------------------------
-DROP TABLE IF EXISTS `group`;
-CREATE TABLE `group` (
-  `ID` char(32) NOT NULL,
-  `NAME` text NOT NULL,
-  `PIC` text NOT NULL,
-  `STATUS` char(32) NOT NULL,
-  `TABLE` varchar(64) NOT NULL,
-  `OWNER` char(32) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of group
 -- ----------------------------
 
 -- ----------------------------
@@ -190,8 +195,16 @@ CREATE TABLE `people` (
   `BIRTHDAY` datetime NOT NULL,
   `ROLE` tinyint(3) unsigned NOT NULL,
   `STATUS` tinyint(3) unsigned NOT NULL,
+  `TEL1` varchar(12) NOT NULL,
+  `TEL2` varchar(12) NOT NULL,
+  `ADDR` varchar(256) NOT NULL,
+  `EMAIL` varchar(128) NOT NULL,
   `COMM` char(32) NOT NULL,
   `GROUP` char(32) NOT NULL,
+  `EDU` tinyint(3) unsigned NOT NULL,
+  `SCHOOL` varchar(32) NOT NULL,
+  `GRADE` varchar(32) NOT NULL,
+  `WORSHIP` char(32) NOT NULL,
   `CREATE` datetime NOT NULL,
   `LAST_UPDATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `NOTE` text NOT NULL,
@@ -201,6 +214,27 @@ CREATE TABLE `people` (
 -- ----------------------------
 -- Records of people
 -- ----------------------------
+INSERT INTO `people` VALUES ('P_222222222', '東東', '0', '2015-03-22 15:55:16', '2', '0', '', '', '', '', 'P_22222222', 'group_000000000000', '0', '泰北高中', '3', 'worship_123456789', '2015-03-22 16:03:32', '2015-03-29 16:07:29', 'TEST');
+
+-- ----------------------------
+-- Table structure for `people_group`
+-- ----------------------------
+DROP TABLE IF EXISTS `people_group`;
+CREATE TABLE `people_group` (
+  `ID` char(36) NOT NULL,
+  `NAME` text NOT NULL,
+  `LEADER` text NOT NULL,
+  `STATUS` char(32) NOT NULL,
+  `TABLE` varchar(64) NOT NULL,
+  `OWNER` char(32) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of people_group
+-- ----------------------------
+INSERT INTO `people_group` VALUES ('00000000-0000-0000-0000-000000000000', '無群組', '0', '0', '0', '0');
+INSERT INTO `people_group` VALUES ('group_000000000000', '幸福小組', '李西隆', 'CARE0001', 'CARE', 'GROUP0001');
 
 -- ----------------------------
 -- Table structure for `permi_grade_main`
@@ -249,6 +283,22 @@ INSERT INTO `permi_group_main` VALUES ('group_000020140902000002', '國小班', 
 INSERT INTO `permi_group_main` VALUES ('group_000020140902000003', '國中班', '2014-09-02 12:08:23');
 INSERT INTO `permi_group_main` VALUES ('group_000020140902000004', '專科班', '2014-09-02 12:08:41');
 INSERT INTO `permi_group_main` VALUES ('group_000020140902000005', '大學班', '2014-09-02 12:08:53');
+
+-- ----------------------------
+-- Table structure for `persistent_logins`
+-- ----------------------------
+DROP TABLE IF EXISTS `persistent_logins`;
+CREATE TABLE `persistent_logins` (
+  `username` varchar(64) NOT NULL,
+  `series` varchar(64) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `last_used` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`series`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of persistent_logins
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `present_info`
@@ -345,6 +395,46 @@ CREATE TABLE `test` (
 INSERT INTO `test` VALUES ('TEST', '女');
 
 -- ----------------------------
+-- Table structure for `users`
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `enabled` int(11) DEFAULT '1',
+  `password` varchar(50) DEFAULT NULL,
+  `username` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
+INSERT INTO `users` VALUES ('1', '2015-03-31 12:40:01', '1', '84ec8d2a7320b636', 'admin');
+INSERT INTO `users` VALUES ('4', '2015-03-13 11:05:45', '1', '1234', 'test');
+
+-- ----------------------------
+-- Table structure for `users_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `users_role`;
+CREATE TABLE `users_role` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `role` int(11) DEFAULT NULL,
+  `rolename` varchar(45) DEFAULT NULL,
+  `username` varchar(45) DEFAULT NULL,
+  `userId` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_hf371ar4xxbkxph5eggr4rgby` (`userId`),
+  CONSTRAINT `FK_hf371ar4xxbkxph5eggr4rgby` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of users_role
+-- ----------------------------
+INSERT INTO `users_role` VALUES ('1', '0', 'ROLE_ADMIN', 'admin', '1');
+INSERT INTO `users_role` VALUES ('2', '1', 'ROLE_USER', 'test', '4');
+
+-- ----------------------------
 -- Table structure for `user_account`
 -- ----------------------------
 DROP TABLE IF EXISTS `user_account`;
@@ -401,3 +491,4 @@ CREATE TABLE `worship` (
 -- ----------------------------
 -- Records of worship
 -- ----------------------------
+INSERT INTO `worship` VALUES ('worship_123456789', '兒主第二堂', 'chang', '1', '1015', '1215', '0');
