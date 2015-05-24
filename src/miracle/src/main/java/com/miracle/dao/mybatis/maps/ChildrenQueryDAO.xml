@@ -27,6 +27,19 @@
 		<result property="tel2" column="TEL2" />
 		<result property="addr" column="ADDR" />
 	</resultMap>
+	
+	<resultMap id="careTimeMap" type="CareTime">
+		<result property="weekDay" column="WEEKDAY" />
+		<result property="stime" column="STIME" />
+		<result property="etime" column="ETIME" />
+	</resultMap>
+	
+	<resultMap id="presentWorshipVOMap" type="PresentWorshipVO">
+		<result property="pid" column="PID" />
+		<result property="chkinTime" column="CHKIN_TIME" />
+		<result property="worshipName" column="WORSHIP_NAME" />
+		<result property="note" column="NOTE" />
+	</resultMap>
 
 	<select id="findPeopleData" parameterType="string" resultMap="peopleVOMap">
 		select A.ID, A.NAME, A.GENDER, A.SCHOOL, A.GRADE,
@@ -44,6 +57,19 @@
 		select NAME, TEL1, TEL2, ADDR
 		from CONTACT
 		where PID = #{peopleId}
+	</select>
+	
+	<select id="findCareTime" parameterType="string" resultMap="careTimeMap">
+		select PID, WEEKDAY, STIME, ETIME
+		from care_time
+		where PID = #{peopleId}
+	</select>
+	
+	<select id="findPresentWorship" parameterType="string" resultMap="presentWorshipVOMap">
+		select A.PID, UNIX_TIMESTAMP(A.CHKIN_TIME) AS CHKIN_TIME, B.NAME as WORSHIP_NAME, A.NOTE
+		from present_worship A
+		left join worship B on A.ACTIVITY_ID = B.ID
+		WHERE PID = #{peopleId}
 	</select>
 	
 

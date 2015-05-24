@@ -93,7 +93,12 @@ body {
 		</div>
 		<!-- /.container -->
 	</section>
-
+	<br/><br/>
+    <c:if test="${not empty error}">
+   	    <spring:message code="login.error" />
+    	<%-- ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} --%>
+	</c:if>
+	${msg}
 	
 
 </body>

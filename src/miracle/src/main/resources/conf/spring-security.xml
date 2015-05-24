@@ -17,14 +17,16 @@
 			<cache-control />
 		</headers>
 		 -->
-
+		 
 		<intercept-url pattern="/signIn**" access="isAnonymous()" />
-		<!-- <intercept-url pattern="/*/car/*" access="permitAll()" /> -->
-		<intercept-url pattern="/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" />
+	    <intercept-url pattern="/" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" />
+	    <intercept-url pattern="/*/miracle/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" />
+	    <intercept-url pattern="/*" access="permitAll()" />
+	    <intercept-url pattern="/**" access="permitAll()" />
 		
 		<form-login login-page="/signIn" 
 		    default-target-url="/"
-			authentication-failure-url="/signIn?error" 
+			authentication-failure-url="/failed" 
 			username-parameter="username"
 			password-parameter="password" 
 			login-processing-url="/postlogin"

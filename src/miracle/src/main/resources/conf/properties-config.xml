@@ -19,7 +19,7 @@
 	<context:property-placeholder
         location="classpath*:/conf/*.properties" />    
     
-	<aop:config proxy-target-class="true"/>
+	<!-- <aop:config proxy-target-class="true"/> -->
 	
     <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">

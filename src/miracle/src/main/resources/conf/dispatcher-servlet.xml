@@ -13,6 +13,9 @@
 	">
 	<!--Handle requests for static resources -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<mvc:resources mapping="/css/**" location="/css/" />
+	<mvc:resources mapping="/images/**" location="/images/" />
+	<mvc:resources mapping="/js/**" location="/js/" />
 	
 	
 	<!-- 国际化配置for i18n -->
