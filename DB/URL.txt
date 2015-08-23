@@ -1,0 +1,20 @@
+http://54.64.92.93
+
+登入
+帳號：admin
+密碼：2222
+
+查詢兒童基本資料：http://54.64.92.93/children//miracle/querychildren  傳入參數：peopleId 值：P_222222222   以POST取資料
+
+回傳JSON:
+
+{"contactList":[{"name":"陳爸","tel1":"982328533","tel2":"978899555","addr":"台北市信義區地寶路120號"},{"name":"陳媽","tel1":"975577777","tel2":"982223333","addr":"台北市中正區中正路12號"}],"status":"OK","careTime":{"weekDay":"7","stime":"1700","etime":"2000"},"peopleVO":{"id":"P_222222222","name":"東東","birthday":"1427039716","gender":"0","school":"泰北高中","grade":"3","groupName":"幸福小組","groupLeader":"李西隆","worshipName":"兒主第二堂","careWeekday":"7","caretStime":"1700","caretEtime":"2000"},"presentWorshipList":[{"pid":"P_222222222","chkinTime":"1432486245","note":"test","worshipName":"兒主第二堂"}]}
+
+
+查詢分頁崇拜資料：http://54.64.92.93/children//miracle/querypresentworship  傳入參數：peopleId 值：P_222222222  以POST取資料
+
+
+回傳JSON:
+{"status":"OK","presentWorshipList":[{"pid":"P_222222222","chkinTime":"1432486245","note":"test","worshipName":"兒主第二堂"}]}
+
+

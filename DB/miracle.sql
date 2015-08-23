@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50621
 File Encoding         : 65001
 
-Date: 2015-03-31 23:27:38
+Date: 2015-08-23 18:02:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -176,13 +176,15 @@ DROP TABLE IF EXISTS `main`;
 CREATE TABLE `main` (
   `ID` char(32) NOT NULL,
   `NAME` text NOT NULL,
-  `VALUE` text NOT NULL,
+  `PIC` text NOT NULL,
+  `TEL` varchar(12) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of main
 -- ----------------------------
+INSERT INTO `main` VALUES ('１', '士林', 'tet555', '555');
 
 -- ----------------------------
 -- Table structure for `people`
@@ -301,24 +303,26 @@ CREATE TABLE `persistent_logins` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `present_info`
+-- Table structure for `present_worship`
 -- ----------------------------
-DROP TABLE IF EXISTS `present_info`;
-CREATE TABLE `present_info` (
+DROP TABLE IF EXISTS `present_worship`;
+CREATE TABLE `present_worship` (
   `ID` char(32) NOT NULL,
-  `NAME` varchar(32) NOT NULL,
-  `PERSON_ID` char(32) NOT NULL,
+  `CID` char(32) NOT NULL,
+  `PID` char(32) NOT NULL,
   `ACTIVITY_ID` char(32) NOT NULL,
-  `CHKIN_TIME` datetime NOT NULL,
-  `LAST_UPDATE` datetime NOT NULL,
-  `FIND_TIME` datetime NOT NULL,
-  `NOTE` text NOT NULL,
+  `CHKIN_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `CHOUT_TIME` datetime DEFAULT NULL,
+  `LAST_UPDATE` datetime DEFAULT NULL,
+  `NOTE` text,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of present_info
+-- Records of present_worship
 -- ----------------------------
+INSERT INTO `present_worship` VALUES ('222', '1', 'P_222222222', 'worship_123456789', '2015-08-22 16:50:45', '0000-00-00 00:00:00', '2015-05-24 16:50:48', 'test');
+INSERT INTO `present_worship` VALUES ('f987da555f77412bbccfb0d2c81c349c', '1', 'P_222222222', 'worship_123456789', '2015-08-23 17:45:33', null, '2015-08-23 18:00:51', null);
 
 -- ----------------------------
 -- Table structure for `prg_page_detl`
@@ -345,17 +349,18 @@ INSERT INTO `prg_page_detl` VALUES ('prg_000020140902000003', 'customLoginAction
 DROP TABLE IF EXISTS `statement`;
 CREATE TABLE `statement` (
   `ID` char(32) NOT NULL,
-  `SUPERVISOR` char(64) NOT NULL,
+  `CONTACT_PEOPLE` char(32) NOT NULL,
   `STATEMENT` text NOT NULL,
   `CREATE` datetime NOT NULL,
   `LAST_UPDATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  `NOTE` text NOT NULL,
+  `NOTE` text,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of statement
 -- ----------------------------
+INSERT INTO `statement` VALUES ('P_222222222', 'P_222222222', '要多為家庭禱告', '2015-08-16 15:53:18', '2015-08-16 15:53:21', '無');
 
 -- ----------------------------
 -- Table structure for `system_parameter`
