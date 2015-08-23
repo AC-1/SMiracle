@@ -7,6 +7,10 @@
 	<!-- <cache /> -->
 
 	
-	
+	<update id="updatePresentWorshipById" parameterType="string">
+		update present_worship
+		set LAST_UPDATE=now()
+		where ID=#{id}
+	</update>
 
 </mapper>

@@ -11,6 +11,8 @@ import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.mode.Car;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
+import com.miracle.mode.PresentWorship;
+import com.miracle.mode.Statement;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 
@@ -44,6 +46,22 @@ public class ChildrenQueryDAOImpl extends BaseQueryDAOImpl<Car, Map<String, Obje
 		
 		return this.getSqlSession().selectList(getNameSpace() + ".findPresentWorship", peopleId, pageBounds);
 	}
+	
+	@Override
+	public List<Statement> findStatementAll(String peopleId, PageBounds pageBounds) throws DAOObjectNotFoundException {
+		
+		
+		return this.getSqlSession().selectList(getNameSpace() + ".findStatementAll", peopleId, pageBounds);
+	}
+	
+	@Override
+	public String findPresentWorshipByKey(PresentWorship presentWorship) throws DAOObjectNotFoundException {
+		
+		
+		return this.getSqlSession().selectOne(getNameSpace() + ".findPresentWorshipByKey", presentWorship);
+	}
+	
+	
 
 	
 }

@@ -3,14 +3,17 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
 	http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 	http://www.springframework.org/schema/aop 
 	http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
-	http://www.springframework.org/schema/context 
-	http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	http://www.springframework.org/schema/data/repository
+    http://www.springframework.org/schema/data/repository/spring-repository-1.5.xsd
+	http://www.springframework.org/schema/data/jpa
+	http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd">
 
 	<aop:config>
     	<aop:pointcut id="businessService"
@@ -163,6 +166,67 @@
 	    </list>
 	  </property>
 	</bean>
+	
+	<!-- JAP Begin-->
+	<bean id="dataSourceJpaQuery" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" depends-on="sysProps">
+      <property name="driverClass">
+        <value>${jdbc_query_driverClassName}</value>
+      </property>
+      <property name="jdbcUrl">
+        <value>${jdbc_query_url}</value>
+      </property>
+      <property name="user">
+       <value>${jdbc_query_username}</value>
+      </property>
+      <property name="password">
+       <value>${jdbc_query_password}</value>
+      </property>
+      <property name="acquireIncrement"><value>5</value></property><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
+      <property name="idleConnectionTestPeriod"><value>60</value></property><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
+      <property name="maxPoolSize"><value>100</value></property><!-- ?接池中保留的最大?接?。默??15； -->
+      <property name="maxStatements"><value>50</value></property><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
+      <property name="minPoolSize"><value>10</value></property><!-- ?接池中保留的最小?接?。默??15 -->
+      <!-- <property name="initialPoolSize"><value>1</value></property> --><!-- 初始化??建的?接?，?在minPoolSize与maxPoolSize之?取值。默??3  -->
+      <!-- <property name="maxIdleTime"><value>240</value></property> --><!-- 最大空???，超?空???的?接?被??。?0或???永不??。默??0 -->
+      <!-- <property name="checkoutTimeout"><value>60000</value></property> --><!-- ??接池用完?客?端?用getConnection()后等待?取新?接的??，超?后??出 SQLException,如??0??限期等待。?位毫秒 -->
+      <!-- <property name="acquireRetryAttempts"><value>0</value></property> --><!-- 定?在??据??取新?接失?后重复???取的次?，默??30 -->
+      <!-- <property name="acquireRetryDelay"><value>1000</value></property> --><!-- ?次?接中?隔??，?位毫秒，默??1000 -->
+      <!-- <property name="maxStatementsPerConnection"><value>100</value></property > --><!-- ?接池????接所?有的最大?存Statement?。默??0 -->
+      <!-- <property name="autoCommitOnClose"><value>true</value></property> --><!-- ?接???默??所有未提交的操作回?。默??false -->
+      <!-- <property name="breakAfterAcquireFailure"><value>true</value></property> --><!-- ?取?接失???引起所有等待?取?接的?程?出异常。但是?据源仍有效保留，并在下次?   用getConnection()的?候?????取?接。如果??true，那么在???取?接失?后??据源?申明已??并永久??。默?? false -->
+      <!-- <property name="debugUnreturnedConnectionStackTraces" value="true" /> --><!-- 是一???，?用之后，?于每???接池拿出去的?据??接，如果一段????有??，C3P0就??制?????接，并??取?接?的stack trace，以?出异常的方式?示出?。 unreturnedConnectionTimeout?置多????超?，以秒??位。 -->
+      <!-- <property name="unreturnedConnectionTimeout" value="300" /> -->
+      <!-- <property name="numHelperThreads"><value>10</value></property> --><!-- c3p0是异步操作的，?慢的JDBC操作通??助?程完成。?展?些操作可以有效的提升性能 -->
+    </bean>
+	
+	
+    <bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<!-- <property name="persistenceUnitName" value="wechat" /> -->
+		<!-- <property name="persistenceXmlLocation" value="classpath:META-INF/persistence.xml" /> -->
+		<property name="dataSource" ref="dataSourceJpaQuery" />
+		<property name="packagesToScan" value="com.miracle.mode" />
+		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+	</bean>
+	<bean id="transactionJpaManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	 <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="showSql" value="false" />
+    </bean>
+    
+    <tx:advice id="txAdviceJpa" transaction-manager="transactionJpaManager">
+	  <tx:attributes>
+	    <tx:method name="save*" propagation="REQUIRED"/>
+	    <tx:method name="insert*" propagation="REQUIRED"/>
+	    <tx:method name="update*" propagation="REQUIRED"/>
+	    <tx:method name="create*" propagation="REQUIRED"/>
+	  </tx:attributes>
+	</tx:advice> 
+	<tx:annotation-driven transaction-manager="transactionJpaManager"/>
+	
+	<jpa:repositories base-package="com.miracle.dao.jpa" entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionJpaManager"/>
+	<!-- JAP End-->
 	
 
 </beans>

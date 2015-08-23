@@ -1,6 +1,7 @@
 package com.miracle.common;
 
 import java.util.GregorianCalendar;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -168,6 +169,9 @@ public class TimeMachine
   }
 
 	
-	
+  public String newRandomUUID() {
+      String uuidRaw = UUID.randomUUID().toString();
+      return uuidRaw.replaceAll("-", "");
+  }
 	
 }

@@ -1,6 +1,7 @@
 package com.miracle.web.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,12 @@ import com.miracle.common.JSONUtils;
 import com.miracle.common.Language;
 import com.miracle.common.SecretUtil;
 import com.miracle.common.SysParameterUtil;
+import com.miracle.common.TimeMachine;
 import com.miracle.common.Tools;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
+import com.miracle.mode.PresentWorship;
+import com.miracle.mode.Statement;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 import com.miracle.service.ChildrenService;
@@ -56,6 +60,8 @@ public class ChildrenController extends BaseController {
 	@Autowired
 	private JSONUtils jsonTool;
 	
+	@Autowired
+	private TimeMachine timeMachine;
 	
 	/** 
 	 * 查詢兒童基本資料
@@ -137,7 +143,7 @@ public class ChildrenController extends BaseController {
 		}
 		String pageSize1 = StringUtils.trimToEmpty(req.getParameter("pageSize"));//總數
 		if(pageSize1 == null || pageSize1.equals("")){
-			pageSize1="9";//首頁進來
+			pageSize1="15";//首頁進來
 		}
 		
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
@@ -164,6 +170,105 @@ public class ChildrenController extends BaseController {
 		} catch (Exception e) {
 			jsonMap.put("status", "ERR");
 			jsonMap.put("code", -100);
+			jsonMap.put("desc", "Message:"+e.getMessage());
+		}
+		
+		return jsonMap;
+	}
+	
+	
+	/** 
+	 * 查詢成長記錄
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/miracle/querystatement", method = RequestMethod.POST , headers="Accept=application/json" )
+	public Map<String, Object> queryStatement (
+			Model model, HttpServletRequest req, 
+			@RequestParam String peopleId,
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(pageNumber == null || pageNumber.equals("")){
+			pageNumber="0";//首頁進來
+		}
+		String pageSize1 = StringUtils.trimToEmpty(req.getParameter("pageSize"));//總數
+		if(pageSize1 == null || pageSize1.equals("")){
+			pageSize1="15";//首頁進來
+		}
+		
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		try {
+			
+			int page = Integer.parseInt(pageNumber); //目前的页号
+			int pageSize = Integer.parseInt(pageSize1); //每页数据条数
+			String sortString = "";//如果你想排序的话逗号分隔可以排序多列->name.asc
+			PageBounds pageBounds = new PageBounds(page, pageSize, Order.formString(sortString), true);
+			
+			//崇拜報到
+			List<Statement> statementList = childrenService.queryStatementAll(peopleId, pageBounds);
+			
+			//获得结果集条总数
+			PageList<Statement> pageList = (PageList<Statement>)statementList;
+			int pageTotal = pageList.getPaginator().getTotalPages();//總共頁數
+			model.addAttribute("pageNumber", pageNumber);
+			model.addAttribute("pageTotal", pageTotal);
+			 
+			jsonMap.put("statementList", statementList);
+			jsonMap.put("status", "OK");
+        
+		} catch (Exception e) {
+			jsonMap.put("status", "ERR");
+			jsonMap.put("code", -100);
+			jsonMap.put("desc", "Message:"+e.getMessage());
+		}
+		
+		return jsonMap;
+	}
+	
+	
+	/** 
+	 * 點名報到
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/callroll", method = RequestMethod.POST , headers="Accept=application/json" )
+	public Map<String, Object> callRoll (
+			Model model, HttpServletRequest req, 
+			@RequestParam String pid, @RequestParam String cid,
+			@RequestParam String worship,
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+//		String pid = StringUtils.trimToEmpty(req.getParameter("pid"));
+//		String cid = StringUtils.trimToEmpty(req.getParameter("cid"));
+//		String worship = StringUtils.trimToEmpty(req.getParameter("worship"));
+		
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		try {
+			
+			PresentWorship presentWorship = new PresentWorship();
+			presentWorship.setId(timeMachine.newRandomUUID());
+			presentWorship.setPid(pid);
+			presentWorship.setCid(cid);
+			presentWorship.setActivityId(worship);
+			
+			//判斷是否報到過
+			String id = childrenService.queryPresentWorshipByKey(presentWorship);
+			if(StringUtils.isBlank(id)){
+				//第一次報到
+				childrenService.createPresentWorship(presentWorship);
+			}else{
+				//重覆報到
+				Boolean isCorrect = childrenService.updatePresentWorshipById(id);
+			}
+			
+			//孩子個人資料
+			
+			
+			jsonMap.put("status", 0);
+        
+		} catch (Exception e) {
+			jsonMap.put("status", -1);
 			jsonMap.put("desc", "Message:"+e.getMessage());
 		}
 		

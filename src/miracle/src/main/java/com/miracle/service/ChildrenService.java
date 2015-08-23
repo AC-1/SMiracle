@@ -6,6 +6,8 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
+import com.miracle.mode.PresentWorship;
+import com.miracle.mode.Statement;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 
@@ -24,4 +26,16 @@ public interface ChildrenService {
 	
 	/** 查詢崇拜活動*/
 	public List<PresentWorshipVO> queryPresentWorship(String peopleId, PageBounds pageBounds) throws DAOObjectNotFoundException;
+	
+	/** 查詢成長記錄*/
+	public List<Statement> queryStatementAll(String peopleId, PageBounds pageBounds) throws DAOObjectNotFoundException;
+	
+	/** 查詢崇拜報到-查詢*/
+	public String queryPresentWorshipByKey(PresentWorship presentWorship) throws DAOObjectNotFoundException;
+	
+	/** 新增第一次報到*/
+	public PresentWorship createPresentWorship(PresentWorship presentWorship) throws DAOObjectNotFoundException;
+
+	/** 更新重覆報到*/
+	public Boolean updatePresentWorshipById(String id) throws DAOObjectNotFoundException;
 }

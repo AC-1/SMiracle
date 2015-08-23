@@ -40,6 +40,19 @@
 		<result property="worshipName" column="WORSHIP_NAME" />
 		<result property="note" column="NOTE" />
 	</resultMap>
+	
+	<resultMap id="statementVOMap" type="Statement">
+		<result property="createName" column="CREATE_NAME" />
+		<result property="statement" column="STATEMENT" />
+		<result property="create" column="CREATE_TIME" />
+		<result property="lastUpdate" column="LAST_UPDATE" />
+		<result property="note" column="NOTE" />
+	</resultMap>
+	
+	<resultMap id="presentWorshipMap" type="PresentWorship">
+		<result property="id" column="ID" />
+	</resultMap>
+
 
 	<select id="findPeopleData" parameterType="string" resultMap="peopleVOMap">
 		select A.ID, A.NAME, A.GENDER, A.SCHOOL, A.GRADE,
@@ -69,7 +82,24 @@
 		select A.PID, UNIX_TIMESTAMP(A.CHKIN_TIME) AS CHKIN_TIME, B.NAME as WORSHIP_NAME, A.NOTE
 		from present_worship A
 		left join worship B on A.ACTIVITY_ID = B.ID
-		WHERE PID = #{peopleId}
+		WHERE A.PID = #{peopleId}
+	</select>
+	
+	<select id="findStatementAll" parameterType="string" resultMap="statementVOMap">
+		select B.NAME as CREATE_NAME, A.STATEMENT, UNIX_TIMESTAMP(A.CREATE) AS CREATE_TIME,
+		       UNIX_TIMESTAMP(A.LAST_UPDATE) AS LAST_UPDATE, A.NOTE
+		from statement A
+		left join people B on A.ID = B.ID
+		WHERE A.ID = #{peopleId}
+	</select>
+	
+	<select id="findPresentWorshipByKey" parameterType="presentWorship" resultType="string">
+		select ID
+		from present_worship
+		WHERE CID = #{cid}
+		  and PID = #{pid}
+		  and ACTIVITY_ID = #{activityId}
+		  and to_days(CHKIN_TIME) = to_days(now())
 	</select>
 	
 
