@@ -31,9 +31,9 @@ private MailUtil mailUtil;
         @SuppressWarnings("resource")
         ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"classpath:conf/root-context.xml"});
 //        carService = (CarService) context.getBean("CarService");
-        childrenQueryDAO = (ChildrenQueryDAO) context.getBean("childrenQueryDAO");
-        childrenService = (ChildrenService) context.getBean("ChildrenService");
-        mailUtil = (MailUtil) context.getBean("mailUtil");
+//        childrenQueryDAO = (ChildrenQueryDAO) context.getBean("childrenQueryDAO");
+        childrenService = (ChildrenService) context.getBean("childrenServiceImpl");
+//        mailUtil = (MailUtil) context.getBean("mailUtil");
     }
      
 //    @Test
@@ -118,6 +118,6 @@ private MailUtil mailUtil;
 //    	List<Contact> contact = childrenQueryDAO.findContact("P_222222222");
 //    	System.out.println(contact);
     	
-//    	excelImport
+    	childrenService.excelImport();
     }
 }
