@@ -1,5 +1,6 @@
 package com.miracle.dao.impl;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
@@ -17,5 +18,15 @@ public class ChildrenTrsDAOImpl extends BaseTrsDAOImpl<Car, Map<String, Object>>
 	public Integer updatePresentWorshipById(String id) throws DAOObjectNotFoundException {
 		
 		return this.getSqlSession().update(getNameSpace() + ".updatePresentWorshipById", id);
+	}
+	
+	@Override
+	public Integer updatePresentWorshipChkoutById(String pid, String cid, String worship) throws DAOObjectNotFoundException {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("pid", pid);
+		map.put("cid", cid);
+		map.put("worship", worship);
+		return this.getSqlSession().update(getNameSpace() + ".updatePresentWorshipChkoutById", map);
 	}
 }

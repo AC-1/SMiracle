@@ -12,5 +12,14 @@
 		set LAST_UPDATE=now()
 		where ID=#{id}
 	</update>
+	
+	<update id="updatePresentWorshipChkoutById" parameterType="map">
+		update present_worship
+		set CHKOUT_TIME=now()
+		where CID=#{cid}
+		  and PID=#{pid}
+		  and ACTIVITY_ID=#{worship}
+		  and to_days(CHKIN_TIME) = to_days(now())
+	</update>
 
 </mapper>

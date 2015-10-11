@@ -106,17 +106,11 @@
 			<version>1.2.2</version>
 		</dependency>
 		<!-- mysql核心包 -->
-		<!-- <dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.29</version>
-		</dependency> -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.36</version>
+			<version>5.1.29</version>
 		</dependency>
-				
 		<!-- junit測式包 -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -327,35 +321,6 @@
 			<version>${spring.security-version}</version>
 		</dependency>
 		
-		<!-- Excel Begin -->
-		<dependency>
-			<groupId>net.sourceforge.jexcelapi</groupId>
-			<artifactId>jxl</artifactId>
-			<version>2.6.12</version>
-		</dependency>
-		
-		 <dependency>
-	        <groupId>org.apache.poi</groupId>
-	        <artifactId>poi</artifactId>
-	        <version>3.7</version>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.apache.poi</groupId>
-	        <artifactId>poi-scratchpad</artifactId>
-	        <version>3.7</version>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.apache.poi</groupId>
-	        <artifactId>poi-ooxml</artifactId>
-	        <version>3.7</version>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.apache.poi</groupId>
-	        <artifactId>poi-ooxml-schemas</artifactId>
-	        <version>3.7</version>
-	    </dependency>
-	    <!-- Excel End -->
-		
 		  <!-- JPA -->
 		  <dependency>
 			<groupId>org.hibernate</groupId>
@@ -375,6 +340,35 @@
 		   <version>1.3.4.RELEASE</version>
 		 </dependency>
 		  <!-- JPA -->
+		  
+		  <!-- Excel Begin -->
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6.12</version>
+		</dependency>
+		
+		 <!-- <dependency>
+	        <groupId>org.apache.poi</groupId>
+	        <artifactId>poi</artifactId>
+	        <version>3.7</version>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.apache.poi</groupId>
+	        <artifactId>poi-scratchpad</artifactId>
+	        <version>3.7</version>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.apache.poi</groupId>
+	        <artifactId>poi-ooxml</artifactId>
+	        <version>3.7</version>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.apache.poi</groupId>
+	        <artifactId>poi-ooxml-schemas</artifactId>
+	        <version>3.7</version>
+	    </dependency> -->
+	    <!-- Excel End -->
    		 
 	</dependencies>
 

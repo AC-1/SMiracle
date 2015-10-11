@@ -2,5 +2,5 @@
 <!DOCTYPE jboss-web>
 <jboss-web>
  <context-root>/</context-root>
- <virtual-host>54.64.92.93</virtual-host>
+ <virtual-host>WitMiracle</virtual-host>
 </jboss-web>

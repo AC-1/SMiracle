@@ -8,6 +8,7 @@ import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
 import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
+import com.miracle.mode.People;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 
@@ -38,4 +39,13 @@ public interface ChildrenService {
 
 	/** 更新重覆報到*/
 	public Boolean updatePresentWorshipById(String id) throws DAOObjectNotFoundException;
+	
+	/** 查詢單個人資料*/
+	public People queryPeopleById(String peopleId) throws DAOObjectNotFoundException;
+	
+	/** 更新報到登出*/
+	public Boolean updatePresentWorshipChkoutById(String pid, String cid, String worship) throws DAOObjectNotFoundException;
+	
+	/** 讀取Excel 匯入兒童基本資料*/
+	public Boolean excelImport() throws DAOObjectNotFoundException;
 }

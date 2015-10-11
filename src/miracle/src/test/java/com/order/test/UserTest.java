@@ -14,8 +14,7 @@ import com.miracle.common.Email;
 import com.miracle.common.MailUtil;
 import com.miracle.common.SecretUtil;
 import com.miracle.dao.ChildrenQueryDAO;
-import com.miracle.mode.Contact;
-import com.miracle.mode.vo.PeopleVO;
+import com.miracle.service.ChildrenService;
 
  
  
@@ -24,6 +23,7 @@ public class UserTest {
  
 //private CarService carService;
 private ChildrenQueryDAO childrenQueryDAO;
+private ChildrenService childrenService;
 private MailUtil mailUtil;
      
     @Before
@@ -32,6 +32,7 @@ private MailUtil mailUtil;
         ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"classpath:conf/root-context.xml"});
 //        carService = (CarService) context.getBean("CarService");
         childrenQueryDAO = (ChildrenQueryDAO) context.getBean("childrenQueryDAO");
+        childrenService = (ChildrenService) context.getBean("ChildrenService");
         mailUtil = (MailUtil) context.getBean("mailUtil");
     }
      
@@ -114,7 +115,9 @@ private MailUtil mailUtil;
     public void Test(){
 //    	PeopleVO peopleVO = childrenQueryDAO.findPeopleData("P_222222222");
     	
-    	List<Contact> contact = childrenQueryDAO.findContact("P_222222222");
-    	System.out.println(contact);
+//    	List<Contact> contact = childrenQueryDAO.findContact("P_222222222");
+//    	System.out.println(contact);
+    	
+//    	excelImport
     }
 }

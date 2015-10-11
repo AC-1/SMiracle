@@ -1,10 +1,11 @@
 package com.miracle.web.controller;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.github.miemiedev.mybatis.paginator.domain.Order;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
@@ -30,11 +32,13 @@ import com.miracle.common.TimeMachine;
 import com.miracle.common.Tools;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
+import com.miracle.mode.People;
 import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 import com.miracle.service.ChildrenService;
+import com.oreilly.servlet.MultipartRequest;
 
 
 
@@ -263,8 +267,44 @@ public class ChildrenController extends BaseController {
 			}
 			
 			//孩子個人資料
+			People people = childrenService.queryPeopleById(pid);
 			
+			jsonMap.put("people", people);
+			jsonMap.put("status", 0);
+        
+		} catch (Exception e) {
+			jsonMap.put("status", -1);
+			jsonMap.put("desc", "Message:"+e.getMessage());
+		}
+		
+		return jsonMap;
+	}
+	
+	
+	/** 
+	 * 點名報到 - 登出
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/callrollchkout", method = RequestMethod.POST , headers="Accept=application/json" )
+	public Map<String, Object> callRollChkout (
+			Model model, HttpServletRequest req, 
+			@RequestParam String pid, @RequestParam String cid,
+			@RequestParam String worship,
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		String result = "";
+		
+		try {
 			
+			Boolean isCorrect = childrenService.updatePresentWorshipChkoutById(pid, cid, worship);
+			if(isCorrect){
+				result = "登出成功";
+			}else{
+				result = "登出失敗";
+			}
+			
+			jsonMap.put("msg", result);
 			jsonMap.put("status", 0);
         
 		} catch (Exception e) {
@@ -318,6 +358,12 @@ public class ChildrenController extends BaseController {
 		
 		return jsonMap;
 	}
+	
+	
+	
+	
+	
+	
 	
 	
 	

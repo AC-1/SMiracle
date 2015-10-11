@@ -34,8 +34,8 @@ public class PresentWorship  implements Serializable{
 	@Column(name="CHKIN_TIME")
 	private Timestamp chkinTime=new Timestamp(System.currentTimeMillis());
 	
-	@Column(name="CHOUT_TIME")
-	private String choutTime;
+	@Column(name="CHKOUT_TIME")
+	private String chkoutTime;
 	
 	@Column(name="LAST_UPDATE")
 	private String lastUpdate;
@@ -75,11 +75,12 @@ public class PresentWorship  implements Serializable{
 	public void setChkinTime(Timestamp chkinTime) {
 		this.chkinTime = chkinTime;
 	}
-	public String getChoutTime() {
-		return choutTime;
+	
+	public String getChkoutTime() {
+		return chkoutTime;
 	}
-	public void setChoutTime(String choutTime) {
-		this.choutTime = choutTime;
+	public void setChkoutTime(String chkoutTime) {
+		this.chkoutTime = chkoutTime;
 	}
 	public String getLastUpdate() {
 		return lastUpdate;
