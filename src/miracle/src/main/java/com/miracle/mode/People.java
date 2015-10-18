@@ -1,6 +1,7 @@
 package com.miracle.mode;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,8 +53,8 @@ public class People  implements Serializable{
 	@Column(name="COMM")
 	private String comm;
 	
-	@Column(name="GROUP")
-	private String group;
+	@Column(name="GROUP_ID")
+	private String groupId;
 	
 	@Column(name="EDU")
 	private String edu;
@@ -67,8 +68,8 @@ public class People  implements Serializable{
 	@Column(name="WORSHIP")
 	private String worship;
 	
-	@Column(name="CREATE")
-	private String create;
+	@Column(name="CREATE_TIME")
+	private String createTime;
 	
 	@Column(name="LAST_UPDATE")
 	private Timestamp lastUpdate=new Timestamp(System.currentTimeMillis());
@@ -164,12 +165,12 @@ public class People  implements Serializable{
 		this.comm = comm;
 	}
 
-	public String getGroup() {
-		return group;
+	public String getGroupId() {
+		return groupId;
 	}
 
-	public void setGroup(String group) {
-		this.group = group;
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 
 	public String getEdu() {
@@ -204,12 +205,14 @@ public class People  implements Serializable{
 		this.worship = worship;
 	}
 
-	public String getCreate() {
-		return create;
+	
+
+	public String getCreateTime() {
+		return createTime;
 	}
 
-	public void setCreate(String create) {
-		this.create = create;
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 
 	public Timestamp getLastUpdate() {
@@ -227,6 +230,7 @@ public class People  implements Serializable{
 	public void setNote(String note) {
 		this.note = note;
 	}
+
 	
 	
 	

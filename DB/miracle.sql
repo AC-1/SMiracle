@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50621
 File Encoding         : 65001
 
-Date: 2015-08-23 18:02:02
+Date: 2015-10-18 17:39:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -69,6 +69,7 @@ INSERT INTO `car` VALUES ('2', '');
 INSERT INTO `car` VALUES ('3', '新增車子');
 INSERT INTO `car` VALUES ('5', '');
 INSERT INTO `car` VALUES ('7', 'test2');
+INSERT INTO `car` VALUES ('10', 'test');
 INSERT INTO `car` VALUES ('222', '');
 INSERT INTO `car` VALUES ('223', 'YAHOO1');
 
@@ -184,7 +185,7 @@ CREATE TABLE `main` (
 -- ----------------------------
 -- Records of main
 -- ----------------------------
-INSERT INTO `main` VALUES ('１', '士林', 'tet555', '555');
+INSERT INTO `main` VALUES ('CH201509061701', '士林', 'tet555', '555');
 
 -- ----------------------------
 -- Table structure for `people`
@@ -192,31 +193,31 @@ INSERT INTO `main` VALUES ('１', '士林', 'tet555', '555');
 DROP TABLE IF EXISTS `people`;
 CREATE TABLE `people` (
   `ID` char(32) NOT NULL,
-  `NAME` varchar(32) NOT NULL,
-  `GENDER` char(1) NOT NULL,
-  `BIRTHDAY` datetime NOT NULL,
-  `ROLE` tinyint(3) unsigned NOT NULL,
-  `STATUS` tinyint(3) unsigned NOT NULL,
-  `TEL1` varchar(12) NOT NULL,
-  `TEL2` varchar(12) NOT NULL,
-  `ADDR` varchar(256) NOT NULL,
-  `EMAIL` varchar(128) NOT NULL,
-  `COMM` char(32) NOT NULL,
-  `GROUP` char(32) NOT NULL,
-  `EDU` tinyint(3) unsigned NOT NULL,
-  `SCHOOL` varchar(32) NOT NULL,
-  `GRADE` varchar(32) NOT NULL,
-  `WORSHIP` char(32) NOT NULL,
-  `CREATE` datetime NOT NULL,
-  `LAST_UPDATE` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  `NOTE` text NOT NULL,
+  `NAME` varchar(32) DEFAULT NULL,
+  `GENDER` char(1) DEFAULT NULL,
+  `BIRTHDAY` datetime DEFAULT NULL,
+  `ROLE` tinyint(3) unsigned DEFAULT NULL,
+  `STATUS` tinyint(3) unsigned DEFAULT NULL,
+  `TEL1` varchar(12) DEFAULT NULL,
+  `TEL2` varchar(12) DEFAULT NULL,
+  `ADDR` varchar(256) DEFAULT NULL,
+  `EMAIL` varchar(128) DEFAULT NULL,
+  `COMM` char(32) DEFAULT NULL,
+  `GROUP_ID` char(32) DEFAULT NULL,
+  `EDU` tinyint(3) unsigned DEFAULT NULL,
+  `SCHOOL` varchar(32) DEFAULT NULL,
+  `GRADE` varchar(32) DEFAULT NULL,
+  `WORSHIP` char(32) DEFAULT NULL,
+  `CREATE_TIME` datetime DEFAULT NULL,
+  `LAST_UPDATE` timestamp NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `NOTE` text,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of people
 -- ----------------------------
-INSERT INTO `people` VALUES ('P_222222222', '東東', '0', '2015-03-22 15:55:16', '2', '0', '', '', '', '', 'P_22222222', 'group_000000000000', '0', '泰北高中', '3', 'worship_123456789', '2015-03-22 16:03:32', '2015-03-29 16:07:29', 'TEST');
+INSERT INTO `people` VALUES ('P_222222222', '東東', '0', '2015-03-22 15:55:16', '2', '0', '', '', '', '', 'P_22222222', 'group_000000000000', '0', '泰北高中', '幼兒', 'worship_123456789', '2015-03-22 16:03:32', '2015-10-18 17:06:54', 'TEST');
 
 -- ----------------------------
 -- Table structure for `people_group`
@@ -312,7 +313,7 @@ CREATE TABLE `present_worship` (
   `PID` char(32) NOT NULL,
   `ACTIVITY_ID` char(32) NOT NULL,
   `CHKIN_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `CHOUT_TIME` datetime DEFAULT NULL,
+  `CHKOUT_TIME` datetime DEFAULT NULL,
   `LAST_UPDATE` datetime DEFAULT NULL,
   `NOTE` text,
   PRIMARY KEY (`ID`)
@@ -321,7 +322,8 @@ CREATE TABLE `present_worship` (
 -- ----------------------------
 -- Records of present_worship
 -- ----------------------------
-INSERT INTO `present_worship` VALUES ('222', '1', 'P_222222222', 'worship_123456789', '2015-08-22 16:50:45', '0000-00-00 00:00:00', '2015-05-24 16:50:48', 'test');
+INSERT INTO `present_worship` VALUES ('222', '1', 'P_222222222', 'worship_123456789', '2015-08-22 16:50:45', null, '2015-05-24 16:50:48', 'test');
+INSERT INTO `present_worship` VALUES ('894ac933ac154491b5fb129d4681d8eb', '1', 'P_222222222', 'worship_123456789', '2015-09-06 16:07:17', '2015-09-06 17:10:38', '2015-09-06 16:48:47', null);
 INSERT INTO `present_worship` VALUES ('f987da555f77412bbccfb0d2c81c349c', '1', 'P_222222222', 'worship_123456789', '2015-08-23 17:45:33', null, '2015-08-23 18:00:51', null);
 
 -- ----------------------------

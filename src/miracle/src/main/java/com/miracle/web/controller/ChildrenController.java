@@ -360,6 +360,31 @@ public class ChildrenController extends BaseController {
 	}
 	
 	
+	/** 
+	 * 匯入EXCEL
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/exportexl", method = RequestMethod.POST , headers="Accept=application/json" )
+	public Map<String, Object> exportExl(Model model, HttpServletRequest req,  HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+				
+		try {
+			
+			childrenService.excelImport();
+//			jsonMap.put("shopDataList", shopDataList);
+			jsonMap.put("status", "OK");
+        
+		} catch (Exception e) {
+			jsonMap.put("status", "ERR");
+			jsonMap.put("code", -100);
+			jsonMap.put("desc", "Message:"+e.getMessage());
+		}
+		
+		return jsonMap;
+	}
+	
+	
 	
 	
 	

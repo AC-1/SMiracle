@@ -11,6 +11,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.common.ExcelUtil;
+import com.miracle.common.TimeMachine;
 import com.miracle.dao.ChildrenQueryDAO;
 import com.miracle.dao.ChildrenTrsDAO;
 import com.miracle.dao.DAOObjectNotFoundException;
@@ -36,6 +39,8 @@ import com.miracle.service.ChildrenService;
 @Service
 public class ChildrenServiceImpl implements ChildrenService {
 	
+	private static final Logger log = LoggerFactory.getLogger(ChildrenServiceImpl.class);
+	
 	@Autowired
 	private ChildrenQueryDAO childrenQueryDAO;
 	
@@ -50,6 +55,9 @@ public class ChildrenServiceImpl implements ChildrenService {
 	
 	@PersistenceContext
 	protected EntityManager entityManager;
+	
+	@Autowired
+	private TimeMachine timeMachine;
 	
 	@Resource
 	private DataSourceTransactionManager transactionManager;
@@ -140,7 +148,7 @@ public class ChildrenServiceImpl implements ChildrenService {
 	@Override
 	public Boolean excelImport() throws DAOObjectNotFoundException {
 		
-		String path = "C://excel/people.xlsx";
+		String path = "C://excel/people.xls";
 		boolean isCorrect = false;
 		
 		//讀取Excel
@@ -168,31 +176,41 @@ public class ChildrenServiceImpl implements ChildrenService {
 			if(map != null && !map.equals("")){
 				
 				String name = map.get(0);//姓名
-//				String spotExteriorId = map.get(1);//班點外碼
-//				String spotName = map.get(2);//班點名稱
-//				String spotStation = map.get(3);//班點站別
-//				String spotPause = map.get(4);//班點狀態
-//				String delData = map.get(5);//刪除
+				String gender = map.get(1);//姓別
+				String birthday = map.get(2);//出生年月日
+				String role = map.get(3);//角色
+				String status = map.get(4);//狀態
+				String tel1 = map.get(5);//電話1
+				String tel2 = map.get(6);//電話2
+				String addr = map.get(7);//住址
+				String email = map.get(8);//email
+				String comm = map.get(9);//牧區ID
+				String groupId = map.get(10);//群組ID
+				String edu = map.get(11);//教育程度
+				String school = map.get(12);//學校名稱
+				String grade = map.get(13);//年級
+				String worship = map.get(14);//崇拜ID
+				String note = map.get(15);//備註
 				
 				People people = new People();
 				people.setId(newRandomUUID());
 				people.setName(name);
-				people.setGender("");
-				people.setBirthday(null);
-				people.setRole("");
-				people.setStatus("");
-				people.setTel1("");
-				people.setTel2("");
-				people.setAddr("");
-				people.setEmail("");
-				people.setComm("");
-				people.setGroup("");
-				people.setEdu("");
-				people.setSchool("");
-				people.setGrade("");
-				people.setWorship("");
-				people.setCreate("2015 10-11 15:50");
-				people.setNote("");
+				people.setGender(gender);
+				people.setBirthday(birthday);
+				people.setRole(role);
+				people.setStatus(status);
+				people.setTel1(tel1);
+				people.setTel2(tel2);
+				people.setAddr(addr);
+				people.setEmail(email);
+				people.setComm(comm);
+				people.setGroupId(groupId);
+				people.setEdu(edu);
+				people.setSchool(school);
+				people.setGrade(grade);
+				people.setWorship(worship);
+				people.setCreateTime(timeMachine.todayFormat());
+				people.setNote(note);
 				
 				//註冊用戶
 				em.persist(people);
@@ -207,7 +225,7 @@ public class ChildrenServiceImpl implements ChildrenService {
 		   
 		   
 		} catch (Exception ex) {
-//			log.info(ex.toString());
+			log.info(ex.toString());
 			em.getTransaction().rollback();
         	isCorrect = false;
 		}
