@@ -1,17 +1,14 @@
 package com.miracle.dao.jpa;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.miracle.mode.PresentWorship;
+import com.miracle.mode.People;
 
 
-@Repository("childrenDAO")
-public interface ChildrenDAO extends CrudRepository<PresentWorship, Long>, JpaRepository<PresentWorship, Long>{
+@Repository("peopleDAO")
+public interface PeopleDAO extends CrudRepository<People, Long>, JpaRepository<People, Long>{
 
 	
 //	@Query(value = "select c from People c ")

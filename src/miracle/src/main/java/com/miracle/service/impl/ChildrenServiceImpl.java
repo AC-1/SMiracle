@@ -11,9 +11,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -25,6 +28,7 @@ import com.miracle.dao.ChildrenQueryDAO;
 import com.miracle.dao.ChildrenTrsDAO;
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.dao.jpa.ChildrenDAO;
+import com.miracle.dao.jpa.PeopleDAO;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
 import com.miracle.mode.People;
@@ -50,6 +54,9 @@ public class ChildrenServiceImpl implements ChildrenService {
 	@Autowired
 	private ChildrenDAO childrenDAO;
 	
+	@Autowired
+	private PeopleDAO peopleDAO;
+	
 	@PersistenceUnit
     private EntityManagerFactory emf; 
 	
@@ -70,6 +77,13 @@ public class ChildrenServiceImpl implements ChildrenService {
 	public PeopleVO queryPeopleData(String peopleId) throws DAOObjectNotFoundException {
 		
 		return childrenQueryDAO.findPeopleData(peopleId);
+	}
+	
+	@Override
+	public Page<People> queryPeopleDataAll(Pageable pageable) throws DAOObjectNotFoundException {
+		
+		
+		return peopleDAO.findAll(pageable);
 	}
 
 	@Override
@@ -175,45 +189,92 @@ public class ChildrenServiceImpl implements ChildrenService {
 			   
 			if(map != null && !map.equals("")){
 				
+//				if(i==0){
+				
 				String name = map.get(0);//姓名
 				String gender = map.get(1);//姓別
-				String birthday = map.get(2);//出生年月日
-				String role = map.get(3);//角色
-				String status = map.get(4);//狀態
-				String tel1 = map.get(5);//電話1
-				String tel2 = map.get(6);//電話2
-				String addr = map.get(7);//住址
-				String email = map.get(8);//email
-				String comm = map.get(9);//牧區ID
-				String groupId = map.get(10);//群組ID
-				String edu = map.get(11);//教育程度
-				String school = map.get(12);//學校名稱
-				String grade = map.get(13);//年級
-				String worship = map.get(14);//崇拜ID
-				String note = map.get(15);//備註
+				String year = map.get(2);//出生年月日
+				String month = map.get(3);//出生年月日
+				String day = map.get(4);//出生年月日
+				String role = map.get(5);//角色
+				String status = map.get(6);//狀態
+				String tel1 = map.get(7);//電話1
+				String tel2 = map.get(8);//電話2
+				String addr = map.get(9);//住址
+				String email = map.get(10);//email
+				String comm = map.get(11);//牧區ID
+				String groupId = map.get(12);//群組ID
+				String edu = map.get(13);//教育程度
+				String school = map.get(14);//學校名稱
+				String grade = map.get(15);//年級
+				String worship = map.get(16);//崇拜ID
+				String note = map.get(17);//備註
 				
-				People people = new People();
-				people.setId(newRandomUUID());
-				people.setName(name);
-				people.setGender(gender);
-				people.setBirthday(birthday);
-				people.setRole(role);
-				people.setStatus(status);
-				people.setTel1(tel1);
-				people.setTel2(tel2);
-				people.setAddr(addr);
-				people.setEmail(email);
-				people.setComm(comm);
-				people.setGroupId(groupId);
-				people.setEdu(edu);
-				people.setSchool(school);
-				people.setGrade(grade);
-				people.setWorship(worship);
-				people.setCreateTime(timeMachine.todayFormat());
-				people.setNote(note);
+				if(gender.equals("女")){
+					gender = "0";
+				}else if(gender.equals("男")){
+					gender = "1";
+				}
 				
-				//註冊用戶
-				em.persist(people);
+				String birthday = null;
+				if(StringUtils.isNotBlank(name)){
+					
+					if(StringUtils.isBlank(year) ||
+							StringUtils.isBlank(month) ||
+							StringUtils.isBlank(day)){
+						
+					}else{
+				
+						birthday = convertTWDateToADDate(year, month, day);
+					
+					}
+//					edu = "0";
+					
+					if(grade.equals("1")){
+						grade = "6";
+					}else if(grade.equals("2")){
+						grade = "7";
+					}else if(grade.equals("3")){
+						grade = "8";
+					}else if(grade.equals("4")){
+						grade = "9";
+					}else if(grade.equals("5")){
+						grade = "10";
+					}else if(grade.equals("6")){
+						grade = "11";
+					}else if(grade.equals("中班")){
+						grade = "4";
+					}else if(grade.equals("高一")){
+						grade = "15";
+					}else if(grade.equals("大班")){
+						grade = "5";
+					}
+					
+					People people = new People();
+					people.setId(newRandomUUID());
+					people.setName(name);
+					people.setGender(gender);
+					people.setBirthday(birthday);
+					people.setRole(role);
+					people.setStatus(status);
+					people.setTel1(tel1);
+					people.setTel2(tel2);
+					people.setAddr(addr);
+					people.setEmail(email);
+					people.setComm(comm);
+					people.setGroupId(groupId);
+					people.setEdu(edu);
+					people.setSchool(school);
+					people.setGrade(grade);
+					people.setWorship(worship);
+					people.setCreateTime(timeMachine.todayFormat());
+					people.setNote(note);
+					
+					//註冊用戶
+					em.persist(people);
+				}
+				
+//				}
 			   
 			   }
 			
@@ -222,12 +283,13 @@ public class ChildrenServiceImpl implements ChildrenService {
 		   
 		   em.getTransaction().commit();
 		   isCorrect = true;
-		   
+		   em.close();
 		   
 		} catch (Exception ex) {
 			log.info(ex.toString());
 			em.getTransaction().rollback();
         	isCorrect = false;
+        	em.close();
 		}
 		   
 		return isCorrect;
@@ -237,6 +299,26 @@ public class ChildrenServiceImpl implements ChildrenService {
 	private String newRandomUUID() {
         String uuidRaw = UUID.randomUUID().toString();
         return uuidRaw.replaceAll("-", "");
+    }
+	
+	
+	public static String convertTWDateToADDate(String twDate, String month, String day) {
+		String addate = "";
+		/*
+        if (twDate.length() != 7)
+            return "";*/
+
+        try {
+            int yy = Integer.valueOf(twDate).intValue() + 1911;
+            String year = String.valueOf(yy);
+            //String month = twDate.substring(3, 5);
+            //String day = twDate.substring(5, 7);
+            addate = year + "-" + month + "-" + day;
+        } catch (Exception ignore) {
+            addate = "";
+        }
+
+        return addate;
     }
 	
 }

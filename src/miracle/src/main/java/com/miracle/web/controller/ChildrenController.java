@@ -1,11 +1,9 @@
 package com.miracle.web.controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,13 +11,17 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.github.miemiedev.mybatis.paginator.domain.Order;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
@@ -38,7 +40,6 @@ import com.miracle.mode.Statement;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 import com.miracle.service.ChildrenService;
-import com.oreilly.servlet.MultipartRequest;
 
 
 
@@ -385,7 +386,47 @@ public class ChildrenController extends BaseController {
 	}
 	
 	
-	
+	/** 
+	 * 查詢兒童資料 - 分頁
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/sign/querychildrenall", method = RequestMethod.POST , headers="Accept=application/json" )
+	public Map<String, Object> queryChildrenDataAll(
+			Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(pageNumber == null || pageNumber.equals("")){
+			pageNumber="0";//首頁進來
+		}
+		
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		try {
+			
+			int pageIndex = Integer.parseInt(pageNumber); //第幾頁 - 從1開始 0會報錯
+			int pageSize = 10;//每頁幾筆
+			int page = (pageIndex-1)*pageSize;
+			
+			Sort sort = new Sort (Direction.DESC, "createTime");
+			Pageable pageable = new PageRequest(pageIndex, pageSize, sort);
+			
+			//查詢所有
+			Page<People> peopleList = childrenService.queryPeopleDataAll(pageable);
+			jsonMap.put("dataList",peopleList.getContent());
+			
+			jsonMap.put("pageNumber", pageNumber);
+			jsonMap.put("pageTotal", peopleList.getTotalPages());
+			jsonMap.put("status", "OK");
+        
+		} catch (Exception e) {
+			jsonMap.put("status", "ERR");
+			jsonMap.put("code", -100);
+			jsonMap.put("desc", "Message:"+e.getMessage());
+		}
+		
+		return jsonMap;
+	}
 	
 	
 	

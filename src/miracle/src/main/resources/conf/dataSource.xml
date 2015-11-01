@@ -25,7 +25,7 @@
   	
   	<aop:config>
     	<aop:pointcut id="businessService2" expression="execution(* com.miracle.dao.jpa.*.*(..))"/>
-		<aop:advisor pointcut-ref="businessService" advice-ref="txAdviceJpa"/>
+		<aop:advisor pointcut-ref="businessService2" advice-ref="txAdviceJpa"/>
   	</aop:config>
   	
 	<!-- <bean id="dataSourceQuery" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
