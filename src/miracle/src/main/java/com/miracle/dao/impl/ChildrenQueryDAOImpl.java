@@ -15,6 +15,7 @@ import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
+import com.miracle.mode.vo.WorshipVO;
 
 
 @Repository("childrenQueryDAO")
@@ -62,6 +63,10 @@ public class ChildrenQueryDAOImpl extends BaseQueryDAOImpl<Car, Map<String, Obje
 	}
 	
 	
+	@Override
+	public WorshipVO findWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException {
 
+		return this.getSqlSession().selectOne(getNameSpace() + ".findWorshipIdByKey", peopleId);
+	}
 	
 }

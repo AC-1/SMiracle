@@ -234,44 +234,57 @@ public class ChildrenController extends BaseController {
 	
 	/** 
 	 * 點名報到
+	 * pid   People ID
+	 * cid   Charch Id
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/callroll", method = RequestMethod.POST , headers="Accept=application/json" )
 	public Map<String, Object> callRoll (
 			Model model, HttpServletRequest req, 
-			@RequestParam String pid, @RequestParam String cid,
-			@RequestParam String worship,
 			HttpServletResponse res,  HttpSession session ) throws Exception{
 		
-//		String pid = StringUtils.trimToEmpty(req.getParameter("pid"));
-//		String cid = StringUtils.trimToEmpty(req.getParameter("cid"));
+		String pid = StringUtils.trimToEmpty(req.getParameter("pid"));
+		String cid = StringUtils.trimToEmpty(req.getParameter("cid"));
 //		String worship = StringUtils.trimToEmpty(req.getParameter("worship"));
 		
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		String worship = ""; //那一堂
 		
 		try {
-			
-			PresentWorship presentWorship = new PresentWorship();
-			presentWorship.setId(timeMachine.newRandomUUID());
-			presentWorship.setPid(pid);
-			presentWorship.setCid(cid);
-			presentWorship.setActivityId(worship);
-			
-			//判斷是否報到過
-			String id = childrenService.queryPresentWorshipByKey(presentWorship);
-			if(StringUtils.isBlank(id)){
-				//第一次報到
-				childrenService.createPresentWorship(presentWorship);
-			}else{
-				//重覆報到
-				Boolean isCorrect = childrenService.updatePresentWorshipById(id);
-			}
 			
 			//孩子個人資料
 			People people = childrenService.queryPeopleById(pid);
 			
-			jsonMap.put("people", people);
-			jsonMap.put("status", 0);
+			//查詢那一堂，依星期和時間查詢
+			
+			
+			
+			if(StringUtils.isNotBlank(worship)){
+			
+				PresentWorship presentWorship = new PresentWorship();
+				presentWorship.setId(timeMachine.newRandomUUID());
+				presentWorship.setPid(pid);
+				presentWorship.setCid(cid);
+				presentWorship.setActivityId(worship);
+				
+				//判斷是否報到過
+				String id = childrenService.queryPresentWorshipByKey(presentWorship);
+				if(StringUtils.isBlank(id)){
+					//第一次報到
+					childrenService.createPresentWorship(presentWorship);
+				}else{
+					//重覆報到
+					Boolean isCorrect = childrenService.updatePresentWorshipById(id);
+				}
+				
+				jsonMap.put("people", people);
+				jsonMap.put("status", 0);
+			
+			}else{
+				jsonMap.put("people", null);
+				jsonMap.put("status", 0);
+				jsonMap.put("msg", "未到打卡時間！");
+			}
         
 		} catch (Exception e) {
 			jsonMap.put("status", -1);
@@ -390,7 +403,7 @@ public class ChildrenController extends BaseController {
 	 * 查詢兒童資料 - 分頁
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/sign/querychildrenall", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/sign/querychildrenall", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public Map<String, Object> queryChildrenDataAll(
 			Model model, HttpServletRequest req, 
 			HttpServletResponse res,  HttpSession session ) throws Exception{
@@ -400,12 +413,17 @@ public class ChildrenController extends BaseController {
 			pageNumber="0";//首頁進來
 		}
 		
+		String pageSize1 = StringUtils.trimToEmpty(req.getParameter("pageSize"));
+		if(StringUtils.isBlank(pageSize1)){
+			pageSize1 = "10";
+		}
+		
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		
 		try {
 			
 			int pageIndex = Integer.parseInt(pageNumber); //第幾頁 - 從1開始 0會報錯
-			int pageSize = 10;//每頁幾筆
+			int pageSize = Integer.parseInt(pageSize1);//每頁幾筆
 			int page = (pageIndex-1)*pageSize;
 			
 			Sort sort = new Sort (Direction.DESC, "createTime");

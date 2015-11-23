@@ -14,6 +14,7 @@ import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
+import com.miracle.mode.vo.WorshipVO;
 
 
 
@@ -54,4 +55,8 @@ public interface ChildrenService {
 	
 	/** 讀取Excel 匯入兒童基本資料*/
 	public Boolean excelImport() throws DAOObjectNotFoundException;
+	
+	/** 打卡查詢那一堂*/
+	public WorshipVO queryWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException;
+	
 }

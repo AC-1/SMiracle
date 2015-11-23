@@ -13,6 +13,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.miracle.common.Email;
 import com.miracle.common.MailUtil;
 import com.miracle.common.SecretUtil;
+import com.miracle.common.TimeMachine;
 import com.miracle.dao.ChildrenQueryDAO;
 import com.miracle.service.ChildrenService;
 
@@ -118,6 +119,10 @@ private MailUtil mailUtil;
 //    	List<Contact> contact = childrenQueryDAO.findContact("P_222222222");
 //    	System.out.println(contact);
     	
-    	childrenService.excelImport();
+//    	childrenService.excelImport();
+    	for(int i=0;i<15;i++){
+    		TimeMachine timeMachine = new TimeMachine();
+    		System.out.println(timeMachine.newRandomUUID());
+    	}
     }
 }

@@ -11,6 +11,7 @@ import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
+import com.miracle.mode.vo.WorshipVO;
 
 
 public interface ChildrenQueryDAO extends BaseQueryDAO<Car, Map<String, Object>> {
@@ -33,5 +34,7 @@ public interface ChildrenQueryDAO extends BaseQueryDAO<Car, Map<String, Object>>
 	/** 查詢崇拜報到-查詢*/
 	public String findPresentWorshipByKey(PresentWorship presentWorship) throws DAOObjectNotFoundException;
 	
+	/** 打卡查詢那一堂*/
+	public WorshipVO findWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException;
 	
 }

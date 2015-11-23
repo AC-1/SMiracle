@@ -79,6 +79,14 @@
     <filter-name>SpringEncodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  <filter>
+	<filter-name>cors</filter-name>
+	<filter-class>com.miracle.web.filter.CorsFilter</filter-class>
+  </filter>
+  <filter-mapping>
+	<filter-name>cors</filter-name>
+	<url-pattern>/*</url-pattern>
+  </filter-mapping>
   
   <welcome-file-list>
   	<welcome-file>/</welcome-file>

@@ -36,6 +36,7 @@ import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
+import com.miracle.mode.vo.WorshipVO;
 import com.miracle.service.ChildrenService;
 
 
@@ -321,4 +322,10 @@ public class ChildrenServiceImpl implements ChildrenService {
         return addate;
     }
 	
+	@Override
+	public WorshipVO queryWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException {
+
+		
+		return null;
+	}
 }

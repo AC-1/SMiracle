@@ -102,5 +102,12 @@
 		  and to_days(CHKIN_TIME) = to_days(now())
 	</select>
 	
+	<!-- <select id="findWorshipIdByKey" parameterType="presentWorship" resultType="string">
+		select B.ID from worship B
+		where B.WEEKDAY = DAYOFWEEK(NOW()) 
+		and DATE_FORMAT(NOW(),'%H%i') BETWEEN B.START_CHECKIN AND B.STOP_CHECKIN
+		and B.EDU = (select EDU from people where ID = #{peopleId})
+	</select> -->
+	
 
 </mapper>
