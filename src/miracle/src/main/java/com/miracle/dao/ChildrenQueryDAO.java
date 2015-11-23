@@ -35,6 +35,6 @@ public interface ChildrenQueryDAO extends BaseQueryDAO<Car, Map<String, Object>>
 	public String findPresentWorshipByKey(PresentWorship presentWorship) throws DAOObjectNotFoundException;
 	
 	/** 打卡查詢那一堂*/
-	public WorshipVO findWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException;
+	public String findWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException;
 	
 }

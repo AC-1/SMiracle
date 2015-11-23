@@ -323,9 +323,9 @@ public class ChildrenServiceImpl implements ChildrenService {
     }
 	
 	@Override
-	public WorshipVO queryWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException {
+	public String queryWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException {
 
 		
-		return null;
+		return childrenQueryDAO.findWorshipIdByKey(peopleId);
 	}
 }

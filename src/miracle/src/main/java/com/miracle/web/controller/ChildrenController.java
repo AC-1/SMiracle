@@ -39,6 +39,7 @@ import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
+import com.miracle.mode.vo.WorshipVO;
 import com.miracle.service.ChildrenService;
 
 
@@ -256,8 +257,7 @@ public class ChildrenController extends BaseController {
 			People people = childrenService.queryPeopleById(pid);
 			
 			//查詢那一堂，依星期和時間查詢
-			
-			
+			worship = childrenService.queryWorshipIdByKey(pid);
 			
 			if(StringUtils.isNotBlank(worship)){
 			

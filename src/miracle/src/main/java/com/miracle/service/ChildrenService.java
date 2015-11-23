@@ -57,6 +57,6 @@ public interface ChildrenService {
 	public Boolean excelImport() throws DAOObjectNotFoundException;
 	
 	/** 打卡查詢那一堂*/
-	public WorshipVO queryWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException;
+	public String queryWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException;
 	
 }

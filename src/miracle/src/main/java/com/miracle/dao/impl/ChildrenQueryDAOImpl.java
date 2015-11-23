@@ -64,7 +64,7 @@ public class ChildrenQueryDAOImpl extends BaseQueryDAOImpl<Car, Map<String, Obje
 	
 	
 	@Override
-	public WorshipVO findWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException {
+	public String findWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException {
 
 		return this.getSqlSession().selectOne(getNameSpace() + ".findWorshipIdByKey", peopleId);
 	}
