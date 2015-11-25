@@ -10,7 +10,7 @@ import com.alibaba.fastjson.JSON;
 import com.miracle.mode.JSONPObject;
 
 
-
+//<!-- JsonP -->
 public class FastJsonHttpMessageConverter extends com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter {
 	
 	@Override  

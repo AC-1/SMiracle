@@ -1,5 +1,6 @@
 package com.miracle.mode;
 
+//<!-- JsonP -->
 public class JSONPObject {
 
 	
