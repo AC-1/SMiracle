@@ -34,6 +34,7 @@ import com.miracle.common.TimeMachine;
 import com.miracle.common.Tools;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
+import com.miracle.mode.JSONPObject;
 import com.miracle.mode.People;
 import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
@@ -74,7 +75,8 @@ public class ChildrenController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/miracle/querychildren", method = RequestMethod.POST , headers="Accept=application/json" )
-	public Map<String, Object> queryChildrenData(
+	public JSONPObject queryChildrenData(
+			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
 			@RequestParam String peopleId,
 			HttpServletResponse res,  HttpSession session ) throws Exception{
@@ -130,7 +132,7 @@ public class ChildrenController extends BaseController {
 			jsonMap.put("desc", "Message:"+e.getMessage());
 		}
 		
-		return jsonMap;
+		return new JSONPObject(callback,jsonMap);
 	}
 	
 	/** 
@@ -138,7 +140,8 @@ public class ChildrenController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/miracle/querypresentworship", method = RequestMethod.POST , headers="Accept=application/json" )
-	public Map<String, Object> queryPresentWorship(
+	public JSONPObject queryPresentWorship(
+			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
 			@RequestParam String peopleId,
 			HttpServletResponse res,  HttpSession session ) throws Exception{
@@ -179,7 +182,7 @@ public class ChildrenController extends BaseController {
 			jsonMap.put("desc", "Message:"+e.getMessage());
 		}
 		
-		return jsonMap;
+		return new JSONPObject(callback,jsonMap);
 	}
 	
 	
@@ -188,7 +191,8 @@ public class ChildrenController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/miracle/querystatement", method = RequestMethod.POST , headers="Accept=application/json" )
-	public Map<String, Object> queryStatement (
+	public JSONPObject queryStatement (
+			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
 			@RequestParam String peopleId,
 			HttpServletResponse res,  HttpSession session ) throws Exception{
@@ -229,7 +233,7 @@ public class ChildrenController extends BaseController {
 			jsonMap.put("desc", "Message:"+e.getMessage());
 		}
 		
-		return jsonMap;
+		return new JSONPObject(callback,jsonMap);
 	}
 	
 	
@@ -240,7 +244,8 @@ public class ChildrenController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/callroll", method = RequestMethod.POST , headers="Accept=application/json" )
-	public Map<String, Object> callRoll (
+	public JSONPObject callRoll (
+			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
 			HttpServletResponse res,  HttpSession session ) throws Exception{
 		
@@ -291,7 +296,7 @@ public class ChildrenController extends BaseController {
 			jsonMap.put("desc", "Message:"+e.getMessage());
 		}
 		
-		return jsonMap;
+		return new JSONPObject(callback,jsonMap);
 	}
 	
 	
@@ -300,7 +305,8 @@ public class ChildrenController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/callrollchkout", method = RequestMethod.POST , headers="Accept=application/json" )
-	public Map<String, Object> callRollChkout (
+	public JSONPObject callRollChkout (
+			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
 			@RequestParam String pid, @RequestParam String cid,
 			@RequestParam String worship,
@@ -326,7 +332,7 @@ public class ChildrenController extends BaseController {
 			jsonMap.put("desc", "Message:"+e.getMessage());
 		}
 		
-		return jsonMap;
+		return new JSONPObject(callback,jsonMap);
 	}
 	
 	
@@ -404,7 +410,8 @@ public class ChildrenController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/sign/querychildrenall", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
-	public Map<String, Object> queryChildrenDataAll(
+	public JSONPObject queryChildrenDataAll(
+			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
 			HttpServletResponse res,  HttpSession session ) throws Exception{
 		
@@ -443,7 +450,7 @@ public class ChildrenController extends BaseController {
 			jsonMap.put("desc", "Message:"+e.getMessage());
 		}
 		
-		return jsonMap;
+		return new JSONPObject(callback,jsonMap);
 	}
 	
 	

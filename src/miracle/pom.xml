@@ -369,6 +369,13 @@
 	        <version>3.7</version>
 	    </dependency>
 	    <!-- Excel End -->
+	    
+	    <!-- JsonP -->
+	    <dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.5</version>
+		</dependency>
    		 
 	</dependencies>
 
