@@ -9,6 +9,7 @@ import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
 import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
+import com.miracle.mode.Worship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 import com.miracle.mode.vo.WorshipVO;
@@ -37,4 +38,8 @@ public interface ChildrenQueryDAO extends BaseQueryDAO<Car, Map<String, Object>>
 	/** 打卡查詢那一堂*/
 	public String findWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException;
 	
+	/** 查詢所有崇拜聚會
+	 *  依時間或worshId查詢 
+	 */
+	public List<PresentWorshipVO> findPresentWorshipAll(String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException;
 }

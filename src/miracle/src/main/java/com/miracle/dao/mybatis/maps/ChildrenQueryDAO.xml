@@ -35,10 +35,15 @@
 	</resultMap>
 	
 	<resultMap id="presentWorshipVOMap" type="PresentWorshipVO">
+		<result property="id" column="ID" />
 		<result property="pid" column="PID" />
+		<result property="activityId" column="activityId" />
 		<result property="chkinTime" column="CHKIN_TIME" />
 		<result property="worshipName" column="WORSHIP_NAME" />
 		<result property="note" column="NOTE" />
+		<result property="name" column="NAME" />
+		<result property="grade" column="GRADE" />
+		<result property="gender" column="GENDER" />
 	</resultMap>
 	
 	<resultMap id="statementVOMap" type="Statement">
@@ -111,6 +116,29 @@
 		where B.WEEKDAY = DAYOFWEEK(NOW()) 
 		and DATE_FORMAT(NOW(),'%H%i') BETWEEN B.START_CHECKIN AND B.STOP_CHECKIN
 		and B.EDU = (select EDU from people where ID = #{peopleId})
+	</select>
+	
+	<select id="findPresentWorshipAll" parameterType="map" resultMap="presentWorshipVOMap">
+		select A.ID, A.PID, A.ACTIVITY_ID, A.CHKIN_TIME,
+		 	   B.NAME, B.GRADE, B.GENDER
+		from present_worship A
+		left join people B on A.PID = B.ID
+		<choose>
+			<when test="beginTime != null and !''.equals(beginTime) and
+			            endTime != null and !''.equals(endTime) and
+			            worshId != null and !''.equals(worshId)">
+			where A.CHKIN_TIME BETWEEN #{beginTime} AND #{endTime}
+			  and A.ACTIVITY_ID = #{worshId}
+			</when>
+			<when test="beginTime != null and !''.equals(beginTime) and
+			            endTime != null and !''.equals(endTime)">
+			where A.CHKIN_TIME BETWEEN #{beginTime} AND #{endTime}
+			</when>
+			<when test="worshId != null and !''.equals(worshId)">
+			where A.ACTIVITY_ID = #{worshId}
+			</when>
+		</choose>
+		order by A.CHKIN_TIME DESC
 	</select>
 	
 

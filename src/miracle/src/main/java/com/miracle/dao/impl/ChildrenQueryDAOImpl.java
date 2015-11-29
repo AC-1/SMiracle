@@ -1,5 +1,6 @@
 package com.miracle.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,5 +69,18 @@ public class ChildrenQueryDAOImpl extends BaseQueryDAOImpl<Car, Map<String, Obje
 
 		return this.getSqlSession().selectOne(getNameSpace() + ".findWorshipIdByKey", peopleId);
 	}
+	
+	
+	@Override
+	public List<PresentWorshipVO> findPresentWorshipAll(String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException {
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("beginTime", beginTime);
+		map.put("endTime", endTime);
+		map.put("worshId", worshId);
+		return this.getSqlSession().selectList(getNameSpace() + ".findPresentWorshipAll", map);
+	}
+	
+	
 	
 }

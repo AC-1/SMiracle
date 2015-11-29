@@ -38,6 +38,7 @@ import com.miracle.mode.JSONPObject;
 import com.miracle.mode.People;
 import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
+import com.miracle.mode.Worship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 import com.miracle.mode.vo.WorshipVO;
@@ -415,6 +416,8 @@ public class ChildrenController extends BaseController {
 			Model model, HttpServletRequest req, 
 			HttpServletResponse res,  HttpSession session ) throws Exception{
 		
+		String grade = StringUtils.trimToEmpty(req.getParameter("grade"));
+		
 		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
 		if(pageNumber == null || pageNumber.equals("")){
 			pageNumber="0";//首頁進來
@@ -436,8 +439,14 @@ public class ChildrenController extends BaseController {
 			Sort sort = new Sort (Direction.DESC, "createTime");
 			Pageable pageable = new PageRequest(pageIndex, pageSize, sort);
 			
+			Page<People> peopleList = null;
 			//查詢所有
-			Page<People> peopleList = childrenService.queryPeopleDataAll(pageable);
+			if(StringUtils.isNotBlank(grade)){
+				//依年級查詢
+				peopleList = childrenService.queryPeopleDataAllByGrade(grade, pageable);
+			}else{
+				peopleList = childrenService.queryPeopleDataAll(pageable);
+			}
 			jsonMap.put("dataList",peopleList.getContent());
 			
 			jsonMap.put("pageNumber", pageNumber);
@@ -454,7 +463,70 @@ public class ChildrenController extends BaseController {
 	}
 	
 	
+	/** 
+	 * 查詢所有崇拜堂數
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/sign/queryworshipall", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
+	public JSONPObject queryWorshipAll(
+			@RequestParam(required=false) String callback,
+			Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		try {
+			
+			//查詢所有
+			List<Worship> worshipList = childrenService.queryWorshipAll();
+			jsonMap.put("dataList",worshipList);
+			
+			jsonMap.put("status", "OK");
+        
+		} catch (Exception e) {
+			jsonMap.put("status", "ERR");
+			jsonMap.put("code", -100);
+			jsonMap.put("desc", "Message:"+e.getMessage());
+		}
+		
+		return new JSONPObject(callback,jsonMap);
+	}
 	
+	
+	/** 
+	 * 查詢所有崇拜 - 依時間或worshId查詢
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/sign/querypresentworshipall", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
+	public JSONPObject queryPresentWorshipAll(
+			@RequestParam(required=false) String callback,
+			Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String beginTime = StringUtils.trimToEmpty(req.getParameter("beginTime"));
+		String endTime = StringUtils.trimToEmpty(req.getParameter("endTime"));
+		String worshId = StringUtils.trimToEmpty(req.getParameter("worshId"));
+
+		
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		try {
+			
+			//查詢所有
+			List<PresentWorshipVO> presentWorshipVOList = childrenService.queryPresentWorshipAll(beginTime, endTime, worshId);
+			jsonMap.put("dataList",presentWorshipVOList);
+			
+			jsonMap.put("status", "OK");
+        
+		} catch (Exception e) {
+			jsonMap.put("status", "ERR");
+			jsonMap.put("code", -100);
+			jsonMap.put("desc", "Message:"+e.getMessage());
+		}
+		
+		return new JSONPObject(callback,jsonMap);
+	}
 	
 	
 	

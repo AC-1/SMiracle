@@ -29,14 +29,15 @@ import com.miracle.dao.ChildrenTrsDAO;
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.dao.jpa.ChildrenDAO;
 import com.miracle.dao.jpa.PeopleDAO;
+import com.miracle.dao.jpa.WorshipDAO;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
 import com.miracle.mode.People;
 import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
+import com.miracle.mode.Worship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
-import com.miracle.mode.vo.WorshipVO;
 import com.miracle.service.ChildrenService;
 
 
@@ -57,6 +58,9 @@ public class ChildrenServiceImpl implements ChildrenService {
 	
 	@Autowired
 	private PeopleDAO peopleDAO;
+	
+	@Autowired
+	private WorshipDAO worshipDAO;
 	
 	@PersistenceUnit
     private EntityManagerFactory emf; 
@@ -85,6 +89,13 @@ public class ChildrenServiceImpl implements ChildrenService {
 		
 		
 		return peopleDAO.findAll(pageable);
+	}
+	
+	@Override
+	public Page<People> queryPeopleDataAllByGrade(String grade, Pageable pageable) throws DAOObjectNotFoundException {
+		
+		
+		return peopleDAO.findAllByGrade(grade, pageable);
 	}
 
 	@Override
@@ -328,4 +339,20 @@ public class ChildrenServiceImpl implements ChildrenService {
 		
 		return childrenQueryDAO.findWorshipIdByKey(peopleId);
 	}
+	
+	
+	@Override
+	public List<Worship> queryWorshipAll() throws DAOObjectNotFoundException {
+		
+		
+		return worshipDAO.findAll();
+	}
+	
+	@Override
+	public List<PresentWorshipVO> queryPresentWorshipAll(String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException {
+		
+		
+		return childrenQueryDAO.findPresentWorshipAll(beginTime, endTime, worshId);
+	}
+	
 }

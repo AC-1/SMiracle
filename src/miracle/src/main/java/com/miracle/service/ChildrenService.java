@@ -12,9 +12,9 @@ import com.miracle.mode.Contact;
 import com.miracle.mode.People;
 import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
+import com.miracle.mode.Worship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
-import com.miracle.mode.vo.WorshipVO;
 
 
 
@@ -25,6 +25,9 @@ public interface ChildrenService {
 
 	/** 查詢單個人資料全部 - 分頁*/
 	public Page<People> queryPeopleDataAll(Pageable pageable) throws DAOObjectNotFoundException;
+	
+	/** 查詢單個人資料全部By年級 - 分頁*/
+	public Page<People> queryPeopleDataAllByGrade(String grade, Pageable pageable) throws DAOObjectNotFoundException;
 	
 	/** 查詢䏈絡資料*/
 	public List<Contact> queryContact(String peopleId) throws DAOObjectNotFoundException;
@@ -59,4 +62,11 @@ public interface ChildrenService {
 	/** 打卡查詢那一堂*/
 	public String queryWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException;
 	
+	/** 查詢所有崇拜堂數*/
+	public List<Worship> queryWorshipAll() throws DAOObjectNotFoundException;
+	
+	/** 查詢所有崇拜聚會
+	 *  依時間或worshId查詢 
+	 */
+	public List<PresentWorshipVO> queryPresentWorshipAll(String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException;
 }
