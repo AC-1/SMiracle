@@ -76,6 +76,7 @@ public class ChildrenController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/miracle/querychildren", method = RequestMethod.POST , headers="Accept=application/json" )
+//	public Map<String, Object> queryChildrenData(
 	public JSONPObject queryChildrenData(
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
@@ -133,6 +134,7 @@ public class ChildrenController extends BaseController {
 			jsonMap.put("desc", "Message:"+e.getMessage());
 		}
 		
+//		return jsonMap;
 		return new JSONPObject(callback,jsonMap);
 	}
 	
