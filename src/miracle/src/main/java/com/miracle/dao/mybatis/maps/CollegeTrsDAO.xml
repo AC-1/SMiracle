@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miracle.dao.CollegeTrsDAO">
+
+	<!-- <cache /> -->
+
+	
+	<insert id="createCollegeCampCheckIn" parameterType="collegeCampCheckIn">
+		insert into college_camp_check_in ( CHECK_IN_ID, COLLEGE_ID, CHECK_IN_TIME, CHECK_IN_LAST_TIME, IF_CHECK_IN, CAMP_DATE, ACTIVITY_ID )
+		values (#{checkInId}, #{collegeId}, now(), now(), 'Y', #{campDate}, #{activityId})
+	</insert>
+	
+	<update id="updateCollegeCampCheckIn" parameterType="string">
+		update college_camp_check_in
+		set CHECK_IN_LAST_TIME=now()
+		where COLLEGE_ID=#{collegeId}
+		and to_days(CHECK_IN_TIME) = to_days(NOW())
+	</update>
+
+</mapper>

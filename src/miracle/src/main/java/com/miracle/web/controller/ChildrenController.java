@@ -41,6 +41,7 @@ import com.miracle.mode.Statement;
 import com.miracle.mode.Worship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
+import com.miracle.mode.vo.WorshipReportVO;
 import com.miracle.mode.vo.WorshipVO;
 import com.miracle.service.ChildrenService;
 
@@ -518,6 +519,46 @@ public class ChildrenController extends BaseController {
 			//查詢所有
 			List<PresentWorshipVO> presentWorshipVOList = childrenService.queryPresentWorshipAll(beginTime, endTime, worshId);
 			jsonMap.put("dataList",presentWorshipVOList);
+			
+			jsonMap.put("status", "OK");
+        
+		} catch (Exception e) {
+			jsonMap.put("status", "ERR");
+			jsonMap.put("code", -100);
+			jsonMap.put("desc", "Message:"+e.getMessage());
+		}
+		
+		return new JSONPObject(callback,jsonMap);
+	}
+	
+	
+	/** 
+	 * 查詢報表
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/sign/queryworshiprepotall", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
+	public JSONPObject queryWorshipRepotAll(
+			@RequestParam(required=false) String callback,
+			Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String beginTime = StringUtils.trimToEmpty(req.getParameter("beginTime"));
+		String endTime = StringUtils.trimToEmpty(req.getParameter("endTime"));
+		String worshId = StringUtils.trimToEmpty(req.getParameter("worshId"));
+		String filter = StringUtils.trimToEmpty(req.getParameter("filter"));
+		String count = StringUtils.trimToEmpty(req.getParameter("count"));
+
+		
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		try {
+			
+			List<WorshipReportVO> worshopReportList = childrenService.queryWorshipReportAll(beginTime, endTime, worshId);
+			jsonMap.put("worshopReportList", worshopReportList);
+			
+			//查詢所有
+//			List<PresentWorshipVO> presentWorshipVOList = childrenService.queryPresentWorshipAll(beginTime, endTime, worshId);
+//			jsonMap.put("dataList",presentWorshipVOList);
 			
 			jsonMap.put("status", "OK");
         

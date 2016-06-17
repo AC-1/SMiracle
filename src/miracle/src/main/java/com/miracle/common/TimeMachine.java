@@ -189,4 +189,18 @@ public class TimeMachine
 //	  System.out.println(dateString);
 	  return parseDate;
   }
+  
+  
+  public String todayFormatYMD(){
+	  String pattern = "yyyy-MM-dd";
+	  //目前時間
+	  Date date = new Date();
+	  //設定日期格式
+	  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	  //進行轉換
+	  String parseDate = new SimpleDateFormat(pattern).format(date);
+//		  String dateString = sdf.format(date);
+//		  System.out.println(dateString);
+	  return parseDate;
+   }
 }

@@ -16,6 +16,7 @@ import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
+import com.miracle.mode.vo.WorshipReportVO;
 import com.miracle.mode.vo.WorshipVO;
 
 
@@ -81,6 +82,14 @@ public class ChildrenQueryDAOImpl extends BaseQueryDAOImpl<Car, Map<String, Obje
 		return this.getSqlSession().selectList(getNameSpace() + ".findPresentWorshipAll", map);
 	}
 	
-	
+	@Override
+	public List<WorshipReportVO> findWorshipReportAll(String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException {
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("beginTime", beginTime);
+		map.put("endTime", endTime);
+		map.put("worshId", worshId);
+		return this.getSqlSession().selectList(getNameSpace() + ".findWorshipReportAll", map);
+	}
 	
 }

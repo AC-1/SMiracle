@@ -15,6 +15,7 @@ import com.miracle.mode.Statement;
 import com.miracle.mode.Worship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
+import com.miracle.mode.vo.WorshipReportVO;
 
 
 
@@ -69,4 +70,9 @@ public interface ChildrenService {
 	 *  依時間或worshId查詢 
 	 */
 	public List<PresentWorshipVO> queryPresentWorshipAll(String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException;
+	
+	/** 
+	 * 查詢報表Year 人數
+	 */
+	public List<WorshipReportVO> queryWorshipReportAll(String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException;
 }

@@ -38,6 +38,7 @@ import com.miracle.mode.Statement;
 import com.miracle.mode.Worship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
+import com.miracle.mode.vo.WorshipReportVO;
 import com.miracle.service.ChildrenService;
 
 
@@ -354,5 +355,14 @@ public class ChildrenServiceImpl implements ChildrenService {
 		
 		return childrenQueryDAO.findPresentWorshipAll(beginTime, endTime, worshId);
 	}
+	
+	@Override
+	public List<WorshipReportVO> queryWorshipReportAll(String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException {
+		
+		
+		return childrenQueryDAO.findWorshipReportAll(beginTime, endTime, worshId);
+	}
+	
+	
 	
 }

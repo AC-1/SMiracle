@@ -61,6 +61,13 @@
 	<resultMap id="worshipVOMap" type="WorshipVO">
 		<result property="id" column="ID" />
 	</resultMap>
+	
+	<resultMap id="WorshipReportVOMap" type="WorshipReportVO">
+		<result property="year" column="YEAR_VALUE" />
+		<result property="month" column="MONTH_VALUE" />
+		<result property="week" column="WEEK_VALUE" />
+		<result property="worshCount" column="worshCount" />
+	</resultMap>
 
 
 	<select id="findPeopleData" parameterType="string" resultMap="peopleVOMap">
@@ -139,6 +146,20 @@
 			</when>
 		</choose>
 		order by A.CHKIN_TIME DESC
+	</select>
+	
+	
+	<select id="findWorshipReportAll" parameterType="map" resultMap="WorshipReportVOMap">
+		Select YEAR(CHKIN_TIME) AS YEAR_VALUE, MONTH(CHKIN_TIME) AS MONTH_VALUE,
+		       CEILING(FLOOR(DAYOFMONTH(CHKIN_TIME)-1)/7)+1 AS WEEK_VALUE, 
+		 COUNT(*) worshCount, CHKIN_TIME  from present_worship
+		where CHKIN_TIME BETWEEN '2015-05-01 16:50:48' AND '2016-09-06 16:07:17'
+		GROUP 
+		     BY YEAR(CHKIN_TIME)
+		      , MONTH(CHKIN_TIME)
+         , CEILING(FLOOR(DAYOFMONTH(CHKIN_TIME)-1)/7)+1
+		  ORDER  
+		     BY CHKIN_TIME;
 	</select>
 	
 

@@ -16,6 +16,7 @@ import com.miracle.common.SecretUtil;
 import com.miracle.common.TimeMachine;
 import com.miracle.dao.ChildrenQueryDAO;
 import com.miracle.service.ChildrenService;
+import com.miracle.service.CollegeService;
 
  
  
@@ -25,6 +26,7 @@ public class UserTest {
 //private CarService carService;
 private ChildrenQueryDAO childrenQueryDAO;
 private ChildrenService childrenService;
+private CollegeService collegeService;
 private MailUtil mailUtil;
      
     @Before
@@ -33,7 +35,8 @@ private MailUtil mailUtil;
         ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"classpath:conf/root-context.xml"});
 //        carService = (CarService) context.getBean("CarService");
 //        childrenQueryDAO = (ChildrenQueryDAO) context.getBean("childrenQueryDAO");
-        childrenService = (ChildrenService) context.getBean("childrenServiceImpl");
+//        childrenService = (ChildrenService) context.getBean("childrenServiceImpl");
+          collegeService = (CollegeService) context.getBean("collegeServiceImpl");
 //        mailUtil = (MailUtil) context.getBean("mailUtil");
     }
      
@@ -112,7 +115,7 @@ private MailUtil mailUtil;
     }
     
     
-    @Test
+//    @Test
     public void Test(){
 //    	PeopleVO peopleVO = childrenQueryDAO.findPeopleData("P_222222222");
     	
@@ -123,6 +126,34 @@ private MailUtil mailUtil;
     	for(int i=0;i<15;i++){
     		TimeMachine timeMachine = new TimeMachine();
     		System.out.println(timeMachine.newRandomUUID());
+    	}
+    }
+    
+    
+    //學生匯入
+//    @Test
+    public void collegeImport(){
+    	
+    	boolean isCorrect = collegeService.excelImport();
+    	if(isCorrect){
+    		System.out.println("匯入成功");
+    	}else{
+    		System.out.println("匯入失敗");
+    	}
+    }
+    
+    
+    
+    //學生報名
+    @Test
+    public void setCampActivitySignup(){
+    	
+    	String activityId = "activity_16021615393155001";//那個營會
+    	boolean isCorrect = collegeService.setCampActivitySignup(activityId);
+    	if(isCorrect){
+    		System.out.println("報名成功");
+    	}else{
+    		System.out.println("報名失敗");
     	}
     }
 }

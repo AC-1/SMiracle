@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/main/java/com/miracle/service/CarService.java=UTF-8
 encoding//src/main/java/com/miracle/service/ChildrenService.java=UTF-8
+encoding//src/main/java/com/miracle/service/CollegeService.java=UTF-8
 encoding//src/main/resources/conf/i18n/label_en_US.properties=UTF-8
 encoding//src/main/resources/conf/i18n/label_zh_CN.properties=UTF-8
 encoding//src/main/resources/conf/i18n/label_zh_TW.properties=UTF-8

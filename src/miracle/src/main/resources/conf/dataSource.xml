@@ -51,9 +51,17 @@
       </property>
       <property name="acquireIncrement"><value>5</value></property><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
       <property name="idleConnectionTestPeriod"><value>60</value></property><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
-      <property name="maxPoolSize"><value>100</value></property><!-- ?接池中保留的最大?接?。默??15； -->
-      <property name="maxStatements"><value>50</value></property><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
+      <property name="maxPoolSize"><value>10</value></property><!-- ?接池中保留的最大?接?。默??15； -->
+      <property name="maxStatements"><value>0</value></property><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
       <property name="minPoolSize"><value>10</value></property><!-- ?接池中保留的最小?接?。默??15 -->
+      <property name="maxIdleTime"><value>100</value></property>
+      <property name="maxStatementsPerConnection"><value>0</value></property ><!--maxStatementsPerConnection定义了连接池内单个连接所拥有的最大缓存statements数。Default: 0 -->
+      <property name="initialPoolSize"><value>1</value></property>
+      <!-- <property name="acquireIncrement"><value>5</value></property> --><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
+      <!-- <property name="idleConnectionTestPeriod"><value>60</value></property> --><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
+      <!-- <property name="maxPoolSize"><value>100</value></property> --><!-- ?接池中保留的最大?接?。默??15； -->
+      <!-- <property name="maxStatements"><value>50</value></property> --><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
+      <!-- <property name="minPoolSize"><value>10</value></property> --><!-- ?接池中保留的最小?接?。默??15 -->
       <!-- <property name="initialPoolSize"><value>1</value></property> --><!-- 初始化??建的?接?，?在minPoolSize与maxPoolSize之?取值。默??3  -->
       <!-- <property name="maxIdleTime"><value>240</value></property> --><!-- 最大空???，超?空???的?接?被??。?0或???永不??。默??0 -->
       <!-- <property name="checkoutTimeout"><value>60000</value></property> --><!-- ??接池用完?客?端?用getConnection()后等待?取新?接的??，超?后??出 SQLException,如??0??限期等待。?位毫秒 -->
@@ -119,9 +127,17 @@
       </property>
       <property name="acquireIncrement"><value>5</value></property><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
       <property name="idleConnectionTestPeriod"><value>60</value></property><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
-      <property name="maxPoolSize"><value>100</value></property><!-- ?接池中保留的最大?接?。默??15； -->
-      <property name="maxStatements"><value>50</value></property><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
+      <property name="maxPoolSize"><value>10</value></property><!-- ?接池中保留的最大?接?。默??15； -->
+      <property name="maxStatements"><value>0</value></property><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
       <property name="minPoolSize"><value>10</value></property><!-- ?接池中保留的最小?接?。默??15 -->
+      <property name="maxIdleTime"><value>100</value></property>
+      <property name="maxStatementsPerConnection"><value>0</value></property ><!--maxStatementsPerConnection定义了连接池内单个连接所拥有的最大缓存statements数。Default: 0 -->
+      <property name="initialPoolSize"><value>1</value></property>
+      <!-- <property name="acquireIncrement"><value>5</value></property> --><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
+      <!-- <property name="idleConnectionTestPeriod"><value>60</value></property> --><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
+      <!-- <property name="maxPoolSize"><value>100</value></property> --><!-- ?接池中保留的最大?接?。默??15； -->
+      <!-- <property name="maxStatements"><value>50</value></property> --><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
+      <!-- <property name="minPoolSize"><value>10</value></property> --><!-- ?接池中保留的最小?接?。默??15 -->
       <!-- <property name="initialPoolSize"><value>1</value></property> --><!-- 初始化??建的?接?，?在minPoolSize与maxPoolSize之?取值。默??3  -->
       <!-- <property name="maxIdleTime"><value>240</value></property> --><!-- 最大空???，超?空???的?接?被??。?0或???永不??。默??0 -->
       <!-- <property name="checkoutTimeout"><value>60000</value></property> --><!-- ??接池用完?客?端?用getConnection()后等待?取新?接的??，超?后??出 SQLException,如??0??限期等待。?位毫秒 -->
@@ -190,9 +206,17 @@
       </property>
       <property name="acquireIncrement"><value>5</value></property><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
       <property name="idleConnectionTestPeriod"><value>60</value></property><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
-      <property name="maxPoolSize"><value>100</value></property><!-- ?接池中保留的最大?接?。默??15； -->
-      <property name="maxStatements"><value>50</value></property><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
+      <property name="maxPoolSize"><value>10</value></property><!-- ?接池中保留的最大?接?。默??15； -->
+      <property name="maxStatements"><value>0</value></property><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
       <property name="minPoolSize"><value>10</value></property><!-- ?接池中保留的最小?接?。默??15 -->
+      <property name="maxIdleTime"><value>100</value></property>
+      <property name="maxStatementsPerConnection"><value>0</value></property ><!--maxStatementsPerConnection定义了连接池内单个连接所拥有的最大缓存statements数。Default: 0 -->
+      <property name="initialPoolSize"><value>1</value></property>
+      <!-- <property name="acquireIncrement"><value>5</value></property> --><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
+      <!-- <property name="idleConnectionTestPeriod"><value>60</value></property> --><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
+      <!-- <property name="maxPoolSize"><value>100</value></property> --><!-- ?接池中保留的最大?接?。默??15； -->
+      <!-- <property name="maxStatements"><value>50</value></property> --><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
+      <!-- <property name="minPoolSize"><value>10</value></property> --><!-- ?接池中保留的最小?接?。默??15 -->
       <!-- <property name="initialPoolSize"><value>1</value></property> --><!-- 初始化??建的?接?，?在minPoolSize与maxPoolSize之?取值。默??3  -->
       <!-- <property name="maxIdleTime"><value>240</value></property> --><!-- 最大空???，超?空???的?接?被??。?0或???永不??。默??0 -->
       <!-- <property name="checkoutTimeout"><value>60000</value></property> --><!-- ??接池用完?客?端?用getConnection()后等待?取新?接的??，超?后??出 SQLException,如??0??限期等待。?位毫秒 -->
