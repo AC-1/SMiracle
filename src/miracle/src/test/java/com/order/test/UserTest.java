@@ -14,7 +14,7 @@ import com.miracle.common.Email;
 import com.miracle.common.MailUtil;
 import com.miracle.common.SecretUtil;
 import com.miracle.common.TimeMachine;
-import com.miracle.dao.ChildrenQueryDAO;
+import com.miracle.dao.ChildrenQTrsDAO;
 import com.miracle.service.ChildrenService;
 import com.miracle.service.CollegeService;
 
@@ -24,7 +24,7 @@ import com.miracle.service.CollegeService;
 public class UserTest {
  
 //private CarService carService;
-private ChildrenQueryDAO childrenQueryDAO;
+private ChildrenQTrsDAO childrenQueryDAO;
 private ChildrenService childrenService;
 private CollegeService collegeService;
 private MailUtil mailUtil;

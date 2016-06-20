@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.miracle.dao.SysParameterQueryDAO;
+import com.miracle.dao.SysParameterQTrsDAO;
 import com.miracle.mode.vo.SysParameterVO;
 
 
@@ -18,7 +18,7 @@ public class SysParameterUtil {
 	private static final Log log = LogFactory.getLog(SysParameterUtil.class);
 	
 	@Autowired
-	private SysParameterQueryDAO sysParameterQueryDAO;
+	private SysParameterQTrsDAO sysParameterQueryDAO;
 
 	/*
 	 * cpStr 要等於 path.properties 內的Connection Pool 設定值, 如:connectionPoolTr ,

@@ -331,11 +331,12 @@ public class CollegeController extends BaseController {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		
 		String campDate = StringUtils.trimToEmpty(req.getParameter("campDate"));//查那一天營會 格式 2016-06-17
+		String activityId = StringUtils.trimToEmpty(req.getParameter("activityId"));//營會ID
 		
 		try {
 			
 			//查營會打卡報到人員
-			List<CollegePeopleVO> collegePeopleVOList = collegeService.queryCollegePeopleCheckInAllByDate(campDate);
+			List<CollegePeopleVO> collegePeopleVOList = collegeService.queryCollegePeopleCheckInAllByDate(campDate, activityId);
 			
 			jsonMap.put("status", "OK");
 			jsonMap.put("collegePeopleVOList", collegePeopleVOList);
@@ -366,10 +367,12 @@ public class CollegeController extends BaseController {
 		
 		String campDate = StringUtils.trimToEmpty(req.getParameter("campDate"));//查那一天營會 格式 2016-06-17
 		
+		String activityId = StringUtils.trimToEmpty(req.getParameter("activityId"));//營會ID
+		
 		try {
 			
 			//查營會打卡未報到人員
-			List<CollegePeopleVO> collegePeopleVOList = collegeService.queryCollegePeopleNoCheckInAllByDate(campDate);
+			List<CollegePeopleVO> collegePeopleVOList = collegeService.queryCollegePeopleNoCheckInAllByDate(campDate, activityId);
 			
 			jsonMap.put("status", "OK");
 			jsonMap.put("collegePeopleVOList", collegePeopleVOList);

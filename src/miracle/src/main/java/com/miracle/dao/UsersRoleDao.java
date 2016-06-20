@@ -5,7 +5,7 @@ import java.util.Map;
 import com.miracle.mode.Users;
 import com.miracle.mode.UsersRole;
 
-public interface UsersRoleDao extends BaseQueryDAO<Users, Map<String, Object>> {
+public interface UsersRoleDao extends BaseDAO<Users, Map<String, Object>> {
 
 	UsersRole findByUserName(String userName) throws DAOObjectNotFoundException;
 }

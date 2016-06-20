@@ -25,7 +25,10 @@ public abstract class BaseDAOImpl<T, K> extends SqlSessionDaoSupport implements
 		return this.getClass().getInterfaces()[0].getName();
 	}
 
-	@Resource
+//	@Resource
+//	@Autowired
+//	@Qualifier(value="sqlSessionFactoryTrs")
+	@Resource(name="sqlSessionFactory")
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
 		super.setSqlSessionFactory(sqlSessionFactory);
 	}

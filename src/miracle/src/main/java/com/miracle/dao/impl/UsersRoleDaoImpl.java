@@ -11,7 +11,7 @@ import com.miracle.mode.Users;
 import com.miracle.mode.UsersRole;
 
 @Repository("usersRoleDao")
-public class UsersRoleDaoImpl extends BaseQueryDAOImpl<Users, Map<String, Object>> implements   UsersRoleDao{
+public class UsersRoleDaoImpl extends BaseDAOImpl<Users, Map<String, Object>> implements   UsersRoleDao{
 
 	@Override
 	public UsersRole findByUserName(String userName) throws DAOObjectNotFoundException {

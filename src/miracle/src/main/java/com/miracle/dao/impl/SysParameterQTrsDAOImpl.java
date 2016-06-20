@@ -7,12 +7,12 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.miracle.dao.DAOObjectNotFoundException;
-import com.miracle.dao.SysParameterQueryDAO;
+import com.miracle.dao.SysParameterQTrsDAO;
 import com.miracle.mode.vo.SysParameterVO;
 
 
-@Repository("sysParameterQueryDAO")
-public class SysParameterQueryDAOImpl extends BaseQueryDAOImpl<SysParameterVO, Map<String, Object>> implements SysParameterQueryDAO {
+@Repository("sysParameterQTrsDAO")
+public class SysParameterQTrsDAOImpl extends BaseDAOImpl<SysParameterVO, Map<String, Object>> implements SysParameterQTrsDAO {
 
 	@Override
 	public List<SysParameterVO> findSysParameterDefault() throws DAOObjectNotFoundException {

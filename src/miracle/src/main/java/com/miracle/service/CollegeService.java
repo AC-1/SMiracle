@@ -87,13 +87,13 @@ public interface CollegeService {
 	/** 
 	 *  查營會打卡報到人員
 	 */
-	public List<CollegePeopleVO> queryCollegePeopleCheckInAllByDate(String campDate) throws DAOObjectNotFoundException;
+	public List<CollegePeopleVO> queryCollegePeopleCheckInAllByDate(String campDate, String activityId) throws DAOObjectNotFoundException;
 	
 	
 	/** 
 	 *  查營會打卡未報到人員
 	 */
-	public List<CollegePeopleVO> queryCollegePeopleNoCheckInAllByDate(String campDate) throws DAOObjectNotFoundException;
+	public List<CollegePeopleVO> queryCollegePeopleNoCheckInAllByDate(String campDate, String activityId) throws DAOObjectNotFoundException;
 	
 	
 	/** 讀取Excel 匯入基本資料*/

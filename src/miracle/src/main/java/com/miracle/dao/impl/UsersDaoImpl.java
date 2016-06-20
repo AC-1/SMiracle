@@ -12,7 +12,7 @@ import com.miracle.mode.Account;
 import com.miracle.mode.Users;
 
 @Repository("usersDao")
-public class UsersDaoImpl extends BaseQueryDAOImpl<Users, Map<String, Object>> implements  UsersDao{
+public class UsersDaoImpl extends BaseDAOImpl<Users, Map<String, Object>> implements  UsersDao{
 
 	@Override
 	public Users findByUsersName(String usersName) throws DAOObjectNotFoundException {

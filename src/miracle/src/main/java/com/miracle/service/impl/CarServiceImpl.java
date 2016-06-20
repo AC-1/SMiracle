@@ -16,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-import com.miracle.dao.CarQueryDAO;
-import com.miracle.dao.CarTrsDAO;
+import com.miracle.dao.CarQTrsDAO;
 import com.miracle.mode.Car;
 import com.miracle.mode.vo.CarVO;
 import com.miracle.service.CarService;
@@ -28,10 +27,7 @@ import com.miracle.service.CarService;
 public class CarServiceImpl implements CarService {
 	
 	@Autowired
-	private CarQueryDAO carQueryDAO;
-	
-	@Autowired
-	private CarTrsDAO carTrsDAO;
+	private CarQTrsDAO carQTrsDAO;
 	
 	@Resource
 	private DataSourceTransactionManager transactionManager;
@@ -40,31 +36,31 @@ public class CarServiceImpl implements CarService {
 	@Override
 	public Car queryCarById(String id) {
 		
-		return carQueryDAO.findById(id);
+		return carQTrsDAO.findById(id);
 	}
 
 	@Override
 	public Car queryByIdName(String id, String name) {
 		
-		return carQueryDAO.findByIdName(id, name);
+		return carQTrsDAO.findByIdName(id, name);
 	}
 
 	@Override
 	public List<Car> queryCarAll(PageBounds pageBounds) {
 		
-		return carQueryDAO.findCarAll(pageBounds);
+		return carQTrsDAO.findCarAll(pageBounds);
 	}
 
 	@Override
 	public Car queryByCarMode(Car car) {
 		
-		return carQueryDAO.findByCarModel(car);
+		return carQTrsDAO.findByCarModel(car);
 	}
 
 	@Override
 	public CarVO queryByCarVO(CarVO carVO) {
 		
-		return carQueryDAO.findByCarVO(carVO);
+		return carQTrsDAO.findByCarVO(carVO);
 	}
 
 	
@@ -73,7 +69,7 @@ public class CarServiceImpl implements CarService {
 		
 		boolean isCorrect = false;
 		
-		int count = carTrsDAO.insertCar(id, name);
+		int count = carQTrsDAO.insertCar(id, name);
 		
 		if(count >0){
 			isCorrect = true;
@@ -86,7 +82,7 @@ public class CarServiceImpl implements CarService {
 		
 		boolean isCorrect = false;
 		
-		int count = carTrsDAO.insertCarByCar(car);
+		int count = carQTrsDAO.insertCarByCar(car);
 		
 		if(count >0){
 			isCorrect = true;
@@ -99,7 +95,7 @@ public class CarServiceImpl implements CarService {
 		
 		boolean isCorrect = false;
 		
-		int count = carTrsDAO.insertCarByCarVO(carVO);
+		int count = carQTrsDAO.insertCarByCarVO(carVO);
 		
 		if(count >0){
 			isCorrect = true;
@@ -112,7 +108,7 @@ public class CarServiceImpl implements CarService {
 		
 		boolean isCorrect = false;
 		
-		int count = carTrsDAO.updateCarByCarVO(carVO);
+		int count = carQTrsDAO.updateCarByCarVO(carVO);
 		
 		if(count >0){
 			isCorrect = true;
@@ -125,7 +121,7 @@ public class CarServiceImpl implements CarService {
 		
 		boolean isCorrect = false;
 		
-		int count = carTrsDAO.updateCarByIdName(id, name);
+		int count = carQTrsDAO.updateCarByIdName(id, name);
 		
 		if(count >0){
 			isCorrect = true;
@@ -138,7 +134,7 @@ public class CarServiceImpl implements CarService {
 		
 		boolean isCorrect = false;
 		
-		int count = carTrsDAO.deleteCarById(id);
+		int count = carQTrsDAO.deleteCarById(id);
 		
 		if(count >0){
 			isCorrect = true;
@@ -158,10 +154,10 @@ public class CarServiceImpl implements CarService {
 		boolean isCorrect = false;
 		try {
 			// 新增車輛資料
-			int count = carTrsDAO.insertCar(Integer.parseInt(id), name);
+			int count = carQTrsDAO.insertCar(Integer.parseInt(id), name);
 
 			// 修改車輛資料
-			int count1 = carTrsDAO.updateCarByIdName(id, newName);
+			int count1 = carQTrsDAO.updateCarByIdName(id, newName);
 
 			if (count > 0) {
 				isCorrect = true;
@@ -183,21 +179,21 @@ public class CarServiceImpl implements CarService {
 		map.put("id", car.getId());
 		
 		//新增
-		carTrsDAO.insert(car);
+		carQTrsDAO.insert(car);
 		
 		//修改
 		car.setName(newName);
-		carTrsDAO.update(car);
+		carQTrsDAO.update(car);
 		
 		//查詢
-		List<Car> carList = (List<Car>)carQueryDAO.findAll();
+		List<Car> carList = (List<Car>)carQTrsDAO.findAll();
 		log.info(carList.get(0).getName());
 		
-		Car car2 = (Car)carQueryDAO.findByKey(map);
+		Car car2 = (Car)carQTrsDAO.findByKey(map);
 		log.info(car2.getName());
 		
 		//刪除
-		carTrsDAO.deleteByKey(map);
+		carQTrsDAO.deleteByKey(map);
 	}
 
 

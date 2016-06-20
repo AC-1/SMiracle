@@ -6,7 +6,7 @@ import java.util.Map;
 import com.miracle.mode.vo.SysParameterVO;
 
 
-public interface SysParameterQueryDAO extends BaseQueryDAO<SysParameterVO, Map<String, Object>> {
+public interface SysParameterQTrsDAO extends BaseDAO<SysParameterVO, Map<String, Object>> {
 	
 	
 	/** 查詢系統資料default*/

@@ -21,8 +21,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.miracle.common.ExcelUtil;
 import com.miracle.common.TimeMachine;
-import com.miracle.dao.CollegeQueryDAO;
-import com.miracle.dao.CollegeTrsDAO;
+import com.miracle.dao.CollegeQTrsDAO;
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.dao.jpa.CampActivityDAO;
 import com.miracle.dao.jpa.CampActivitySignupDAO;
@@ -43,10 +42,7 @@ public class CollegeServiceImpl implements CollegeService {
 	private static final Logger log = LoggerFactory.getLogger(CollegeServiceImpl.class);
 	
 	@Autowired
-	private CollegeQueryDAO collegeQueryDAO;
-	
-	@Autowired
-	private CollegeTrsDAO collegeTrsDAO;
+	private CollegeQTrsDAO collegeQTrsDAO;
 	
 	@Autowired
 	private CampActivitySignupDAO campActivitySignupDAO;
@@ -107,7 +103,7 @@ public class CollegeServiceImpl implements CollegeService {
 	public Boolean queryIfCollegeCampCheckIn(String collegeId) throws DAOObjectNotFoundException {
 		
 		boolean isCorrect = false;
-		int count = collegeQueryDAO.findIfCollegeCampCheckIn(collegeId);
+		int count = collegeQTrsDAO.findIfCollegeCampCheckIn(collegeId);
 		if(count >0 ){
 			isCorrect = true;
 		}
@@ -129,7 +125,7 @@ public class CollegeServiceImpl implements CollegeService {
 		collegeCampCheckIn.setCampDate(idtime.todayFormatYMD());
 		collegeCampCheckIn.setActivityId(activityId);
 		
-		int count = collegeTrsDAO.createCollegeCampCheckIn(collegeCampCheckIn);
+		int count = collegeQTrsDAO.createCollegeCampCheckIn(collegeCampCheckIn);
 		
 		if(count >0){
 			isCorrect = true;
@@ -144,7 +140,7 @@ public class CollegeServiceImpl implements CollegeService {
 		boolean isCorrect = false;
 		
 		
-		int count = collegeTrsDAO.updateCollegeCampCheckIn(collegeId);
+		int count = collegeQTrsDAO.updateCollegeCampCheckIn(collegeId);
 		
 		if(count >0){
 			isCorrect = true;
@@ -252,23 +248,23 @@ public class CollegeServiceImpl implements CollegeService {
 	public List<CampActivitySignupVO> queryCampActivitySignupAllByActivityId(String activityId) throws DAOObjectNotFoundException {
 		
 		
-		return collegeQueryDAO.findCampActivitySignupAllByActivityId(activityId);
+		return collegeQTrsDAO.findCampActivitySignupAllByActivityId(activityId);
 	}
 	
 	
 	@Override
-	public List<CollegePeopleVO> queryCollegePeopleCheckInAllByDate(String campDate) throws DAOObjectNotFoundException {
+	public List<CollegePeopleVO> queryCollegePeopleCheckInAllByDate(String campDate, String activityId) throws DAOObjectNotFoundException {
 		
 		
-		return collegeQueryDAO.findCollegePeopleCheckInAllByDate(campDate);
+		return collegeQTrsDAO.findCollegePeopleCheckInAllByDate(campDate, activityId);
 	}
 	
 	
 	@Override
-	public List<CollegePeopleVO> queryCollegePeopleNoCheckInAllByDate(String campDate) throws DAOObjectNotFoundException {
+	public List<CollegePeopleVO> queryCollegePeopleNoCheckInAllByDate(String campDate, String activityId) throws DAOObjectNotFoundException {
 		
 		
-		return collegeQueryDAO.findCollegePeopleNoCheckInAllByDate(campDate);
+		return collegeQTrsDAO.findCollegePeopleNoCheckInAllByDate(campDate, activityId);
 	}
 	
 	@Override

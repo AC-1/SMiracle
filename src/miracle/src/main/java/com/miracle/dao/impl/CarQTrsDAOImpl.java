@@ -6,15 +6,53 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.miracle.dao.CarTrsDAO;
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.miracle.dao.CarQTrsDAO;
+import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.mode.Car;
 import com.miracle.mode.vo.CarVO;
 
 
-@Repository("carTrsDAO")
-public class CarTrsDAOImpl extends BaseTrsDAOImpl<Car, Map<String, Object>> implements CarTrsDAO {
+@Repository("carQTrsDAO")
+public class CarQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> implements CarQTrsDAO {
 
+	
+	@Override
+	public Car findById(String id) throws DAOObjectNotFoundException {
+		
+		return this.getSqlSession().selectOne(getNameSpace() + ".findById", id);
+	}
+	
+	@Override
+	public Car findByIdName(String id, String name) throws DAOObjectNotFoundException {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("name", name);
+		return this.getSqlSession().selectOne(getNameSpace() + ".findByIdName", map);
+	}
 
+	@Override
+	public List<Car> findCarAll(PageBounds pageBounds) throws DAOObjectNotFoundException {
+		
+		
+		return this.getSqlSession().selectList(getNameSpace() + ".findCarAll",null , pageBounds);
+	}
+
+	@Override
+	public Car findByCarModel(Car car) throws DAOObjectNotFoundException {
+		
+		
+		return this.getSqlSession().selectOne(getNameSpace() + ".findByCarModel", car);
+	}
+
+	@Override
+	public CarVO findByCarVO(CarVO carVO) throws DAOObjectNotFoundException {
+		
+		return this.getSqlSession().selectOne(getNameSpace() + ".findByCarVO", carVO);
+	}
+
+	
 	@Override
 	public int insertCar(Integer id, String name) {
 		
@@ -84,4 +122,6 @@ public class CarTrsDAOImpl extends BaseTrsDAOImpl<Car, Map<String, Object>> impl
 //			throws DAOObjectNotFoundException {
 //		return this.getSqlSession().selectList(getNameSpace() + ".findAllByAcSegment3", acSegment3);
 //	}
+	
+	
 }

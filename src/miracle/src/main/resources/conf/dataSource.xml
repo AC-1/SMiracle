@@ -28,106 +28,30 @@
 		<aop:advisor pointcut-ref="businessService2" advice-ref="txAdviceJpa"/>
   	</aop:config>
   	
-	<!-- <bean id="dataSourceQuery" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.p6spy.engine.spy.P6SpyDriver" />
-		<property name="driverClassName" value="${jdbc_query_driverClassName}" />
-		<property name="url" value="${jdbc_query_url}" />
-		<property name="username" value="${jdbc_query_username}" />
-		<property name="password" value="${jdbc_query_password}" />
+	
+	<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc_driverClassName}" />
+		<property name="url" value="${jdbc_url}" />
+		<property name="username" value="${jdbc_username}" />
+		<property name="password" value="${jdbc_password}" />
 	</bean> -->
 	
-	<bean id="dataSourceQuery" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" depends-on="sysProps">
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" depends-on="sysProps">
       <property name="driverClass">
-        <value>${jdbc_query_driverClassName}</value>
+        <value>${jdbc_driverClassName}</value>
       </property>
       <property name="jdbcUrl">
-        <value>${jdbc_query_url}</value>
+        <value>${jdbc_url}</value>
       </property>
       <property name="user">
-       <value>${jdbc_query_username}</value>
+       <value>${jdbc_username}</value>
       </property>
       <property name="password">
-       <value>${jdbc_query_password}</value>
+       <value>${jdbc_password}</value>
       </property>
       <property name="acquireIncrement"><value>5</value></property><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
       <property name="idleConnectionTestPeriod"><value>60</value></property><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
-      <property name="maxPoolSize"><value>10</value></property><!-- ?接池中保留的最大?接?。默??15； -->
-      <property name="maxStatements"><value>0</value></property><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
-      <property name="minPoolSize"><value>10</value></property><!-- ?接池中保留的最小?接?。默??15 -->
-      <property name="maxIdleTime"><value>100</value></property>
-      <property name="maxStatementsPerConnection"><value>0</value></property ><!--maxStatementsPerConnection定义了连接池内单个连接所拥有的最大缓存statements数。Default: 0 -->
-      <property name="initialPoolSize"><value>1</value></property>
-      <!-- <property name="acquireIncrement"><value>5</value></property> --><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
-      <!-- <property name="idleConnectionTestPeriod"><value>60</value></property> --><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
-      <!-- <property name="maxPoolSize"><value>100</value></property> --><!-- ?接池中保留的最大?接?。默??15； -->
-      <!-- <property name="maxStatements"><value>50</value></property> --><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
-      <!-- <property name="minPoolSize"><value>10</value></property> --><!-- ?接池中保留的最小?接?。默??15 -->
-      <!-- <property name="initialPoolSize"><value>1</value></property> --><!-- 初始化??建的?接?，?在minPoolSize与maxPoolSize之?取值。默??3  -->
-      <!-- <property name="maxIdleTime"><value>240</value></property> --><!-- 最大空???，超?空???的?接?被??。?0或???永不??。默??0 -->
-      <!-- <property name="checkoutTimeout"><value>60000</value></property> --><!-- ??接池用完?客?端?用getConnection()后等待?取新?接的??，超?后??出 SQLException,如??0??限期等待。?位毫秒 -->
-      <!-- <property name="acquireRetryAttempts"><value>0</value></property> --><!-- 定?在??据??取新?接失?后重复???取的次?，默??30 -->
-      <!-- <property name="acquireRetryDelay"><value>1000</value></property> --><!-- ?次?接中?隔??，?位毫秒，默??1000 -->
-      <!-- <property name="maxStatementsPerConnection"><value>100</value></property > --><!-- ?接池????接所?有的最大?存Statement?。默??0 -->
-      <!-- <property name="autoCommitOnClose"><value>true</value></property> --><!-- ?接???默??所有未提交的操作回?。默??false -->
-      <!-- <property name="breakAfterAcquireFailure"><value>true</value></property> --><!-- ?取?接失???引起所有等待?取?接的?程?出异常。但是?据源仍有效保留，并在下次?   用getConnection()的?候?????取?接。如果??true，那么在???取?接失?后??据源?申明已??并永久??。默?? false -->
-      <!-- <property name="debugUnreturnedConnectionStackTraces" value="true" /> --><!-- 是一???，?用之后，?于每???接池拿出去的?据??接，如果一段????有??，C3P0就??制?????接，并??取?接?的stack trace，以?出异常的方式?示出?。 unreturnedConnectionTimeout?置多????超?，以秒??位。 -->
-      <!-- <property name="unreturnedConnectionTimeout" value="300" /> -->
-      <!-- <property name="numHelperThreads"><value>10</value></property> --><!-- c3p0是异步操作的，?慢的JDBC操作通??助?程完成。?展?些操作可以有效的提升性能 -->
-    </bean>
-
-	<!-- mybatis (start) -->
-	<!-- define the SqlSessionFactory -->
-	<bean id="sqlSessionFactoryQuery" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSourceQuery" />
-		<property name="typeAliasesPackage" value="com.miracle.mode" />
-		<!-- <property name="configLocation" value="classpath:com/taikoomotors/ep/dao/mybatis/conf/mybatis-config.xml" 
-			/> -->
-		<property name="mapperLocations" value="classpath*:com/miracle/dao/mybatis/maps/*.xml" />
-		<!-- 分頁另一種方式直接配置在Mybatis xml  -->	
-		<!-- <property name="configLocation" value="classpath:com/order/dao/mybatis/conf/mybatis-config.xml"/> -->
-		<!-- 分頁 -->
-		<property name="plugins">
-	        <array>
-	            <ref bean="paginationInterceptor"/>
-	        </array>
-	    </property>
-	</bean>
-	<!-- 分頁 -->
-	<bean id="paginationInterceptor" class="com.github.miemiedev.mybatis.paginator.OffsetLimitInterceptor">
-		<property name="dialectClass" value="com.github.miemiedev.mybatis.paginator.dialect.MySQLDialect" />
-	</bean>
-	<!-- mybatis (end) -->
-
-	<bean id="transactionManagerQuery"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSourceQuery" />
-	</bean>
-
-	
-	
-	<!-- <bean id="dataSourceTrs" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${jdbc_trs_driverClassName}" />
-		<property name="url" value="${jdbc_trs_url}" />
-		<property name="username" value="${jdbc_trs_username}" />
-		<property name="password" value="${jdbc_trs_password}" />
-	</bean> -->
-	
-	<bean id="dataSourceTrs" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" depends-on="sysProps">
-      <property name="driverClass">
-        <value>${jdbc_trs_driverClassName}</value>
-      </property>
-      <property name="jdbcUrl">
-        <value>${jdbc_trs_url}</value>
-      </property>
-      <property name="user">
-       <value>${jdbc_trs_username}</value>
-      </property>
-      <property name="password">
-       <value>${jdbc_trs_password}</value>
-      </property>
-      <property name="acquireIncrement"><value>5</value></property><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
-      <property name="idleConnectionTestPeriod"><value>60</value></property><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
-      <property name="maxPoolSize"><value>10</value></property><!-- ?接池中保留的最大?接?。默??15； -->
+      <property name="maxPoolSize"><value>50</value></property><!-- ?接池中保留的最大?接?。默??15； -->
       <property name="maxStatements"><value>0</value></property><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
       <property name="minPoolSize"><value>10</value></property><!-- ?接池中保留的最小?接?。默??15 -->
       <property name="maxIdleTime"><value>100</value></property>
@@ -151,19 +75,29 @@
       <!-- <property name="numHelperThreads"><value>10</value></property> --><!-- c3p0是异步操作的，?慢的JDBC操作通??助?程完成。?展?些操作可以有效的提升性能 -->
     </bean> 
 
-	<bean id="sqlSessionFactoryTrs" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSourceTrs" />
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
 		<property name="typeAliasesPackage" value="com.miracle.mode" />
 		<!-- <property name="configLocation" value="classpath:com/taikoomotors/ep/dao/mybatis/conf/mybatis-config.xml" 
 			/> -->
 		<property name="mapperLocations" value="classpath*:com/miracle/dao/mybatis/maps/*.xml" />
+		<!-- 分頁另一種方式直接配置在Mybatis xml  -->	
+		<!-- <property name="configLocation" value="classpath:com/order/dao/mybatis/conf/mybatis-config.xml"/> -->
+		<!-- 分頁 -->
+		<property name="plugins">
+	        <array>
+	            <ref bean="paginationInterceptor"/>
+	        </array>
+	    </property>
 	</bean>
-
+	<!-- 分頁 -->
+	<bean id="paginationInterceptor" class="com.github.miemiedev.mybatis.paginator.OffsetLimitInterceptor">
+		<property name="dialectClass" value="com.github.miemiedev.mybatis.paginator.dialect.MySQLDialect" />
+	</bean>
 	
-
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSourceTrs" />
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
@@ -175,9 +109,7 @@
 	  </tx:attributes>
 	</tx:advice> 
 	
-	
     <tx:annotation-driven transaction-manager="transactionManager" />
-	
 	
 	<bean id="sysProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 	  <property name="targetClass"><value>java.lang.System</value></property>
@@ -190,23 +122,25 @@
 	  </property>
 	</bean>
 	
+	
+	
 	<!-- JAP Begin-->
 	<bean id="dataSourceJpaQuery" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" depends-on="sysProps">
       <property name="driverClass">
-        <value>${jdbc_query_driverClassName}</value>
+        <value>${jdbc_driverClassName}</value>
       </property>
       <property name="jdbcUrl">
-        <value>${jdbc_query_url}</value>
+        <value>${jdbc_url}</value>
       </property>
       <property name="user">
-       <value>${jdbc_query_username}</value>
+       <value>${jdbc_username}</value>
       </property>
       <property name="password">
-       <value>${jdbc_query_password}</value>
+       <value>${jdbc_password}</value>
       </property>
       <property name="acquireIncrement"><value>5</value></property><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
       <property name="idleConnectionTestPeriod"><value>60</value></property><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
-      <property name="maxPoolSize"><value>10</value></property><!-- ?接池中保留的最大?接?。默??15； -->
+      <property name="maxPoolSize"><value>50</value></property><!-- ?接池中保留的最大?接?。默??15； -->
       <property name="maxStatements"><value>0</value></property><!-- JDBC的?准??，用以控制?据源?加?的PreparedStatement?量 但由于??存的Statement? 于??Connection而不是整??接池。所以?置????需要考?到多方面的因素，如果maxStatements与 maxStatementsPerConnection均?0，??存被??。默??0 -->
       <property name="minPoolSize"><value>10</value></property><!-- ?接池中保留的最小?接?。默??15 -->
       <property name="maxIdleTime"><value>100</value></property>

@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-import com.miracle.dao.ChildrenQueryDAO;
+import com.miracle.dao.ChildrenQTrsDAO;
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.mode.Car;
 import com.miracle.mode.CareTime;
@@ -20,8 +20,8 @@ import com.miracle.mode.vo.WorshipReportVO;
 import com.miracle.mode.vo.WorshipVO;
 
 
-@Repository("childrenQueryDAO")
-public class ChildrenQueryDAOImpl extends BaseQueryDAOImpl<Car, Map<String, Object>> implements ChildrenQueryDAO {
+@Repository("childrenQTrsDAO")
+public class ChildrenQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> implements ChildrenQTrsDAO {
 
 	@Override
 	public PeopleVO findPeopleData(String peopleId) throws DAOObjectNotFoundException {
@@ -92,4 +92,21 @@ public class ChildrenQueryDAOImpl extends BaseQueryDAOImpl<Car, Map<String, Obje
 		return this.getSqlSession().selectList(getNameSpace() + ".findWorshipReportAll", map);
 	}
 	
+	
+	
+	@Override
+	public Integer updatePresentWorshipById(String id) throws DAOObjectNotFoundException {
+		
+		return this.getSqlSession().update(getNameSpace() + ".updatePresentWorshipById", id);
+	}
+	
+	@Override
+	public Integer updatePresentWorshipChkoutById(String pid, String cid, String worship) throws DAOObjectNotFoundException {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("pid", pid);
+		map.put("cid", cid);
+		map.put("worship", worship);
+		return this.getSqlSession().update(getNameSpace() + ".updatePresentWorshipChkoutById", map);
+	}
 }

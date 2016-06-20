@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.miracle.dao.CollegeQueryDAO">
+<mapper namespace="com.miracle.dao.CollegeQTrsDAO">
 
 	<!-- <cache /> -->
 	
@@ -53,22 +53,37 @@
 		where A.ACTIVITY_ID = #{activityId}
 	</select>
 	
-	<select id="findCollegePeopleCheckInAllByDate" parameterType="string" resultMap="collegePeopleVOMap">
+	<select id="findCollegePeopleCheckInAllByDate" parameterType="map" resultMap="collegePeopleVOMap">
 		select A.CHECK_IN_TIME, B.COLLEGE_ID, B.COLLEGE_NAME, B.COLLEGE_AREA, B.COLLEGE_GROUP, B.COLLEGE_GENDER, B.COLLEGE_BIRTHDAY, 
 		       B.COLLEGE_SCHOOL_GRADE, B.COLLEGE_PHONE, B.COLLEGE_TEL
 		from  college_camp_check_in A 
 		left join college_people B on A.COLLEGE_ID = B.COLLEGE_ID 
-		where CAMP_DATE = #{campDate}
+		where A.CAMP_DATE = #{campDate}
+		AND A.ACTIVITY_ID = #{activityId}
 	</select>
 	
 	
-	<select id="findCollegePeopleNoCheckInAllByDate" parameterType="string" resultMap="collegePeopleVOMap">
+	<select id="findCollegePeopleNoCheckInAllByDate" parameterType="map" resultMap="collegePeopleVOMap">
 		SELECT COLLEGE_ID, COLLEGE_NAME, COLLEGE_AREA, COLLEGE_GROUP, COLLEGE_GENDER, COLLEGE_BIRTHDAY, COLLEGE_SCHOOL_GRADE,
 		       COLLEGE_PHONE, COLLEGE_TEL
 		from college_people 
 		where COLLEGE_ID not in (
 			select COLLEGE_ID from college_camp_check_in where CAMP_DATE = #{campDate}
+			and ACTIVITY_ID = #{activityId}
 		 )
 	</select>
+	
+	
+	<insert id="createCollegeCampCheckIn" parameterType="collegeCampCheckIn">
+		insert into college_camp_check_in ( CHECK_IN_ID, COLLEGE_ID, CHECK_IN_TIME, CHECK_IN_LAST_TIME, IF_CHECK_IN, CAMP_DATE, ACTIVITY_ID )
+		values (#{checkInId}, #{collegeId}, now(), now(), 'Y', #{campDate}, #{activityId})
+	</insert>
+	
+	<update id="updateCollegeCampCheckIn" parameterType="string">
+		update college_camp_check_in
+		set CHECK_IN_LAST_TIME=now()
+		where COLLEGE_ID=#{collegeId}
+		and to_days(CHECK_IN_TIME) = to_days(NOW())
+	</update>
 
 </mapper>

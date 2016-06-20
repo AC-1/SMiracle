@@ -5,8 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.miracle.common.SecretUtil;
-import com.miracle.dao.LoginQueryDAO;
-import com.miracle.dao.LoginTrsDAO;
+import com.miracle.dao.LoginQTrsDAO;
 import com.miracle.mode.Account;
 import com.miracle.service.LoginService;
 
@@ -16,10 +15,7 @@ import com.miracle.service.LoginService;
 public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
-	private LoginQueryDAO loginQueryDAO;
-	
-	@Autowired
-	private LoginTrsDAO loginTrsDAO;
+	private LoginQTrsDAO loginQTrsDAO;
 	
 	@Autowired
 	private SecretUtil sert;
@@ -35,7 +31,7 @@ public class LoginServiceImpl implements LoginService {
 		} catch (Exception e) {
 			log.error(e);
 		}
-		return loginQueryDAO.findByUserPassword(userId, encryptPwd);
+		return loginQTrsDAO.findByUserPassword(userId, encryptPwd);
 	}
 
 	

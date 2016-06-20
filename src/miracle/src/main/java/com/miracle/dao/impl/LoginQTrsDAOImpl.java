@@ -5,12 +5,12 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.miracle.dao.LoginQueryDAO;
+import com.miracle.dao.LoginQTrsDAO;
 import com.miracle.mode.Account;
 
 
-@Repository("loginQueryDAO")
-public class LoginQueryDAOImpl extends BaseQueryDAOImpl<Account, Map<String, Object>> implements LoginQueryDAO {
+@Repository("loginQTrsDAO")
+public class LoginQTrsDAOImpl extends BaseDAOImpl<Account, Map<String, Object>> implements LoginQTrsDAO {
 
 	
 	@Override

@@ -24,8 +24,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.common.ExcelUtil;
 import com.miracle.common.TimeMachine;
-import com.miracle.dao.ChildrenQueryDAO;
-import com.miracle.dao.ChildrenTrsDAO;
+import com.miracle.dao.ChildrenQTrsDAO;
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.dao.jpa.ChildrenDAO;
 import com.miracle.dao.jpa.PeopleDAO;
@@ -49,10 +48,7 @@ public class ChildrenServiceImpl implements ChildrenService {
 	private static final Logger log = LoggerFactory.getLogger(ChildrenServiceImpl.class);
 	
 	@Autowired
-	private ChildrenQueryDAO childrenQueryDAO;
-	
-	@Autowired
-	private ChildrenTrsDAO childrenTrsDAO;
+	private ChildrenQTrsDAO childrenQTrsDAO;
 	
 	@Autowired
 	private ChildrenDAO childrenDAO;
@@ -82,7 +78,7 @@ public class ChildrenServiceImpl implements ChildrenService {
 	@Override
 	public PeopleVO queryPeopleData(String peopleId) throws DAOObjectNotFoundException {
 		
-		return childrenQueryDAO.findPeopleData(peopleId);
+		return childrenQTrsDAO.findPeopleData(peopleId);
 	}
 	
 	@Override
@@ -102,32 +98,32 @@ public class ChildrenServiceImpl implements ChildrenService {
 	@Override
 	public List<Contact> queryContact(String peopleId) throws DAOObjectNotFoundException {
 		
-		return childrenQueryDAO.findContact(peopleId);
+		return childrenQTrsDAO.findContact(peopleId);
 	}
 
 	@Override
 	public CareTime queryCareTime(String peopleId) throws DAOObjectNotFoundException {
 		
-		return childrenQueryDAO.findCareTime(peopleId);
+		return childrenQTrsDAO.findCareTime(peopleId);
 	}
 	
 	@Override
 	public List<PresentWorshipVO> queryPresentWorship(String peopleId, PageBounds pageBounds) throws DAOObjectNotFoundException {
 		
-		return childrenQueryDAO.findPresentWorship(peopleId, pageBounds);
+		return childrenQTrsDAO.findPresentWorship(peopleId, pageBounds);
 	}
 	
 	@Override
 	public List<Statement> queryStatementAll(String peopleId, PageBounds pageBounds) throws DAOObjectNotFoundException {
 		
-		return childrenQueryDAO.findStatementAll(peopleId, pageBounds);
+		return childrenQTrsDAO.findStatementAll(peopleId, pageBounds);
 	}
 	
 	@Override
 	public String queryPresentWorshipByKey(PresentWorship presentWorship) throws DAOObjectNotFoundException {
 
 		
-		return childrenQueryDAO.findPresentWorshipByKey(presentWorship);
+		return childrenQTrsDAO.findPresentWorshipByKey(presentWorship);
 	}
 	
 	@Override
@@ -142,7 +138,7 @@ public class ChildrenServiceImpl implements ChildrenService {
 		
 		boolean isCorrect = false;
 		
-		int count = childrenTrsDAO.updatePresentWorshipById(id);
+		int count = childrenQTrsDAO.updatePresentWorshipById(id);
 		
 		if(count >0){
 			isCorrect = true;
@@ -163,7 +159,7 @@ public class ChildrenServiceImpl implements ChildrenService {
 		
 		boolean isCorrect = false;
 		
-		int count = childrenTrsDAO.updatePresentWorshipChkoutById(pid, cid, worship);
+		int count = childrenQTrsDAO.updatePresentWorshipChkoutById(pid, cid, worship);
 		
 		if(count >0){
 			isCorrect = true;
@@ -338,7 +334,7 @@ public class ChildrenServiceImpl implements ChildrenService {
 	public String queryWorshipIdByKey(String peopleId) throws DAOObjectNotFoundException {
 
 		
-		return childrenQueryDAO.findWorshipIdByKey(peopleId);
+		return childrenQTrsDAO.findWorshipIdByKey(peopleId);
 	}
 	
 	
@@ -353,14 +349,14 @@ public class ChildrenServiceImpl implements ChildrenService {
 	public List<PresentWorshipVO> queryPresentWorshipAll(String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException {
 		
 		
-		return childrenQueryDAO.findPresentWorshipAll(beginTime, endTime, worshId);
+		return childrenQTrsDAO.findPresentWorshipAll(beginTime, endTime, worshId);
 	}
 	
 	@Override
 	public List<WorshipReportVO> queryWorshipReportAll(String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException {
 		
 		
-		return childrenQueryDAO.findWorshipReportAll(beginTime, endTime, worshId);
+		return childrenQTrsDAO.findWorshipReportAll(beginTime, endTime, worshId);
 	}
 	
 	
