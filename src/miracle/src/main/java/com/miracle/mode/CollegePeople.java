@@ -46,6 +46,12 @@ public class CollegePeople  implements Serializable{
 	@Column(name="COLLEGE_TEL")
 	private String collegeTel;
 	
+	@Column(name="COLLEGE_GRADE")
+	private String collegeGrade;
+	
+	@Column(name="COLLEGE_LEADER")
+	private String collegeLeader;
+	
 	
 
 	public String getCollegeId() {
@@ -119,6 +125,24 @@ public class CollegePeople  implements Serializable{
 	public void setCollegeTel(String collegeTel) {
 		this.collegeTel = collegeTel;
 	}
+
+	public String getCollegeGrade() {
+		return collegeGrade;
+	}
+
+	public void setCollegeGrade(String collegeGrade) {
+		this.collegeGrade = collegeGrade;
+	}
+
+	public String getCollegeLeader() {
+		return collegeLeader;
+	}
+
+	public void setCollegeLeader(String collegeLeader) {
+		this.collegeLeader = collegeLeader;
+	}
+
+	
 	
 	
 	

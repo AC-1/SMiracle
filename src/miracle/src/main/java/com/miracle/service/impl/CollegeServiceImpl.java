@@ -321,6 +321,8 @@ public class CollegeServiceImpl implements CollegeService {
 					collegePeople.setCollegeSchoolGrade(collegeSchoolGrade);
 					collegePeople.setCollegePhone(collegePhone);
 					collegePeople.setCollegeTel(collegeTel);
+					collegePeople.setCollegeGrade("2");
+					collegePeople.setCollegeLeader("Y");
 					
 					//註冊用戶
 					em.persist(collegePeople);

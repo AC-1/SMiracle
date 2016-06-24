@@ -247,7 +247,7 @@ public class ChildrenController extends BaseController {
 	 * cid   Charch Id
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/callroll", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/callroll", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public JSONPObject callRoll (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
@@ -308,7 +308,7 @@ public class ChildrenController extends BaseController {
 	 * 點名報到 - 登出
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/callrollchkout", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/callrollchkout", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public JSONPObject callRollChkout (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
@@ -345,7 +345,7 @@ public class ChildrenController extends BaseController {
 	 * 新增兒童基本資料
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/savechildrendata", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/savechildrendata", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public Map<String, Object> saveChildrenData(Model model, HttpServletRequest req,  HttpServletResponse res,  HttpSession session ) throws Exception{
 		
 		Map<String, Object> jsonMap = new HashMap<String, Object>();

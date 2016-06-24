@@ -64,7 +64,7 @@ public class CollegeController extends BaseController {
 	 * 營會點名報到 打卡
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/checkin", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/checkin", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public JSONPObject checkIn (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
@@ -153,7 +153,7 @@ public class CollegeController extends BaseController {
 	 * 營會報名
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/campregistration", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/campregistration", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public JSONPObject campRegistration (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
@@ -204,7 +204,7 @@ public class CollegeController extends BaseController {
 	 * 刪除營會報名
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/delcampregistration", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/delcampregistration", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public JSONPObject delCampRegistration (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
@@ -257,7 +257,7 @@ public class CollegeController extends BaseController {
 	 * 查所有營會資料
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/querycampactivityall", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/querycampactivityall", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public JSONPObject queryCampActivityAll (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
@@ -288,7 +288,7 @@ public class CollegeController extends BaseController {
 	 * 查營會所有報名人員資料
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/querycampactivitysignupall", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/querycampactivitysignupall", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public JSONPObject queryCampActivitySignupAll (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
@@ -321,7 +321,7 @@ public class CollegeController extends BaseController {
 	 * 查營會打卡報到人員資料 - 依時間
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/querycheckincollegedataall", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/querycheckincollegedataall", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public JSONPObject queryCheckInCollegeDataAll (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
@@ -356,7 +356,7 @@ public class CollegeController extends BaseController {
 	 * 查營會打卡未報到人員資料 - 依時間
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/querynocheckincollegedataall", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/querynocheckincollegedataall", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public JSONPObject queryNoCheckInCollegeDataAll (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
@@ -391,7 +391,7 @@ public class CollegeController extends BaseController {
 	 * 查學生人員基本資料
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/querycollegepeopleall", method = RequestMethod.POST , headers="Accept=application/json" )
+	@RequestMapping(value = "/querycollegepeopleall", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public JSONPObject queryCollegePeopleAll (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
