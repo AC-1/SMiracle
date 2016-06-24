@@ -2,6 +2,9 @@ package com.miracle.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.mode.CampActivity;
 import com.miracle.mode.CampActivitySignup;
@@ -101,5 +104,30 @@ public interface CollegeService {
 	
 	/** 讀取 基本資料 匯入報名表*/
 	public Boolean setCampActivitySignup(String activityId) throws DAOObjectNotFoundException;
+	
+	
+	/** 查詢人員基本資料設定 - 分頁*/
+	public Page<CollegePeople> queryCollegePeopleAll(Pageable pageable) throws DAOObjectNotFoundException;
+
+	/** 查詢人員基本資料設定 - 分頁 - BY collegeId*/
+	public Page<CollegePeople> queryCollegePeopleAllByCollegeId(Pageable pageable, String collegeId) throws DAOObjectNotFoundException;
+	
+	/** 查詢人員基本資料設定 - 分頁 - BY collegeName*/
+	public Page<CollegePeople> queryCollegePeopleAllByCollegeName(Pageable pageable, String collegeName) throws DAOObjectNotFoundException;
+	
+	/** 查詢人員基本資料設定 - 分頁 - BY collegeGrade*/
+	public Page<CollegePeople> queryCollegePeopleAllByCollegeGrade(Pageable pageable, String collegeGrade) throws DAOObjectNotFoundException;
+	
+	/** 查詢人員基本資料設定 - 分頁 - BY collegeLeader*/
+	public Page<CollegePeople> queryCollegePeopleAllByCollegeLeader(Pageable pageable, String collegeLeader) throws DAOObjectNotFoundException;
+	
+	/** 新增人員基本資料設定  */
+	public boolean createCollegePeople(CollegePeople collegePeople) throws DAOObjectNotFoundException;
+	
+	/** 查詢單一人員基本資料設定*/
+	public CollegePeople queryCollegePeople(String collegeId) throws DAOObjectNotFoundException;
+	
+	/** 刪除人員基本資料設定*/
+	public Boolean deleteCollegePeople(String collegeId) throws DAOObjectNotFoundException;
 	
 }

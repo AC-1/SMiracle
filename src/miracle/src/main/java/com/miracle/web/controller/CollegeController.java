@@ -10,12 +10,17 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.miracle.common.JSONUtils;
 import com.miracle.common.Language;
@@ -427,6 +432,266 @@ public class CollegeController extends BaseController {
 		}
 		
 		return new JSONPObject(callback,jsonMap);
+	}
+	
+	
+	//人員基本資料設定首頁
+	@RequestMapping(value = "/sign/querycollegepeople", method = {RequestMethod.GET, RequestMethod.POST})
+	public String queryCollegePeople(Model model, @ModelAttribute("pageNumber") String pageNumber1,
+			@ModelAttribute("msg") String msg,
+			@ModelAttribute("selectType") String selectType1,
+			@ModelAttribute("collegeId") String collegeId1,
+			@ModelAttribute("collegeName") String collegeName1,
+			@ModelAttribute("collegeGrade") String collegeGrade1,
+			@ModelAttribute("collegeLeader") String collegeLeader1,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+	
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(pageNumber == null || pageNumber.equals("")){
+			if(pageNumber1 != null && !pageNumber1.equals("")){
+				pageNumber=pageNumber1;//修改頁面而來
+			}else{
+				pageNumber="0";//首頁進來
+			}
+		}
+		
+		String selectType = StringUtils.trimToEmpty(req.getParameter("selectType"));
+		if(selectType == null || selectType.equals("")){
+			if(selectType1 != null && !selectType1.equals("")){
+				selectType=selectType1;
+			}else{
+				selectType="";//首頁進來
+			}
+		}
+		
+		String collegeId = StringUtils.trimToEmpty(req.getParameter("collegeId"));
+		if(collegeId == null || collegeId.equals("")){
+			if(collegeId1 != null && !collegeId1.equals("")){
+				collegeId=collegeId1;
+			}else{
+				collegeId="";//首頁進來
+			}
+		}
+		
+		String collegeName = StringUtils.trimToEmpty(req.getParameter("collegeName"));
+		if(collegeName == null || collegeName.equals("")){
+			if(collegeName1 != null && !collegeName1.equals("")){
+				collegeName=collegeName1;
+			}else{
+				collegeName="";//首頁進來
+			}
+		}
+		
+		String collegeGrade = StringUtils.trimToEmpty(req.getParameter("collegeGrade"));
+		if(collegeGrade == null || collegeGrade.equals("")){
+			if(collegeGrade1 != null && !collegeGrade1.equals("")){
+				collegeGrade=collegeGrade1;
+			}else{
+				collegeGrade="";//首頁進來
+			}
+		}
+		
+		String collegeLeader = StringUtils.trimToEmpty(req.getParameter("collegeLeader"));
+		if(collegeLeader == null || collegeLeader.equals("")){
+			if(collegeLeader1 != null && !collegeLeader1.equals("")){
+				collegeLeader=collegeLeader1;
+			}else{
+				collegeLeader="";//首頁進來
+			}
+		}
+		
+		int pageIndex = Integer.parseInt(pageNumber); //第幾頁 - 從1開始 0會報錯
+		int pageSize = 7;//每頁幾筆
+		int page = (pageIndex-1)*pageSize;
+		
+//		Sort sort = new Sort (Direction.ASC, "sort");
+		Pageable pageable = new PageRequest(pageIndex, pageSize);
+		
+		Page<CollegePeople> collegePeopleList = null;
+		if(StringUtils.isNotBlank(selectType) && selectType.equals("1")){
+			if(StringUtils.isNotBlank(collegeId)){
+				
+				collegePeopleList = collegeService.queryCollegePeopleAllByCollegeId(pageable, collegeId);
+			
+			}else if(StringUtils.isNotBlank(collegeName)){
+				
+				collegePeopleList = collegeService.queryCollegePeopleAllByCollegeName(pageable, collegeName);
+			
+			}else if(StringUtils.isNotBlank(collegeGrade)){
+				
+				collegePeopleList = collegeService.queryCollegePeopleAllByCollegeGrade(pageable, collegeGrade);
+			
+			}else if(StringUtils.isNotBlank(collegeLeader)){
+				
+				collegePeopleList = collegeService.queryCollegePeopleAllByCollegeLeader(pageable, collegeLeader);
+			
+			}else {
+				
+				collegePeopleList = collegeService.queryCollegePeopleAll(pageable);
+			}
+			
+		}else{
+			
+			//查詢所有資料
+			collegePeopleList = collegeService.queryCollegePeopleAll(pageable);
+		}
+		
+		//查詢所有資料
+		model.addAttribute(collegePeopleList.getContent());
+		
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("pageTotal", collegePeopleList.getTotalPages());
+		
+		model.addAttribute("msg", msg);
+		
+		model.addAttribute("collegeId", collegeId);
+		model.addAttribute("collegeName", collegeName);
+		model.addAttribute("collegeGrade", collegeGrade);
+		model.addAttribute("collegeLeader", collegeLeader);
+		model.addAttribute("selectType", selectType);
+		
+		return "collegepeople/queryCollegePeople";
+	}
+	
+	
+	//新增人員設定
+	@RequestMapping(value = "/sign/addcollegepeople", method = RequestMethod.GET)
+	public String addCollegePeople(Model model,
+			@ModelAttribute("msg") String msg, @ModelAttribute("pageNumber") String pageNumber,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+		
+		
+		 model.addAttribute("pageNumber", pageNumber);
+	     model.addAttribute("msg", msg);
+		
+		return "collegepeople/addCollegePeople";
+	}
+	
+	
+	//人員設定- 新增
+	@RequestMapping(value = "/sign/createcollegepeople", method = RequestMethod.POST )
+	public String createCollegePeople( 
+			@ModelAttribute CollegePeople collegePeople,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String resultValue = "";
+		try {
+			
+			collegePeople.setCollegeId(timeMachine.newRandomUUID());
+			Boolean isCorrect = collegeService.createCollegePeople(collegePeople);
+			
+			if(isCorrect){
+				resultValue="新增成功";
+				
+			}else{
+				resultValue="新增失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		
+		
+		return "redirect:/college/sign/querycollegepeople";
+	}
+	
+	
+	//人員設定- 修改頁面
+	@RequestMapping(value = "/sign/editcollegepeople", method = {RequestMethod.POST, RequestMethod.GET})
+	public String editCollegePeople(@ModelAttribute("id") String id1, @ModelAttribute("msg") String msg,
+			@ModelAttribute("pageNumber") String pageNumber1,
+			Model model, HttpServletRequest req, HttpSession s )  throws Exception {
+		
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber1"));//分頁點擊
+		if(StringUtils.isNotBlank(pageNumber1)){
+			pageNumber = pageNumber1;
+		}
+		
+		String id = StringUtils.trimToEmpty(req.getParameter("id"));
+		if(StringUtils.isNotBlank(id1)){
+			id = id1;
+		}
+		
+		//查詢
+		CollegePeople collegePeople = collegeService.queryCollegePeople(id);
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("collegePeople", collegePeople);
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("id", id);
+		
+		
+		return "collegepeople/editCollegePeople";
+	}
+	
+	
+	//人員設定 - 修改
+	@RequestMapping(value = "/sign/updatecollegepeople", method = RequestMethod.POST )
+	public String updateCollegePeople(
+			@ModelAttribute CollegePeople collegePeople,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));
+		
+		String resultValue = "";
+		
+		try {
+			
+			//修改
+			Boolean isCorrect = collegeService.createCollegePeople(collegePeople);
+			
+			if(isCorrect){
+				resultValue="修改成功";
+				
+			}else{
+				resultValue="修改失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue);
+		attr.addFlashAttribute("pageNumber", pageNumber);
+		
+		
+		return "redirect:/college/sign/querycollegepeople";
+	}
+	
+	
+	//刪除人員設定
+	@RequestMapping(value = "/sign/deletecollegepeople", method = RequestMethod.POST )
+	public String deleteCollegePeople( @RequestParam String delId,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		String resultValue = "";
+		
+		try {
+			
+			//刪除
+			Boolean isCorrect = collegeService.deleteCollegePeople(delId);
+			if(isCorrect){
+				resultValue = "刪除成功";
+			}else{
+				resultValue = "刪除失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		attr.addFlashAttribute("pageNumber", pageNumber); 
+		
+		return "redirect:/college/sign/querycollegepeople";
 	}
 
 }

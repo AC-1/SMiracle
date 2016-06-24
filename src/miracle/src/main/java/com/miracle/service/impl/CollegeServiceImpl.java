@@ -15,6 +15,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -321,6 +323,9 @@ public class CollegeServiceImpl implements CollegeService {
 					collegePeople.setCollegeSchoolGrade(collegeSchoolGrade);
 					collegePeople.setCollegePhone(collegePhone);
 					collegePeople.setCollegeTel(collegeTel);
+//					collegePeople.setCollegeGrade("1");
+//					collegePeople.setCollegeLeader("Y");
+					
 					collegePeople.setCollegeGrade("2");
 					collegePeople.setCollegeLeader("Y");
 					
@@ -392,6 +397,101 @@ public class CollegeServiceImpl implements CollegeService {
         	em.close();
 		}
 		   
+		return isCorrect;
+	}
+	
+	
+	@Override
+	public Page<CollegePeople> queryCollegePeopleAll(Pageable pageable) throws DAOObjectNotFoundException {
+		
+		
+		return collegePeopleDAO.findAll(pageable);
+	}
+	
+	
+	@Override
+	public boolean createCollegePeople(CollegePeople collegePeople) throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		try {
+			
+			collegePeopleDAO.save(collegePeople);
+			
+			isCorrect = true;
+			
+		} catch (Exception e) {
+        	isCorrect = false;
+        	log.info("createCollegePeople error:" + e.getMessage() );
+		}
+		
+		return isCorrect;
+	}
+	
+	@Override
+	public Page<CollegePeople> queryCollegePeopleAllByCollegeId(Pageable pageable, String collegeId)throws DAOObjectNotFoundException {
+		
+		
+		return collegePeopleDAO.findCollegePeopleAllByCollegeId(collegeId, pageable);
+	}
+	
+	@Override
+	public Page<CollegePeople> queryCollegePeopleAllByCollegeName(Pageable pageable, String collegeName)throws DAOObjectNotFoundException {
+		
+		
+		return collegePeopleDAO.findCollegePeopleAllByCollegeName(collegeName, pageable);
+	}
+	
+	@Override
+	public Page<CollegePeople> queryCollegePeopleAllByCollegeGrade(Pageable pageable, String collegeGrade)throws DAOObjectNotFoundException {
+		
+		return collegePeopleDAO.findCollegePeopleAllByCollegeGrade(collegeGrade, pageable);
+	}
+	
+	@Override
+	public Page<CollegePeople> queryCollegePeopleAllByCollegeLeader(Pageable pageable, String collegeLeader)throws DAOObjectNotFoundException {
+	
+		return collegePeopleDAO.findCollegePeopleAllByCollegeLeader(collegeLeader, pageable);
+	}
+	
+	@Override
+	public CollegePeople queryCollegePeople(String collegeId)throws DAOObjectNotFoundException {
+		
+		
+		return entityManager.find(CollegePeople.class, collegeId);
+	}
+	
+	@Override
+	public Boolean deleteCollegePeople(String collegeId)throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		
+		try {
+			isCorrect = false;
+			
+			//刪除
+			Query query = em.createQuery("DELETE FROM CollegePeople e WHERE collegeId = ?1 ");
+//      	query.setParameter("propertyValue", value);
+			query.setParameter(1, collegeId);
+			long rows = query.executeUpdate();
+			
+			if(rows > 0){
+				em.getTransaction().commit();
+				isCorrect = true;
+			}else{
+				em.getTransaction().rollback();
+				isCorrect = false;
+			}
+			
+			em.close();
+		} catch (Exception e) {
+			log.info("deleteCollegePeople eror："+e.getMessage());
+			em.close();
+		}
+		
 		return isCorrect;
 	}
 	

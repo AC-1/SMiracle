@@ -145,7 +145,7 @@ private MailUtil mailUtil;
     
     
     //學生報名
-    @Test
+//    @Test
     public void setCampActivitySignup(){
     	
     	String activityId = "activity_16021615393155001";//那個營會
