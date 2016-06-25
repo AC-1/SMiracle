@@ -39,6 +39,10 @@ public class CampActivitySignupVO  implements Serializable{
 	
 	private String collegeTel;
 	
+	private String collegeGrade;
+	
+	private String collegeLeader;
+	
 	
 	public String getSignupId() {
 		return signupId;
@@ -117,6 +121,18 @@ public class CampActivitySignupVO  implements Serializable{
 	}
 	public void setCollegeTel(String collegeTel) {
 		this.collegeTel = collegeTel;
+	}
+	public String getCollegeGrade() {
+		return collegeGrade;
+	}
+	public void setCollegeGrade(String collegeGrade) {
+		this.collegeGrade = collegeGrade;
+	}
+	public String getCollegeLeader() {
+		return collegeLeader;
+	}
+	public void setCollegeLeader(String collegeLeader) {
+		this.collegeLeader = collegeLeader;
 	}
 
 	

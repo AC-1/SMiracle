@@ -20,6 +20,8 @@
 		<result property="collegeSchoolGrade" column="COLLEGE_SCHOOL_GRADE" />
 		<result property="collegePhone" column="COLLEGE_PHONE" />
 		<result property="collegeTel" column="COLLEGE_TEL" />
+		<result property="collegeGrade" column="COLLEGE_GRADE" />
+		<result property="collegeLeader" column="COLLEGE_LEADER" />
 	</resultMap>
 	
 	<resultMap id="collegePeopleVOMap" type="CollegePeopleVO">
@@ -33,6 +35,8 @@
 		<result property="collegePhone" column="COLLEGE_PHONE" />
 		<result property="collegeTel" column="COLLEGE_TEL" />
 		<result property="checkInTime" column="CHECK_IN_TIME" />
+		<result property="collegeGrade" column="COLLEGE_GRADE" />
+		<result property="collegeLeader" column="COLLEGE_LEADER" />
 	</resultMap>
 	
 	
@@ -47,7 +51,7 @@
 	<select id="findCampActivitySignupAllByActivityId" parameterType="string" resultMap="campActivitySignupVOMap">
 		select A.SIGNUP_ID, A.ACTIVITY_ID, A.COLLEGE_ID, A.IF_CHECK_IN, A.SIGNUP_DATE,
 		       B.COLLEGE_NAME, B.COLLEGE_AREA, B.COLLEGE_GROUP, B.COLLEGE_GENDER, B.COLLEGE_BIRTHDAY, 
-		       B.COLLEGE_SCHOOL_GRADE, B.COLLEGE_PHONE, B.COLLEGE_TEL
+		       B.COLLEGE_SCHOOL_GRADE, B.COLLEGE_PHONE, B.COLLEGE_TEL, B.COLLEGE_GRADE, B.COLLEGE_LEADER
 		from camp_activity_signup A
 		left join college_people B on A.COLLEGE_ID = B.COLLEGE_ID
 		where A.ACTIVITY_ID = #{activityId}
@@ -55,7 +59,7 @@
 	
 	<select id="findCollegePeopleCheckInAllByDate" parameterType="map" resultMap="collegePeopleVOMap">
 		select A.CHECK_IN_TIME, B.COLLEGE_ID, B.COLLEGE_NAME, B.COLLEGE_AREA, B.COLLEGE_GROUP, B.COLLEGE_GENDER, B.COLLEGE_BIRTHDAY, 
-		       B.COLLEGE_SCHOOL_GRADE, B.COLLEGE_PHONE, B.COLLEGE_TEL
+		       B.COLLEGE_SCHOOL_GRADE, B.COLLEGE_PHONE, B.COLLEGE_TEL, B.COLLEGE_GRADE, B.COLLEGE_LEADER
 		from  college_camp_check_in A 
 		left join college_people B on A.COLLEGE_ID = B.COLLEGE_ID 
 		where A.CAMP_DATE = #{campDate}
@@ -65,7 +69,7 @@
 	
 	<select id="findCollegePeopleNoCheckInAllByDate" parameterType="map" resultMap="collegePeopleVOMap">
 		SELECT COLLEGE_ID, COLLEGE_NAME, COLLEGE_AREA, COLLEGE_GROUP, COLLEGE_GENDER, COLLEGE_BIRTHDAY, COLLEGE_SCHOOL_GRADE,
-		       COLLEGE_PHONE, COLLEGE_TEL
+		       COLLEGE_PHONE, COLLEGE_TEL, COLLEGE_GRADE, COLLEGE_LEADER
 		from college_people 
 		where COLLEGE_ID not in (
 			select COLLEGE_ID from college_camp_check_in where CAMP_DATE = #{campDate}

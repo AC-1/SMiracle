@@ -34,8 +34,11 @@ public class CollegePeopleVO  implements Serializable{
 	
 	private String collegeTel;
 	
-	
 	private String checkInTime;
+	
+	private String collegeGrade;
+	
+	private String collegeLeader;
 	
 	
 
@@ -117,6 +120,22 @@ public class CollegePeopleVO  implements Serializable{
 
 	public void setCollegeTel(String collegeTel) {
 		this.collegeTel = collegeTel;
+	}
+
+	public String getCollegeGrade() {
+		return collegeGrade;
+	}
+
+	public void setCollegeGrade(String collegeGrade) {
+		this.collegeGrade = collegeGrade;
+	}
+
+	public String getCollegeLeader() {
+		return collegeLeader;
+	}
+
+	public void setCollegeLeader(String collegeLeader) {
+		this.collegeLeader = collegeLeader;
 	}
 	
 	
