@@ -39,7 +39,11 @@ public class CollegeCampCheckIn  implements Serializable{
 	@Column(name="ACTIVITY_ID")
 	private String activityId;
 	
+	@Column(name="CHECK_TYPE_TIME")
+	private String checkTypeTime;
 	
+	@Column(name="CHECK_INFO")
+	private String checkInfo;
 
 	public String getCheckInId() {
 		return checkInId;
@@ -95,6 +99,22 @@ public class CollegeCampCheckIn  implements Serializable{
 
 	public void setActivityId(String activityId) {
 		this.activityId = activityId;
+	}
+
+	public String getCheckTypeTime() {
+		return checkTypeTime;
+	}
+
+	public void setCheckTypeTime(String checkTypeTime) {
+		this.checkTypeTime = checkTypeTime;
+	}
+
+	public String getCheckInfo() {
+		return checkInfo;
+	}
+
+	public void setCheckInfo(String checkInfo) {
+		this.checkInfo = checkInfo;
 	}
 	
 	

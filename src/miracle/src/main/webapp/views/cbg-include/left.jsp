@@ -6,6 +6,7 @@
 		            <h2>國高、大專營會報名</h2>  
 		            <ul>                     
 		              <li><a href="<c:url value="college/sign/querycollegepeople"/>">人員資料功能</a></li>
+		              <li><a href="<c:url value="college/sign/handcheckin"/>">手動報到打卡</a></li>
 		              <li><a href="<c:url value=""/>">營會報名功能</a></li>
 		            </ul>                
 		            <%-- <ul>                     

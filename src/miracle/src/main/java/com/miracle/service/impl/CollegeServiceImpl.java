@@ -102,10 +102,10 @@ public class CollegeServiceImpl implements CollegeService {
 	}
 	
 	@Override
-	public Boolean queryIfCollegeCampCheckIn(String collegeId) throws DAOObjectNotFoundException {
+	public Boolean queryIfCollegeCampCheckIn(String collegeId, String checkTypeTime) throws DAOObjectNotFoundException {
 		
 		boolean isCorrect = false;
-		int count = collegeQTrsDAO.findIfCollegeCampCheckIn(collegeId);
+		int count = collegeQTrsDAO.findIfCollegeCampCheckIn(collegeId, checkTypeTime);
 		if(count >0 ){
 			isCorrect = true;
 		}
@@ -115,7 +115,7 @@ public class CollegeServiceImpl implements CollegeService {
 	
 	
 	@Override
-	public Boolean createCollegeCampCheckIn(String collegeId, String activityId) throws DAOObjectNotFoundException {
+	public Boolean createCollegeCampCheckIn(String collegeId, String activityId, String checkTypeTime, String checkInfo) throws DAOObjectNotFoundException {
 		
 		boolean isCorrect = false;
 		
@@ -126,7 +126,8 @@ public class CollegeServiceImpl implements CollegeService {
 		collegeCampCheckIn.setCollegeId(collegeId);
 		collegeCampCheckIn.setCampDate(idtime.todayFormatYMD());
 		collegeCampCheckIn.setActivityId(activityId);
-		
+		collegeCampCheckIn.setCheckTypeTime(checkTypeTime);
+		collegeCampCheckIn.setCheckInfo(checkInfo);
 		int count = collegeQTrsDAO.createCollegeCampCheckIn(collegeCampCheckIn);
 		
 		if(count >0){
@@ -137,12 +138,12 @@ public class CollegeServiceImpl implements CollegeService {
 	}
 	
 	@Override
-	public Boolean updateCollegeCampCheckIn(String collegeId) throws DAOObjectNotFoundException {
+	public Boolean updateCollegeCampCheckIn(String collegeId, String checkTypeTime, String checkInfo) throws DAOObjectNotFoundException {
 		
 		boolean isCorrect = false;
 		
 		
-		int count = collegeQTrsDAO.updateCollegeCampCheckIn(collegeId);
+		int count = collegeQTrsDAO.updateCollegeCampCheckIn(collegeId, checkTypeTime, checkInfo);
 		
 		if(count >0){
 			isCorrect = true;
@@ -255,10 +256,10 @@ public class CollegeServiceImpl implements CollegeService {
 	
 	
 	@Override
-	public List<CollegePeopleVO> queryCollegePeopleCheckInAllByDate(String campDate, String activityId) throws DAOObjectNotFoundException {
+	public List<CollegePeopleVO> queryCollegePeopleCheckInAllByDate(String campDate, String activityId, String checkTypeTime) throws DAOObjectNotFoundException {
 		
 		
-		return collegeQTrsDAO.findCollegePeopleCheckInAllByDate(campDate, activityId);
+		return collegeQTrsDAO.findCollegePeopleCheckInAllByDate(campDate, activityId, checkTypeTime);
 	}
 	
 	

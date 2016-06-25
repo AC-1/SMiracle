@@ -34,17 +34,24 @@
 		<result property="collegeSchoolGrade" column="COLLEGE_SCHOOL_GRADE" />
 		<result property="collegePhone" column="COLLEGE_PHONE" />
 		<result property="collegeTel" column="COLLEGE_TEL" />
-		<result property="checkInTime" column="CHECK_IN_TIME" />
 		<result property="collegeGrade" column="COLLEGE_GRADE" />
 		<result property="collegeLeader" column="COLLEGE_LEADER" />
+		<result property="checkInId" column="CHECK_IN_ID" />
+		<result property="checkInTime" column="CHECK_IN_TIME" />
+		<result property="checkInLastTime" column="CHECK_IN_LAST_TIME" />
+		<result property="ifCheckIn" column="IF_CHECK_IN" />
+		<result property="campDate" column="CAMP_DATE" />
+		<result property="activityId" column="ACTIVITY_ID" />
+		<result property="checkTypeTime" column="CHECK_TYPE_TIME" />
+		<result property="checkInfo" column="CHECK_INFO" />
 	</resultMap>
-	
-	
+
 	
 	<select id="findIfCollegeCampCheckIn" parameterType="string" resultType="integer">
 		select count(0) count from college_camp_check_in 
 		where to_days(CHECK_IN_TIME) = to_days(NOW())
 		and COLLEGE_ID = #{collegeId}
+		and CHECK_TYPE_TIME=#{checkTypeTime}
 	</select>
 	
 	
@@ -58,12 +65,17 @@
 	</select>
 	
 	<select id="findCollegePeopleCheckInAllByDate" parameterType="map" resultMap="collegePeopleVOMap">
-		select A.CHECK_IN_TIME, B.COLLEGE_ID, B.COLLEGE_NAME, B.COLLEGE_AREA, B.COLLEGE_GROUP, B.COLLEGE_GENDER, B.COLLEGE_BIRTHDAY, 
+		select A.CHECK_IN_ID, A.CHECK_IN_TIME, A.CHECK_IN_LAST_TIME, A.IF_CHECK_IN, A.CAMP_DATE,
+			   A.ACTIVITY_ID, A.CHECK_TYPE_TIME, A.CHECK_INFO,
+			   B.COLLEGE_ID, B.COLLEGE_NAME, B.COLLEGE_AREA, B.COLLEGE_GROUP, B.COLLEGE_GENDER, B.COLLEGE_BIRTHDAY, 
 		       B.COLLEGE_SCHOOL_GRADE, B.COLLEGE_PHONE, B.COLLEGE_TEL, B.COLLEGE_GRADE, B.COLLEGE_LEADER
 		from  college_camp_check_in A 
 		left join college_people B on A.COLLEGE_ID = B.COLLEGE_ID 
 		where A.CAMP_DATE = #{campDate}
 		AND A.ACTIVITY_ID = #{activityId}
+		<if test="checkTypeTime != null and !''.equals(checkTypeTime)">
+		AND A.CHECK_TYPE_TIME = #{checkTypeTime}
+		</if>
 	</select>
 	
 	
@@ -79,15 +91,17 @@
 	
 	
 	<insert id="createCollegeCampCheckIn" parameterType="collegeCampCheckIn">
-		insert into college_camp_check_in ( CHECK_IN_ID, COLLEGE_ID, CHECK_IN_TIME, CHECK_IN_LAST_TIME, IF_CHECK_IN, CAMP_DATE, ACTIVITY_ID )
-		values (#{checkInId}, #{collegeId}, now(), now(), 'Y', #{campDate}, #{activityId})
+		insert into college_camp_check_in ( CHECK_IN_ID, COLLEGE_ID, CHECK_IN_TIME, CHECK_IN_LAST_TIME, IF_CHECK_IN, CAMP_DATE, ACTIVITY_ID, CHECK_TYPE_TIME, CHECK_INFO )
+		values (#{checkInId}, #{collegeId}, now(), now(), 'Y', #{campDate}, #{activityId}, #{checkTypeTime}, #{checkInfo} )
 	</insert>
 	
-	<update id="updateCollegeCampCheckIn" parameterType="string">
+	<update id="updateCollegeCampCheckIn" parameterType="map">
 		update college_camp_check_in
-		set CHECK_IN_LAST_TIME=now()
+		set CHECK_IN_LAST_TIME=now(),
+			CHECK_INFO=#{checkInfo}
 		where COLLEGE_ID=#{collegeId}
 		and to_days(CHECK_IN_TIME) = to_days(NOW())
+		and CHECK_TYPE_TIME=#{checkTypeTime}
 	</update>
 
 </mapper>

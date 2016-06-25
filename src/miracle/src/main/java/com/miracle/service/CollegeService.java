@@ -41,7 +41,7 @@ public interface CollegeService {
 	/** College 大學生 營會 查詢是否報到過
 	 *	collegeId:學生ID
 	 */
-	public Boolean queryIfCollegeCampCheckIn(String collegeId) throws DAOObjectNotFoundException;
+	public Boolean queryIfCollegeCampCheckIn(String collegeId, String checkTypeTime) throws DAOObjectNotFoundException;
 	
 	
 	/** 
@@ -49,14 +49,14 @@ public interface CollegeService {
 	 *  College 大學生 營會 當天今天報到打卡
 	 *  collegeId:學生ID 
 	 */
-	public Boolean createCollegeCampCheckIn(String collegeId, String activityId) throws DAOObjectNotFoundException;
+	public Boolean createCollegeCampCheckIn(String collegeId, String activityId, String checkTypeTime, String checkInfo) throws DAOObjectNotFoundException;
 	
 	/** 
 	 *  重覆報到打卡寫進DB
 	 *  College 大學生 營會 當天今天報到重覆打卡
 	 *  collegeId:學生ID 
 	 */
-	public Boolean updateCollegeCampCheckIn(String collegeId) throws DAOObjectNotFoundException;
+	public Boolean updateCollegeCampCheckIn(String collegeId, String checkTypeTime, String checkInfo) throws DAOObjectNotFoundException;
 	
 	/** 
 	 *  打卡寫進報名表DB
@@ -90,7 +90,7 @@ public interface CollegeService {
 	/** 
 	 *  查營會打卡報到人員
 	 */
-	public List<CollegePeopleVO> queryCollegePeopleCheckInAllByDate(String campDate, String activityId) throws DAOObjectNotFoundException;
+	public List<CollegePeopleVO> queryCollegePeopleCheckInAllByDate(String campDate, String activityId, String checkTypeTime) throws DAOObjectNotFoundException;
 	
 	
 	/** 

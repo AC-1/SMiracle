@@ -1,5 +1,7 @@
 package com.miracle.web.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +65,7 @@ public class CollegeController extends BaseController {
 	@Autowired
 	private TimeMachine timeMachine;
 	
-	
+	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	/** 
 	 * 營會點名報到 打卡
@@ -75,73 +77,107 @@ public class CollegeController extends BaseController {
 			Model model, HttpServletRequest req, 
 			HttpServletResponse res,  HttpSession session ) throws Exception{
 		
+		String chkInTimeTest = StringUtils.trimToEmpty(req.getParameter("chkInTimeTest"));//正式打卡傳""會抓系統時間 測式打卡時間格式2016-06-25 14:30:00
 		String collegeId = StringUtils.trimToEmpty(req.getParameter("collegeId"));//學生ID
 		String activityId = StringUtils.trimToEmpty(req.getParameter("activityId"));//營會ID
+		String checkInfo = StringUtils.trimToEmpty(req.getParameter("checkInfo"));//報到資訊
 		
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		
 		Boolean isCorrect = false;
+		boolean isCheckInTime = true;
+		String checkTypeTime = "";
 		
 		try {
+			Date date = new Date();
+			if(StringUtils.isNotBlank(chkInTimeTest)){
+				date = sdf.parse(chkInTimeTest);
+			}
 			
-			//查詢是否有此學生
-			CollegePeople collegePeople = collegeService.queryCollegePeopleById(collegeId);
+			//判斷報到到時段
+			//判斷8點到10點
+    		Date start=timeMachine.changeTime(new Date(), 8, 00, 00);
+    		Date end=timeMachine.changeTime(new Date(), 10, 00, 00);
+			boolean isTime = timeMachine.isDateBetween(date, start, end);
+			//判斷12:30點到14:30點
+			Date start2=timeMachine.changeTime(new Date(), 12, 30, 00);
+    		Date end2=timeMachine.changeTime(new Date(), 14, 30, 00);
+			boolean isTime2 = timeMachine.isDateBetween(date, start2, end2);
 			
-			//查營會資料
-			CampActivity campActivity = collegeService.queryCampActivity(activityId);
+			if(isTime){
+				checkTypeTime = "1";
+			}else if(isTime2){
+				checkTypeTime = "2";
+			}else{
+				isCheckInTime =false;//不在打卡時間之內
+			} 
 			
-			if(collegePeople != null){
+			if(isCheckInTime){
 			
-				//查詢報名表是否報名
-				CampActivitySignup campActivitySignup = collegeService.queryCampActivitySignup(collegeId, activityId);
+				//查詢是否有此學生
+				CollegePeople collegePeople = collegeService.queryCollegePeopleById(collegeId);
 				
-				//判斷是否報到過
-				boolean isCheckIn = collegeService.queryIfCollegeCampCheckIn(collegeId);
-				if(!isCheckIn){
-					
-					//第一次報到打卡
-					isCorrect = collegeService.createCollegeCampCheckIn(collegeId, activityId);
-					
-					//更新報名表，設為Y
-					if(campActivitySignup != null){
-						campActivitySignup.setIfCheckIn("Y");
-						collegeService.updateCampActivitySignup(campActivitySignup);
-					}
-					
-				}else{
-					
-					//重覆報到打卡
-					isCorrect = collegeService.updateCollegeCampCheckIn(collegeId);
-					
-					//更新報名表，設為Y
-					if(campActivitySignup != null){
-						campActivitySignup.setIfCheckIn("Y");
-						collegeService.updateCampActivitySignup(campActivitySignup);
-					}
-				}
+				//查營會資料
+				CampActivity campActivity = collegeService.queryCampActivity(activityId);
 				
-				if(isCorrect){
+				if(collegePeople != null){
+				
+					//查詢報名表是否報名
+					CampActivitySignup campActivitySignup = collegeService.queryCampActivitySignup(collegeId, activityId);
 					
-					jsonMap.put("status", "OK");
-					
-					if(campActivitySignup != null){
-						jsonMap.put("msg", "打卡成功");
+					//判斷是否報到過
+					boolean isCheckIn = collegeService.queryIfCollegeCampCheckIn(collegeId, checkTypeTime);
+					if(!isCheckIn){
+						
+						//第一次報到打卡
+						isCorrect = collegeService.createCollegeCampCheckIn(collegeId, activityId, checkTypeTime, checkInfo);
+						
+						//更新報名表，設為Y
+						if(campActivitySignup != null){
+							campActivitySignup.setIfCheckIn("Y");
+							collegeService.updateCampActivitySignup(campActivitySignup);
+						}
+						
 					}else{
-						jsonMap.put("msg", "打卡成功，但查無此學生有報名過");
+						
+						//重覆報到打卡
+						isCorrect = collegeService.updateCollegeCampCheckIn(collegeId, checkTypeTime, checkInfo);
+						
+						//更新報名表，設為Y
+						if(campActivitySignup != null){
+							campActivitySignup.setIfCheckIn("Y");
+							collegeService.updateCampActivitySignup(campActivitySignup);
+						}
 					}
-				
+					
+					if(isCorrect){
+						
+						jsonMap.put("status", "OK");
+						
+						if(campActivitySignup != null){
+							jsonMap.put("msg", "打卡成功");
+						}else{
+							jsonMap.put("msg", "打卡成功，但查無此學生有報名過");
+						}
+					
+					}else{
+						jsonMap.put("status", "ERR");
+						jsonMap.put("msg", "打卡失敗");
+					}
+					
+					jsonMap.put("collegePeople", collegePeople);
+					jsonMap.put("campActivity", campActivity);
+					
 				}else{
+					
 					jsonMap.put("status", "ERR");
-					jsonMap.put("msg", "打卡失敗");
+					jsonMap.put("msg", "查無此人ID資料，無法打卡!");
 				}
-				
-				jsonMap.put("collegePeople", collegePeople);
-				jsonMap.put("campActivity", campActivity);
-				
+			
 			}else{
 				
 				jsonMap.put("status", "ERR");
-				jsonMap.put("msg", "查無此人ID資料，無法打卡!");
+				jsonMap.put("msg", "不在打卡時間之內，無法打卡!");
 			}
 			
         
@@ -337,11 +373,12 @@ public class CollegeController extends BaseController {
 		
 		String campDate = StringUtils.trimToEmpty(req.getParameter("campDate"));//查那一天營會 格式 2016-06-17
 		String activityId = StringUtils.trimToEmpty(req.getParameter("activityId"));//營會ID
+		String checkTypeTime = StringUtils.trimToEmpty(req.getParameter("checkTypeTime"));//查那一時段空""：查整天全部， 1：am 8:00~10:00，2：12:30 ~ 14:30， 3：非報到時間 後台手動報到
 		
 		try {
 			
 			//查營會打卡報到人員
-			List<CollegePeopleVO> collegePeopleVOList = collegeService.queryCollegePeopleCheckInAllByDate(campDate, activityId);
+			List<CollegePeopleVO> collegePeopleVOList = collegeService.queryCollegePeopleCheckInAllByDate(campDate, activityId, checkTypeTime);
 			
 			jsonMap.put("status", "OK");
 			jsonMap.put("collegePeopleVOList", collegePeopleVOList);
@@ -692,6 +729,128 @@ public class CollegeController extends BaseController {
 		attr.addFlashAttribute("pageNumber", pageNumber); 
 		
 		return "redirect:/college/sign/querycollegepeople";
+	}
+	
+	
+	//手動報到打卡
+	@RequestMapping(value = "/sign/handcheckin", method = RequestMethod.GET)
+	public String handCheckIn(Model model,
+			@ModelAttribute("msg") String msg,
+			@ModelAttribute("collegeId") String collegeId,
+			@ModelAttribute("activityId") String activityId,
+			@ModelAttribute("checkInfo") String checkInfo,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+		
+		//查營會資料
+		List<CampActivity> campActivityList = collegeService.queryCampActivityAll();
+		model.addAttribute("campActivityList", campActivityList);
+	    
+		model.addAttribute("msg", msg);
+		model.addAttribute("collegeId", collegeId);
+		model.addAttribute("activityId", activityId);
+		model.addAttribute("checkInfo", checkInfo);
+		
+		return "handcheckin/handCheckIn";
+	}
+	
+	
+	//手動報到打卡-儲存 
+	@RequestMapping(value = "/sign/createhandcheckin", method = RequestMethod.POST )
+	public String createHandCheckIn( 
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String resultValue = "";
+		String collegeId = StringUtils.trimToEmpty(req.getParameter("collegeId"));//學生ID
+		String activityId = StringUtils.trimToEmpty(req.getParameter("activityId"));//營會ID
+		String checkInfo = StringUtils.trimToEmpty(req.getParameter("checkInfo"));//報到資訊
+		
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		Boolean isCorrect = false;
+		String checkTypeTime = "";
+		
+		try {
+
+			checkTypeTime = "3";
+			
+			//查詢是否有此學生
+			CollegePeople collegePeople = collegeService.queryCollegePeopleById(collegeId);
+			
+			//查營會資料
+			CampActivity campActivity = collegeService.queryCampActivity(activityId);
+			
+			if(collegePeople != null){
+			
+				//查詢報名表是否報名
+				CampActivitySignup campActivitySignup = collegeService.queryCampActivitySignup(collegeId, activityId);
+				
+				//判斷是否報到過
+				boolean isCheckIn = collegeService.queryIfCollegeCampCheckIn(collegeId, checkTypeTime);
+				if(!isCheckIn){
+					
+					//第一次報到打卡
+					isCorrect = collegeService.createCollegeCampCheckIn(collegeId, activityId, checkTypeTime, checkInfo);
+					
+					//更新報名表，設為Y
+					if(campActivitySignup != null){
+						campActivitySignup.setIfCheckIn("Y");
+						collegeService.updateCampActivitySignup(campActivitySignup);
+					}
+					
+				}else{
+					
+					//重覆報到打卡
+					isCorrect = collegeService.updateCollegeCampCheckIn(collegeId, checkTypeTime, checkInfo);
+					
+					//更新報名表，設為Y
+					if(campActivitySignup != null){
+						campActivitySignup.setIfCheckIn("Y");
+						collegeService.updateCampActivitySignup(campActivitySignup);
+					}
+				}
+				
+				if(isCorrect){
+					
+					if(campActivitySignup != null){
+						resultValue="打卡成功";
+					}else{
+						resultValue="打卡成功，但查無此學生有報名過";
+					}
+				
+				}else{
+					resultValue="打卡失敗";
+					
+					attr.addFlashAttribute("collegeId", collegeId);	
+					attr.addFlashAttribute("activityId", activityId);	
+					attr.addFlashAttribute("checkInfo", checkInfo);
+					
+				}
+				
+//					jsonMap.put("collegePeople", collegePeople);
+//					jsonMap.put("campActivity", campActivity);
+				
+			}else{
+				
+				resultValue="查無此人ID資料，無法打卡!";
+				
+				attr.addFlashAttribute("collegeId", collegeId);	
+				attr.addFlashAttribute("activityId", activityId);	
+				attr.addFlashAttribute("checkInfo", checkInfo);	
+			}
+			
+        
+		} catch (Exception e) {
+			resultValue="Message:"+e.getMessage();
+			
+			attr.addFlashAttribute("collegeId", collegeId);	
+			attr.addFlashAttribute("activityId", activityId);	
+			attr.addFlashAttribute("checkInfo", checkInfo);	
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		
+		return "redirect:/college/sign/handcheckin";
 	}
 
 }

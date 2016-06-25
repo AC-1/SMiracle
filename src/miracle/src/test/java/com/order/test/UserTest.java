@@ -1,7 +1,11 @@
 package com.order.test;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +32,9 @@ private ChildrenQTrsDAO childrenQueryDAO;
 private ChildrenService childrenService;
 private CollegeService collegeService;
 private MailUtil mailUtil;
+private TimeMachine timeMachine;
+
+private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
      
     @Before
     public void before(){                                                                    
@@ -38,6 +45,7 @@ private MailUtil mailUtil;
 //        childrenService = (ChildrenService) context.getBean("childrenServiceImpl");
           collegeService = (CollegeService) context.getBean("collegeServiceImpl");
 //        mailUtil = (MailUtil) context.getBean("mailUtil");
+          timeMachine = (TimeMachine) context.getBean("timeMachine");
     }
      
 //    @Test
@@ -155,5 +163,64 @@ private MailUtil mailUtil;
     	}else{
     		System.out.println("報名失敗");
     	}
+    }
+    
+    @Test
+    public void TEST(){
+    	try {
+
+//    		Date dt =sdf.parse("11:49:00");
+    		
+    		/*Calendar calendar = Calendar.getInstance();
+    		calendar.setTime(new Date());
+    		calendar.set(Calendar.HOUR_OF_DAY, 8); //將hour改成下午六點
+    		calendar.set(Calendar.MINUTE, 00); 
+    		calendar.set(Calendar.SECOND, 00);
+    		calendar.set(Calendar.MILLISECOND, 00);
+    		Date start=calendar.getTime();
+    		System.out.println(start);
+    		
+    		calendar.setTime(new Date());
+    		calendar.set(Calendar.HOUR_OF_DAY, 10); //將hour改成下午六點
+    		calendar.set(Calendar.MINUTE, 00); 
+    		calendar.set(Calendar.SECOND, 00); 
+    		calendar.set(Calendar.MILLISECOND, 00);
+    		Date end=calendar.getTime();
+    		System.out.println(end);*/
+    		
+    		//判斷8點到10點
+    		Date start=timeMachine.changeTime(new Date(), 8, 00, 00);
+    		Date end=timeMachine.changeTime(new Date(), 10, 00, 00);
+    		
+    		Date date = sdf.parse("2016-06-25 10:00:00");
+			boolean isTime = timeMachine.isDateBetween(date, start, end);
+//			System.out.println(isTime);
+			
+			//判斷12:30點到14:30點
+			Date start2=timeMachine.changeTime(new Date(), 12, 30, 00);
+    		Date end2=timeMachine.changeTime(new Date(), 14, 30, 00);
+    		
+    		Date date2 = sdf.parse("2016-06-25 14:30:00");
+			boolean isTime2 = timeMachine.isDateBetween(date2, start2, end2);
+			System.out.println(isTime2);
+    		
+//    		c.set(Calendar.AM_PM, Calendar.PM);             //將hour改成下午六點 
+//    		c.set(Calendar.HOUR, 6);
+//    		calendar.set
+//    		calendar.add(Calendar.MONTH, 2);//月份+2
+//    		calendar.add(Calendar.HOUR, -1);//小時-1
+//    		Date tdt=calendar.getTime();//取得加減過後的Date
+    		
+			
+			
+//			boolean chkEquals = timeMachine.chekDateEquals(date, start);
+//			System.out.println(chkEquals);
+			
+//			 System.out.println(date.after(start)); 
+//			boolean isTime = timeMachine.isInDate(date, "08:00:00", "10:00:00");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 }

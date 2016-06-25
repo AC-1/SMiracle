@@ -19,10 +19,12 @@ public class CollegeQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> im
 
 	
 	@Override
-	public int findIfCollegeCampCheckIn(String collegeId) throws DAOObjectNotFoundException {
+	public int findIfCollegeCampCheckIn(String collegeId, String checkTypeTime) throws DAOObjectNotFoundException {
 		
-		
-		return this.getSqlSession().selectOne(getNameSpace() + ".findIfCollegeCampCheckIn", collegeId);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("collegeId", collegeId);
+		map.put("checkTypeTime", checkTypeTime);
+		return this.getSqlSession().selectOne(getNameSpace() + ".findIfCollegeCampCheckIn", map);
 	}
 	
 	
@@ -34,11 +36,12 @@ public class CollegeQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> im
 	
 	
 	@Override
-	public List<CollegePeopleVO> findCollegePeopleCheckInAllByDate(String campDate, String activityId) throws DAOObjectNotFoundException {
+	public List<CollegePeopleVO> findCollegePeopleCheckInAllByDate(String campDate, String activityId, String checkTypeTime) throws DAOObjectNotFoundException {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("campDate", campDate);
 		map.put("activityId", activityId);
+		map.put("checkTypeTime", checkTypeTime);
 		return this.getSqlSession().selectList(getNameSpace() + ".findCollegePeopleCheckInAllByDate", map);
 	}
 	
@@ -62,10 +65,13 @@ public class CollegeQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> im
 	
 	
 	@Override
-	public int updateCollegeCampCheckIn(String collegeId) throws DAOObjectNotFoundException {
+	public int updateCollegeCampCheckIn(String collegeId, String checkTypeTime, String checkInfo) throws DAOObjectNotFoundException {
 		
-		
-		return this.getSqlSession().insert(getNameSpace() + ".updateCollegeCampCheckIn", collegeId);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("collegeId", collegeId);
+		map.put("checkTypeTime", checkTypeTime);
+		map.put("checkInfo", checkInfo);
+		return this.getSqlSession().insert(getNameSpace() + ".updateCollegeCampCheckIn", map);
 	}
 	
 }

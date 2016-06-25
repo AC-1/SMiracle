@@ -13,7 +13,7 @@ public interface CollegeQTrsDAO extends BaseDAO<Car, Map<String, Object>> {
 	
 	
 	/** College 大學生 營會 查詢是否報到過*/
-	public int findIfCollegeCampCheckIn(String collegeId) throws DAOObjectNotFoundException;
+	public int findIfCollegeCampCheckIn(String collegeId, String checkTypeTime) throws DAOObjectNotFoundException;
 
 	
 	/** 
@@ -25,7 +25,7 @@ public interface CollegeQTrsDAO extends BaseDAO<Car, Map<String, Object>> {
 	/** 
 	 *  查營會打卡報到人員
 	 */
-	public List<CollegePeopleVO> findCollegePeopleCheckInAllByDate(String campDate, String activityId) throws DAOObjectNotFoundException;
+	public List<CollegePeopleVO> findCollegePeopleCheckInAllByDate(String campDate, String activityId, String checkTypeTime) throws DAOObjectNotFoundException;
 	
 	
 	/** 
@@ -47,6 +47,6 @@ public interface CollegeQTrsDAO extends BaseDAO<Car, Map<String, Object>> {
 	 *  College 大學生 營會 當天今天報到重覆打卡
 	 *  collegeId:學生ID 
 	 */
-	public int updateCollegeCampCheckIn(String collegeId) throws DAOObjectNotFoundException;
+	public int updateCollegeCampCheckIn(String collegeId, String checkTypeTime, String checkInfo) throws DAOObjectNotFoundException;
 	
 }
