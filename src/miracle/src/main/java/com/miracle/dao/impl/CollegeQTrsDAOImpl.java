@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.dao.CollegeQTrsDAO;
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.mode.Car;
@@ -75,6 +76,23 @@ public class CollegeQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> im
 		map.put("checkInfo", checkInfo);
 		map.put("checkInTime", date);
 		return this.getSqlSession().insert(getNameSpace() + ".updateCollegeCampCheckIn", map);
+	}
+	
+	@Override
+	public List<CampActivitySignupVO> findCampActivitySignupAll(PageBounds pageBounds) throws DAOObjectNotFoundException {
+		
+		
+		return this.getSqlSession().selectList(getNameSpace() + ".findCampActivitySignupAll", null, pageBounds);
+	}
+	
+	@Override
+	public List<CampActivitySignupVO> findCampActivitySignupAllByKey(String activityId, String collegeId, String collegeName, PageBounds pageBounds) throws DAOObjectNotFoundException {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("activityId", activityId);
+		map.put("collegeId", collegeId);
+		map.put("collegeName", collegeName);
+		return this.getSqlSession().selectList(getNameSpace() + ".findCampActivitySignupAllByKey", map, pageBounds);
 	}
 	
 }

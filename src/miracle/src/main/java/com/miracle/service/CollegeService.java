@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.mode.CampActivity;
 import com.miracle.mode.CampActivitySignup;
@@ -83,6 +84,11 @@ public interface CollegeService {
 	public Boolean deleteCampActivitySignup(String collegeId, String activityId) throws DAOObjectNotFoundException;
 	
 	/** 
+	 *  刪除營會報名
+	 */
+	public Boolean deleteCampActivitySignupById(String signupId) throws DAOObjectNotFoundException;
+	
+	/** 
 	 *  查詢所有報名人員資料By營會ID
 	 */
 	public List<CampActivitySignupVO> queryCampActivitySignupAllByActivityId(String activityId) throws DAOObjectNotFoundException;
@@ -130,5 +136,11 @@ public interface CollegeService {
 	
 	/** 刪除人員基本資料設定*/
 	public Boolean deleteCollegePeople(String collegeId) throws DAOObjectNotFoundException;
+	
+	/** 查詢所有營會報名人員資料 - 分頁*/
+	public List<CampActivitySignupVO> queryCampActivitySignupAll(PageBounds pageBounds) throws DAOObjectNotFoundException;
+	
+	/** 查詢所有營會報名人員資料 - BY Key - 分頁*/
+	public List<CampActivitySignupVO> queryCampActivitySignupAllByKey(String activityId, String collegeId, String collegeName, PageBounds pageBounds) throws DAOObjectNotFoundException;
 	
 }

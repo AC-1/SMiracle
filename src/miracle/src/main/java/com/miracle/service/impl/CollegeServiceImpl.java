@@ -22,6 +22,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.common.ExcelUtil;
 import com.miracle.common.TimeMachine;
 import com.miracle.dao.CollegeQTrsDAO;
@@ -243,6 +244,43 @@ public class CollegeServiceImpl implements CollegeService {
 		} catch (Exception e) {
 			isCorrect = false;
 			log.info("deleteCampActivitySignup error :"+e.getMessage());
+			em.getTransaction().rollback();
+			em.close();
+		}
+		
+		return isCorrect;
+	}
+	
+	@Override
+	public Boolean deleteCampActivitySignupById(String signupId) throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		
+		try {
+			
+			//刪除 CampActivitySignup
+			Query query = em.createQuery("DELETE FROM CampActivitySignup e WHERE signupId = ?1 ");
+//     	    query.setParameter("propertyValue", value);
+			query.setParameter(1, signupId);
+			long rows = query.executeUpdate();
+			
+			
+			if(rows > 0 ){
+				em.getTransaction().commit();
+				isCorrect = true;
+			}else{
+				em.getTransaction().rollback();
+				isCorrect = false;
+			}
+			
+			em.close();
+			
+		} catch (Exception e) {
+			isCorrect = false;
+			log.info("deleteCampActivitySignupById error :"+e.getMessage());
 			em.getTransaction().rollback();
 			em.close();
 		}
@@ -497,6 +535,20 @@ public class CollegeServiceImpl implements CollegeService {
 		}
 		
 		return isCorrect;
+	}
+	
+	@Override
+	public List<CampActivitySignupVO> queryCampActivitySignupAll(PageBounds pageBounds) throws DAOObjectNotFoundException {
+		
+		
+		return collegeQTrsDAO.findCampActivitySignupAll(pageBounds);
+	}
+	
+	@Override
+	public List<CampActivitySignupVO> queryCampActivitySignupAllByKey(String activityId, String collegeId, String collegeName, PageBounds pageBounds) throws DAOObjectNotFoundException {
+
+		
+		return collegeQTrsDAO.findCampActivitySignupAllByKey(activityId, collegeId, collegeName, pageBounds);
 	}
 	
 }

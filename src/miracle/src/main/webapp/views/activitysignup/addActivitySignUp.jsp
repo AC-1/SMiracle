@@ -6,7 +6,7 @@
 	<head>
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>新增</title>
+		<title>報名</title>
 
 		<!-- header's css start-->
 			<%@ include file="/views/cbg-include/header-css.html" %> 
@@ -32,6 +32,8 @@
 				//alert(msg);
 			}
 			
+			setOptionSelected("activityId",'<c:out value="${activityId}" />');
+			
 		});
 		
 		
@@ -39,8 +41,12 @@
 	    function checkThing() {
 			var result = true;
 			
-			if ($("#collegeName").val() == "") {
-				alert('姓名不可為空白');
+			if ($("#collegeId").val() == "") {
+				alert('報名人員ID不可為空白');
+				result = false;
+				
+			}else if ($("#activityId").val() == "") {
+				alert('營會ID不可為空白');
 				result = false;
 				
 			}
@@ -51,7 +57,7 @@
  		function goBack(){
 	    	
 	    	var pageNumber = '<c:out value="${pageNumber}" />';
-	    	window.location.href='<c:url value="/college/sign/querycollegepeople?pageNumber='+pageNumber+'"/>'; 
+	    	window.location.href='<c:url value="/college/sign/queryactivitysignup?pageNumber='+pageNumber+'"/>'; 
 	    }
 		
 	</script>
@@ -76,89 +82,36 @@
                         
                    <div class="serviceTermForm">
                    		
-						<h2 class="campaign_ttl">新增-人員基本資料設定</h2>
+						<h2 class="campaign_ttl">新增-營會人員報名</h2>
 						
-						<form method="post" action="college/sign/createcollegepeople" onsubmit="return checkThing();">
+						<form method="post" action="college/sign/createactivitysignup" onsubmit="return checkThing();">
 							<div class="shopDataForm">
 								<table id="tb" border="0" cellspacing="0" cellpadding="0" width="100%">
 									<tr>
-										<th>新增人員基本資料設定</th> 
+										<th>營會報名</th> 
 	                                    <td align="left"><span id="msg" style="color:#F00">
 	                                        ${msg}
 	                                    </span></td>
 	                                </tr>
 									
 									<tr>
-										<td><label>*</label>&nbsp;姓名</td>
+										<td><label>*</label>&nbsp;報名人員ID</td>
 										<td class="fillembg">
-										<input type="text" id="collegeName" name="collegeName" size="10" value="${collegeName}">
+										<input type="text" id="collegeId" name="collegeId" style="width: 250px;" size="10" value="${collegeId}">
 										</td>
 									</tr>
 									
 									<tr>
-										<td class="embg"><label>*</label>&nbsp;小區</td>
+										<td class="embg"><label>*</label>&nbsp;營會</td>
 										<td class="fillembg">
-										<input type="text" id="collegeArea" name="collegeArea" size="10" value="${collegeArea}">
+											<select id="activityId" name="activityId">
+												<option value="">請選擇</option>
+												<c:forEach items="${campActivityList}" var="campActivity" varStatus="s">
+													<option value="${campActivity.activityId}">${campActivity.activityName}</option>
+												</c:forEach>
+											</select>
 										</td>
 									</tr>
-									
-									<tr>
-										<td><label>*</label>&nbsp;小組</td>
-										<td class="fillembg">
-										<input type="text" id="collegeGroup" name="collegeGroup" size="10" value="${collegeGroup}">
-										</td>
-									</tr>
-									
-									<tr>
-										<td class="embg"><label>*</label>&nbsp;姓別</td>
-										<td class="fillembg">
-										<input type="text" id="collegeGender" name="collegeGender" size="10" value="${collegeGender}">
-										</td>
-									</tr>
-									
-									<tr>
-										<td><label>*</label>&nbsp;生日</td>
-										<td class="fillembg">
-										<input type="text" id="collegeBirthday" name="collegeBirthday" size="10" value="${collegeBirthday}">
-										</td>
-									</tr>		
-									
-									<tr>
-										<td class="embg"><label>*</label>&nbsp;學校/年級</td>
-										<td class="fillembg">
-										<input type="text" id="collegeSchoolGrade" name="collegeSchoolGrade" size="10" value="${collegeSchoolGrade}">
-										</td>
-									</tr>
-									
-									<tr>
-										<td><label>*</label>&nbsp;手機</td>
-										<td class="fillembg">
-										<input type="text" id="collegePhone" name="collegePhone" size="10" value="${collegePhone}">
-										</td>
-									</tr>
-									
-									<tr>
-										<td class="embg"><label>*</label>&nbsp;家電</td>
-										<td class="fillembg">
-										<input type="text" id="collegeTel" name="collegeTel" size="10" value="${collegeTel}">
-										</td>
-									</tr>
-									
-									<tr>
-										<td><label>*</label>&nbsp;年級名稱</td>
-										<td class="fillembg">
-										<input type="radio" id="collegeGrade" name="collegeGrade" value="1" checked>國高-1
-										<input type="radio" id="collegeGrade" name="collegeGrade" value="2">大專-2
-										</td>
-									</tr>
-									
-									<tr>
-										<td class="embg"><label>*</label>&nbsp;是否同工</td>
-										<td class="fillembg">
-										<input type="radio" id="collegeLeader" name="collegeLeader" value="N" checked>否-N
-										<input type="radio" id="collegeLeader" name="collegeLeader" value="Y">是-Y
-										</td>
-									</tr>						
 							
 								</table>
 							</div>

@@ -25,7 +25,7 @@
 	
 	<!-- 分頁套件 -->
 	<link href="<c:url value="/resources/cbg-include/css/controlPager.css"/>" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="<c:url value="/resources/js/jquery/jquery.controlPagerJpa.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/resources/js/jquery/jquery.controlPager.js"/>"></script>
 	
 		<script type="text/javascript">
 		
@@ -35,22 +35,12 @@
 					//alert(msg);
 				}
 				
-				setOptionSelected("collegeGrade",'<c:out value="${collegeGrade}" />');
-				setOptionSelected("collegeLeader",'<c:out value="${collegeLeader}" />');
-				
+				setOptionSelected("activityId",'<c:out value="${activityId}" />');
 			});
 			
 			
 			function add(){
-				location.href='<c:url value="/college/sign/addcollegepeople"/>';
-			}
-			
-			
-			function editData(id) {
-				var pageNumber = '<c:out value="${pageNumber}" />'; //目前的頁數
-				document.dataForm.id.value = id;
-	        	document.dataForm.pageNumber1.value = pageNumber;
-				$("#dataForm").submit();
+				location.href='<c:url value="/college/sign/addactivitysignup"/>';
 			}
 			
 			
@@ -83,7 +73,7 @@
 					document.searchForm.selectType.value = selectType;
 					document.searchForm.submit();
 			    }else{
-			    	window.location.href='<c:url value="/college/sign/querycollegepeople?pageNumber='+pageclickednumber+'"/>'; 
+			    	window.location.href='<c:url value="/college/sign/queryactivitysignup?pageNumber='+pageclickednumber+'"/>'; 
 			    }
 			    
 			}
@@ -119,7 +109,7 @@
                    <div class="serviceTermForm">
                    
 	                   	<div id="dialog"></div>
-							<h2 class="campaign_ttl">人員基本資料-設定</h2>
+							<h2 class="campaign_ttl">營會報名功能</h2>
 							<br />
 							<p align="center">
 								<font color="red" size="3">
@@ -129,47 +119,37 @@
 							<div class="shopDataForm">
 								<table id="shopHolidayTab" class="table_form" border="0"
 									align="center" cellspacing="0" cellpadding="0" width="100%">
-									<form name="searchForm" id="searchForm" action="college/sign/querycollegepeople" method="post">
+									<form name="searchForm" id="searchForm" action="college/sign/queryactivitysignup" method="post">
 									<tr>
 										<td>
-											ID搜尋：
+											營會搜尋：
+											<select id="activityId" name="activityId">
+											<option value="">全部</option>
+											<c:forEach items="${campActivityList}" var="campActivity" varStatus="s">
+												<option value="${campActivity.activityId}">${campActivity.activityName}</option>
+											</c:forEach>
+										</select>
+										</td>
+									</tr>
+									
+									<tr>
+										<td>
+											人員ID搜尋：
 											<input type="text" id="collegeId" name="collegeId" value="${collegeId}" style="width: 170px;"/>
 										</td>
 									</tr>
 									
 									<tr>
 										<td>
-											名稱搜尋：
+											人員名稱搜尋：
 											<input type="text" id="collegeName" name="collegeName" value="${collegeName}" style="width: 170px;"/>
 										</td>
 									</tr>
 									
 									<tr>
 										<td>
-											年級搜尋：
-											<select id="collegeGrade" name="collegeGrade">
-											    <option value="" selected="selected">空白</option>
-												<option value="1" >國高</option>
-												<option value="2">大專</option>
-											</select>
-										</td>
-									</tr>
-									
-									<tr>
-										<td>
-											是否同工：
-											<select id="collegeLeader" name="collegeLeader">
-												<option value="" selected="selected">空白</option>
-												<option value="N">否</option>
-												<option value="Y">是</option>
-											</select>
-										</td>
-									</tr>
-									
-									<tr>
-										<td>
 											<center>
-											<button class="glay_b" type="button" id="btn01" name="btn01" value="查詢" onclick="queryKey();">單一查尋(其他請空白)</button>
+											<button class="glay_b" type="button" id="btn01" name="btn01" value="查詢" onclick="queryKey();">查詢</button>
 											<input type="hidden" id="pageNumber" name="pageNumber" value="${pageNumber}" />
 											<input type="hidden" id="selectType" name="selectType" value="${selectType}"/>
 											</center>
@@ -184,57 +164,40 @@
 							<br />
 							
 								<div align="center">
-									<button type="button" onclick="add();">新增</button>
+									<button type="button" onclick="add();">報名</button>
 								</div>
 								<br/>
 								<div class="shopDataForm" style="width: 1200px">
 									<table>
 										<tr>
-											<th class="orangeBg">編輯</th>
-											<th class="orangeBg">刪除</th>
-											<th class="orangeBg">編號</th>
-											<th class="orangeBg">姓名</th>
-											<th class="orangeBg">小區</th>
-											<th class="orangeBg">小組</th>
-											<th class="orangeBg">姓別</th>
-											<th class="orangeBg">生日</th>
-											<th class="orangeBg">學校/年級</th>
-											<th class="orangeBg">手機</th>
-											<th class="orangeBg">家電</th>
-											<th class="orangeBg">年級</th>
-											<th class="orangeBg">是否同工</th>
+											<th class="orangeBg">刪除報名</th>
+											<th class="orangeBg">營會ID</th>
+											<th class="orangeBg">營會名稱</th>
+											<th class="orangeBg">報名人ID</th>
+											<th class="orangeBg">報名姓名</th>
+											<th class="orangeBg">是否報到打卡</th>
+											<th class="orangeBg">報名日期</th>
 										</tr>
 										
- 										<c:forEach items="${collegePeopleList}" var="collegePeople" varStatus="s"> 
+ 										<c:forEach items="${campActivitySignupVOList}" var="campActivitySignupVO" varStatus="s"> 
 											<tr id="row_itemId_1401171148326500">
-												<td class="embg"><a href="javascript:void(0)" onclick="editData('${collegePeople.collegeId}');" class="button">編輯</a></td>
-												<td class="embg"><a href="javascript:void(0)" onclick="deleteData('${collegePeople.collegeId}');" class="button">刪除</a></td>
-												<td class="embg">${collegePeople.collegeId}</td>
-												<td class="embg">${collegePeople.collegeName}</td>
-												<td class="embg">${collegePeople.collegeArea}</td>
-												<td class="embg">${collegePeople.collegeGroup}</td>
-												<td class="embg">${collegePeople.collegeGender}</td>
-												<td class="embg">${collegePeople.collegeBirthday}</td>
-												<td class="embg">${collegePeople.collegeSchoolGrade}</td>
-												<td class="embg">${collegePeople.collegePhone}</td>
-												<td class="embg">${collegePeople.collegeTel}</td>
+												<td class="embg"><a href="javascript:void(0)" onclick="deleteData('${campActivitySignupVO.signupId}');" class="button">刪除</a></td>
+												<td class="embg">${campActivitySignupVO.activityId}</td>
+												<td class="embg">${campActivitySignupVO.activityName}</td>
+												<td class="embg">${campActivitySignupVO.collegeId}</td>
+												<td class="embg">${campActivitySignupVO.collegeName}</td>
 												<td class="embg">
-												<c:if test="${collegePeople.collegeGrade eq '1'}">國高</c:if>
-												<c:if test="${collegePeople.collegeGrade eq '2'}">大專</c:if>
+													<c:if test="${campActivitySignupVO.ifCheckIn eq 'Y'}">是</c:if>
+													<c:if test="${campActivitySignupVO.ifCheckIn eq 'N'}">否</c:if>
 												</td>
-												<td class="embg">${collegePeople.collegeLeader}</td>
+												<td class="embg">${campActivitySignupVO.signupDate}</td>
 											</tr>
 										</c:forEach>
 										
 									</table>
 								</div>
 								
-								<form name="dataForm" id="dataForm" action="college/sign/editcollegepeople" method="post">
-									<input type="hidden" id="id" name="id">
-									<input type="hidden" id="pageNumber1" name="pageNumber1">
-								</form>
-								
-								<form name="delDataForm" id="delDataForm" action="college/sign/deletecollegepeople" method="post">
+								<form name="delDataForm" id="delDataForm" action="college/sign/deleteactivitysignup" method="post">
 									<input type="hidden" id="delId" name="delId">
 									<input type="hidden" id="pageNumber" name="pageNumber">
 								</form>

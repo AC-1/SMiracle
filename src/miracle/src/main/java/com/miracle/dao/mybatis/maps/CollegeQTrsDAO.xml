@@ -22,6 +22,7 @@
 		<result property="collegeTel" column="COLLEGE_TEL" />
 		<result property="collegeGrade" column="COLLEGE_GRADE" />
 		<result property="collegeLeader" column="COLLEGE_LEADER" />
+		<result property="activityName" column="ACTIVITY_NAME" />
 	</resultMap>
 	
 	<resultMap id="collegePeopleVOMap" type="CollegePeopleVO">
@@ -103,5 +104,57 @@
 		and to_days(CHECK_IN_TIME) = to_days(#{checkInTime})
 		and CHECK_TYPE_TIME=#{checkTypeTime}
 	</update>
+	
+	
+	<select id="findCampActivitySignupAll" parameterType="string" resultMap="campActivitySignupVOMap">
+		select A.SIGNUP_ID , A.ACTIVITY_ID, A.COLLEGE_ID, A.IF_CHECK_IN, A.SIGNUP_DATE,
+        	   B.ACTIVITY_NAME, C.COLLEGE_NAME
+		from camp_activity_signup A
+		left JOIN camp_activity B on A.ACTIVITY_ID = B.ACTIVITY_ID
+		left JOIN college_people C on A.COLLEGE_ID = C.COLLEGE_ID
+		ORDER BY A.SIGNUP_DATE DESC
+	</select>
+	
+	<select id="findCampActivitySignupAllByKey" parameterType="map" resultMap="campActivitySignupVOMap">
+		select A.SIGNUP_ID , A.ACTIVITY_ID, A.COLLEGE_ID, A.IF_CHECK_IN, A.SIGNUP_DATE,
+        	   B.ACTIVITY_NAME, C.COLLEGE_NAME
+		from camp_activity_signup A
+		left JOIN camp_activity B on A.ACTIVITY_ID = B.ACTIVITY_ID
+		left JOIN college_people C on A.COLLEGE_ID = C.COLLEGE_ID
+		<choose>
+			<when test="activityId != null and !''.equals(activityId) and
+			            collegeId != null and !''.equals(collegeId) and
+			            collegeName != null and !''.equals(collegeName)">
+				where A.ACTIVITY_ID = #{activityId}
+          	  	  AND A.COLLEGE_ID = #{collegeId}
+          	  	  and C.COLLEGE_NAME like CONCAT('%',#{collegeName},'%')
+			</when>
+			<when test="activityId != null and !''.equals(activityId) and
+			            collegeId != null and !''.equals(collegeId)">
+				where A.ACTIVITY_ID = #{activityId}
+          	  	  AND A.COLLEGE_ID = #{collegeId}
+			</when>
+			<when test="activityId != null and !''.equals(activityId) and
+			            collegeName != null and !''.equals(collegeName)">
+				where A.ACTIVITY_ID = #{activityId}
+          	  	  and C.COLLEGE_NAME like CONCAT('%',#{collegeName},'%')
+			</when>
+			<when test="collegeId != null and !''.equals(collegeId) and
+			            collegeName != null and !''.equals(collegeName)">
+				where A.COLLEGE_ID = #{collegeId}
+          	  	  and C.COLLEGE_NAME like CONCAT('%',#{collegeName},'%')
+			</when>
+			<when test="activityId != null and !''.equals(activityId)">
+				where A.ACTIVITY_ID = #{activityId}
+			</when>
+			<when test="collegeId != null and !''.equals(collegeId)">
+				where A.COLLEGE_ID = #{collegeId}
+			</when>
+			<when test="collegeName != null and !''.equals(collegeName)">
+				where C.COLLEGE_NAME like CONCAT('%',#{collegeName},'%')
+			</when>
+		</choose>
+		ORDER BY A.SIGNUP_DATE DESC
+	</select>
 
 </mapper>

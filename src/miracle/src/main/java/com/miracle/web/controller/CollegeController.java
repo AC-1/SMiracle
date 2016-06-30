@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.github.miemiedev.mybatis.paginator.domain.Order;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.common.JSONUtils;
 import com.miracle.common.Language;
 import com.miracle.common.SecretUtil;
@@ -912,44 +916,40 @@ public class CollegeController extends BaseController {
 			}
 		}
 		
+		int page = Integer.parseInt(pageNumber); //目前的??
+		int pageSize = 7; //每??据??
+		String sortString = "";//如果你想排序的?逗?分隔可以排序多列->name.asc
+		PageBounds pageBounds = new PageBounds(page, pageSize, Order.formString(sortString), true);
 		
-		int pageIndex = Integer.parseInt(pageNumber); //第幾頁 - 從1開始 0會報錯
-		int pageSize = 7;//每頁幾筆
-		int page = (pageIndex-1)*pageSize;
-		
-//			Sort sort = new Sort (Direction.ASC, "sort");
-		Pageable pageable = new PageRequest(pageIndex, pageSize);
-		
-		Page<CollegePeople> collegePeopleList = null;
+		List<CampActivitySignupVO> campActivitySignupVOList = null;
 		if(StringUtils.isNotBlank(selectType) && selectType.equals("1")){
-			if(StringUtils.isNotBlank(collegeId)){
+			if(StringUtils.isBlank(collegeId) && StringUtils.isBlank(collegeName)
+					&& StringUtils.isBlank(activityId)){
 				
-//				collegePeopleList = collegeService.queryCollegePeopleAllByCollegeId(pageable, collegeId);
-			
-			}else if(StringUtils.isNotBlank(collegeName)){
-				
-//				collegePeopleList = collegeService.queryCollegePeopleAllByCollegeName(pageable, collegeName);
-			
-			}else if(StringUtils.isNotBlank(activityId)){
-				
-//				collegePeopleList = collegeService.queryCollegePeopleAllByCollegeGrade(pageable, collegeGrade);
+				campActivitySignupVOList = collegeService.queryCampActivitySignupAll(pageBounds);
 			
 			}else {
 				
-				collegePeopleList = collegeService.queryCollegePeopleAll(pageable);
+				campActivitySignupVOList = collegeService.queryCampActivitySignupAllByKey(activityId, collegeId, collegeName, pageBounds);
 			}
 			
 		}else{
 			
 			//查詢所有資料
-			collegePeopleList = collegeService.queryCollegePeopleAll(pageable);
+			campActivitySignupVOList = collegeService.queryCampActivitySignupAll(pageBounds);
 		}
 		
 		//查詢所有資料
-		model.addAttribute(collegePeopleList.getContent());
+		PageList<CampActivitySignupVO> pageList = (PageList<CampActivitySignupVO>)campActivitySignupVOList;
+		int pageTotal = pageList.getPaginator().getTotalPages();//總共頁數
+		model.addAttribute("campActivitySignupVOList", campActivitySignupVOList);
 		
 		model.addAttribute("pageNumber", pageNumber);
-		model.addAttribute("pageTotal", collegePeopleList.getTotalPages());
+		model.addAttribute("pageTotal", pageTotal);
+		
+		//查營會資料
+		List<CampActivity> campActivityList = collegeService.queryCampActivityAll();
+		model.addAttribute("campActivityList", campActivityList);
 		
 		model.addAttribute("msg", msg);
 		
@@ -960,5 +960,112 @@ public class CollegeController extends BaseController {
 		
 		return "activitysignup/queryActivitySignUp";
 	}
+	
+	
+	//營會報名頁面
+	@RequestMapping(value = "/sign/addactivitysignup", method = RequestMethod.GET)
+	public String addActivitySignUp(Model model,
+			@ModelAttribute("msg") String msg, @ModelAttribute("pageNumber") String pageNumber,
+			@ModelAttribute("collegeId") String collegeId,
+			@ModelAttribute("activityId") String activityId,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+		
+		//查營會資料
+		List<CampActivity> campActivityList = collegeService.queryCampActivityAll();
+		model.addAttribute("campActivityList", campActivityList);
+		
+		 model.addAttribute("pageNumber", pageNumber);
+	     model.addAttribute("msg", msg);
+	     model.addAttribute("collegeId", collegeId);
+	     model.addAttribute("activityId", activityId);
+		
+		return "activitysignup/addActivitySignUp";
+	}
+	
+	
+	//營會報名- 新增
+	@RequestMapping(value = "/sign/createactivitysignup", method = RequestMethod.POST )
+	public String createActivitySignUp( 
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));
+		
+		String collegeId = StringUtils.trimToEmpty(req.getParameter("collegeId"));//學生ID
+		String activityId = StringUtils.trimToEmpty(req.getParameter("activityId"));//營會ID
+		
+		Boolean isCorrect = false;
+		String resultValue = "";
+		boolean chkSignUp = false;
+		
+		try {
+			
+			//查詢報名表是否報名過
+			CampActivitySignup campActivitySignup = collegeService.queryCampActivitySignup(collegeId, activityId);
+			if(campActivitySignup == null){
+				//新報名
+				isCorrect = collegeService.createCampActivitySignup(collegeId, activityId);
+				if(isCorrect){
+					chkSignUp = true;
+					resultValue="報名成功";
+				}else{
+					
+					resultValue="報名失敗";
+				}
+				
+			}else{
+				//已報名過
+				resultValue="此人員已經報名";
+			}
+			
+        
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		attr.addFlashAttribute("pageNumber", pageNumber); 
+		
+		if(chkSignUp){
+			return "redirect:/college/sign/queryactivitysignup";
+		}else{
+			
+			attr.addFlashAttribute("collegeId", collegeId); 
+			attr.addFlashAttribute("activityId", activityId); 
+			return "redirect:/college/sign/addactivitysignup";
+		}
+	}
+	
+	
+	//刪除營會報名人員
+	@RequestMapping(value = "/sign/deleteactivitysignup", method = RequestMethod.POST )
+	public String deleteActivitySignUp( @RequestParam String delId,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		String resultValue = "";
+		
+		try {
+			
+			//刪除
+			Boolean isCorrect = collegeService.deleteCampActivitySignupById(delId);
+			if(isCorrect){
+				resultValue = "刪除成功";
+			}else{
+				resultValue = "刪除失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		attr.addFlashAttribute("pageNumber", pageNumber); 
+		
+		return "redirect:/college/sign/queryactivitysignup";
+	}
+	
 
 }
