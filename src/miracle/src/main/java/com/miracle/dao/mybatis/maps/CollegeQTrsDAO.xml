@@ -49,7 +49,7 @@
 	
 	<select id="findIfCollegeCampCheckIn" parameterType="string" resultType="integer">
 		select count(0) count from college_camp_check_in 
-		where to_days(CHECK_IN_TIME) = to_days(NOW())
+		where to_days(CHECK_IN_TIME) = to_days(#{checkInTime})
 		and COLLEGE_ID = #{collegeId}
 		and CHECK_TYPE_TIME=#{checkTypeTime}
 	</select>
@@ -92,15 +92,15 @@
 	
 	<insert id="createCollegeCampCheckIn" parameterType="collegeCampCheckIn">
 		insert into college_camp_check_in ( CHECK_IN_ID, COLLEGE_ID, CHECK_IN_TIME, CHECK_IN_LAST_TIME, IF_CHECK_IN, CAMP_DATE, ACTIVITY_ID, CHECK_TYPE_TIME, CHECK_INFO )
-		values (#{checkInId}, #{collegeId}, now(), now(), 'Y', #{campDate}, #{activityId}, #{checkTypeTime}, #{checkInfo} )
+		values (#{checkInId}, #{collegeId}, #{checkInTime}, #{checkInLastTime}, 'Y', #{campDate}, #{activityId}, #{checkTypeTime}, #{checkInfo} )
 	</insert>
 	
 	<update id="updateCollegeCampCheckIn" parameterType="map">
 		update college_camp_check_in
-		set CHECK_IN_LAST_TIME=now(),
+		set CHECK_IN_LAST_TIME=#{checkInTime},
 			CHECK_INFO=#{checkInfo}
 		where COLLEGE_ID=#{collegeId}
-		and to_days(CHECK_IN_TIME) = to_days(NOW())
+		and to_days(CHECK_IN_TIME) = to_days(#{checkInTime})
 		and CHECK_TYPE_TIME=#{checkTypeTime}
 	</update>
 

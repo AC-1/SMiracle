@@ -96,12 +96,12 @@ public class CollegeController extends BaseController {
 			
 			//判斷報到到時段
 			//判斷8點到10點
-    		Date start=timeMachine.changeTime(new Date(), 8, 00, 00);
-    		Date end=timeMachine.changeTime(new Date(), 10, 00, 00);
+    		Date start=timeMachine.changeTime(date, 8, 00, 00);
+    		Date end=timeMachine.changeTime(date, 10, 00, 00);
 			boolean isTime = timeMachine.isDateBetween(date, start, end);
 			//判斷12:30點到14:30點
-			Date start2=timeMachine.changeTime(new Date(), 12, 30, 00);
-    		Date end2=timeMachine.changeTime(new Date(), 14, 30, 00);
+			Date start2=timeMachine.changeTime(date, 12, 30, 00);
+    		Date end2=timeMachine.changeTime(date, 14, 30, 00);
 			boolean isTime2 = timeMachine.isDateBetween(date, start2, end2);
 			
 			if(isTime){
@@ -126,11 +126,11 @@ public class CollegeController extends BaseController {
 					CampActivitySignup campActivitySignup = collegeService.queryCampActivitySignup(collegeId, activityId);
 					
 					//判斷是否報到過
-					boolean isCheckIn = collegeService.queryIfCollegeCampCheckIn(collegeId, checkTypeTime);
+					boolean isCheckIn = collegeService.queryIfCollegeCampCheckIn(timeMachine.dateFormat(date), collegeId, checkTypeTime);
 					if(!isCheckIn){
 						
 						//第一次報到打卡
-						isCorrect = collegeService.createCollegeCampCheckIn(collegeId, activityId, checkTypeTime, checkInfo);
+						isCorrect = collegeService.createCollegeCampCheckIn(date, collegeId, activityId, checkTypeTime, checkInfo);
 						
 						//更新報名表，設為Y
 						if(campActivitySignup != null){
@@ -141,7 +141,7 @@ public class CollegeController extends BaseController {
 					}else{
 						
 						//重覆報到打卡
-						isCorrect = collegeService.updateCollegeCampCheckIn(collegeId, checkTypeTime, checkInfo);
+						isCorrect = collegeService.updateCollegeCampCheckIn(timeMachine.dateFormat(date), collegeId, checkTypeTime, checkInfo);
 						
 						//更新報名表，設為Y
 						if(campActivitySignup != null){
@@ -769,6 +769,7 @@ public class CollegeController extends BaseController {
 		
 		Boolean isCorrect = false;
 		String checkTypeTime = "";
+		Date date = new Date();
 		
 		try {
 
@@ -786,11 +787,11 @@ public class CollegeController extends BaseController {
 				CampActivitySignup campActivitySignup = collegeService.queryCampActivitySignup(collegeId, activityId);
 				
 				//判斷是否報到過
-				boolean isCheckIn = collegeService.queryIfCollegeCampCheckIn(collegeId, checkTypeTime);
+				boolean isCheckIn = collegeService.queryIfCollegeCampCheckIn(timeMachine.dateFormat(date), collegeId, checkTypeTime);
 				if(!isCheckIn){
 					
 					//第一次報到打卡
-					isCorrect = collegeService.createCollegeCampCheckIn(collegeId, activityId, checkTypeTime, checkInfo);
+					isCorrect = collegeService.createCollegeCampCheckIn(date, collegeId, activityId, checkTypeTime, checkInfo);
 					
 					//更新報名表，設為Y
 					if(campActivitySignup != null){
@@ -801,7 +802,7 @@ public class CollegeController extends BaseController {
 				}else{
 					
 					//重覆報到打卡
-					isCorrect = collegeService.updateCollegeCampCheckIn(collegeId, checkTypeTime, checkInfo);
+					isCorrect = collegeService.updateCollegeCampCheckIn(timeMachine.dateFormat(date), collegeId, checkTypeTime, checkInfo);
 					
 					//更新報名表，設為Y
 					if(campActivitySignup != null){
@@ -851,6 +852,113 @@ public class CollegeController extends BaseController {
 		attr.addFlashAttribute("msg", resultValue); 
 		
 		return "redirect:/college/sign/handcheckin";
+	}
+	
+	
+	//營會報名功能首頁
+	@RequestMapping(value = "/sign/queryactivitysignup", method = {RequestMethod.GET, RequestMethod.POST})
+	public String queryActivitySignUp(Model model, @ModelAttribute("pageNumber") String pageNumber1,
+			@ModelAttribute("msg") String msg,
+			@ModelAttribute("selectType") String selectType1,
+			@ModelAttribute("activityId") String activityId1,
+			@ModelAttribute("collegeId") String collegeId1,
+			@ModelAttribute("collegeName") String collegeName1,
+			
+//			@ModelAttribute("collegeLeader") String collegeLeader1,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+	
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(pageNumber == null || pageNumber.equals("")){
+			if(pageNumber1 != null && !pageNumber1.equals("")){
+				pageNumber=pageNumber1;//修改頁面而來
+			}else{
+				pageNumber="0";//首頁進來
+			}
+		}
+		
+		String selectType = StringUtils.trimToEmpty(req.getParameter("selectType"));
+		if(selectType == null || selectType.equals("")){
+			if(selectType1 != null && !selectType1.equals("")){
+				selectType=selectType1;
+			}else{
+				selectType="";//首頁進來
+			}
+		}
+		
+		String activityId = StringUtils.trimToEmpty(req.getParameter("activityId"));
+		if(activityId == null || activityId.equals("")){
+			if(activityId1 != null && !activityId1.equals("")){
+				activityId=activityId1;
+			}else{
+				activityId="";//首頁進來
+			}
+		}
+		
+		String collegeId = StringUtils.trimToEmpty(req.getParameter("collegeId"));
+		if(collegeId == null || collegeId.equals("")){
+			if(collegeId1 != null && !collegeId1.equals("")){
+				collegeId=collegeId1;
+			}else{
+				collegeId="";//首頁進來
+			}
+		}
+		
+		String collegeName = StringUtils.trimToEmpty(req.getParameter("collegeName"));
+		if(collegeName == null || collegeName.equals("")){
+			if(collegeName1 != null && !collegeName1.equals("")){
+				collegeName=collegeName1;
+			}else{
+				collegeName="";//首頁進來
+			}
+		}
+		
+		
+		int pageIndex = Integer.parseInt(pageNumber); //第幾頁 - 從1開始 0會報錯
+		int pageSize = 7;//每頁幾筆
+		int page = (pageIndex-1)*pageSize;
+		
+//			Sort sort = new Sort (Direction.ASC, "sort");
+		Pageable pageable = new PageRequest(pageIndex, pageSize);
+		
+		Page<CollegePeople> collegePeopleList = null;
+		if(StringUtils.isNotBlank(selectType) && selectType.equals("1")){
+			if(StringUtils.isNotBlank(collegeId)){
+				
+//				collegePeopleList = collegeService.queryCollegePeopleAllByCollegeId(pageable, collegeId);
+			
+			}else if(StringUtils.isNotBlank(collegeName)){
+				
+//				collegePeopleList = collegeService.queryCollegePeopleAllByCollegeName(pageable, collegeName);
+			
+			}else if(StringUtils.isNotBlank(activityId)){
+				
+//				collegePeopleList = collegeService.queryCollegePeopleAllByCollegeGrade(pageable, collegeGrade);
+			
+			}else {
+				
+				collegePeopleList = collegeService.queryCollegePeopleAll(pageable);
+			}
+			
+		}else{
+			
+			//查詢所有資料
+			collegePeopleList = collegeService.queryCollegePeopleAll(pageable);
+		}
+		
+		//查詢所有資料
+		model.addAttribute(collegePeopleList.getContent());
+		
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("pageTotal", collegePeopleList.getTotalPages());
+		
+		model.addAttribute("msg", msg);
+		
+		model.addAttribute("collegeId", collegeId);
+		model.addAttribute("collegeName", collegeName);
+		model.addAttribute("activityId", activityId);
+		model.addAttribute("selectType", selectType);
+		
+		return "activitysignup/queryActivitySignUp";
 	}
 
 }

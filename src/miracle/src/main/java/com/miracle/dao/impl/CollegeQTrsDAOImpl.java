@@ -1,5 +1,6 @@
 package com.miracle.dao.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +20,12 @@ public class CollegeQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> im
 
 	
 	@Override
-	public int findIfCollegeCampCheckIn(String collegeId, String checkTypeTime) throws DAOObjectNotFoundException {
+	public int findIfCollegeCampCheckIn(String date,String collegeId, String checkTypeTime) throws DAOObjectNotFoundException {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("collegeId", collegeId);
 		map.put("checkTypeTime", checkTypeTime);
+		map.put("checkInTime", date);
 		return this.getSqlSession().selectOne(getNameSpace() + ".findIfCollegeCampCheckIn", map);
 	}
 	
@@ -65,12 +67,13 @@ public class CollegeQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> im
 	
 	
 	@Override
-	public int updateCollegeCampCheckIn(String collegeId, String checkTypeTime, String checkInfo) throws DAOObjectNotFoundException {
+	public int updateCollegeCampCheckIn(String date,String collegeId, String checkTypeTime, String checkInfo) throws DAOObjectNotFoundException {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("collegeId", collegeId);
 		map.put("checkTypeTime", checkTypeTime);
 		map.put("checkInfo", checkInfo);
+		map.put("checkInTime", date);
 		return this.getSqlSession().insert(getNameSpace() + ".updateCollegeCampCheckIn", map);
 	}
 	

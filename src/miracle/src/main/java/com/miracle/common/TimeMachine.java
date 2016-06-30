@@ -383,7 +383,7 @@ public class TimeMachine
 		return NowDatetime;
 	}
 
-  
+  //今日日期轉換
   public String todayFormatYMD(){
 	  String pattern = "yyyy-MM-dd";
 	  //目前時間
@@ -393,6 +393,31 @@ public class TimeMachine
 	  //進行轉換
 	  String parseDate = new SimpleDateFormat(pattern).format(date);
 //		  String dateString = sdf.format(date);
+//		  System.out.println(dateString);
+	  return parseDate;
+   }
+  
+  
+  //日期轉換
+  public String dateFormatYMD(Date date){
+	  String pattern = "yyyy-MM-dd";
+	  //目前時間
+	  //設定日期格式
+	  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	  //進行轉換
+	  String parseDate = new SimpleDateFormat(pattern).format(date);
+//		  String dateString = sdf.format(date);
+//		  System.out.println(dateString);
+	  return parseDate;
+   }
+  
+  
+   //日期轉換
+   public String dateFormat(Date date){
+	  //設定日期格式
+	  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	  //進行轉換
+	  String parseDate = sdf.format(date);
 //		  System.out.println(dateString);
 	  return parseDate;
    }

@@ -1,5 +1,6 @@
 package com.miracle.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public interface CollegeQTrsDAO extends BaseDAO<Car, Map<String, Object>> {
 	
 	
 	/** College 大學生 營會 查詢是否報到過*/
-	public int findIfCollegeCampCheckIn(String collegeId, String checkTypeTime) throws DAOObjectNotFoundException;
+	public int findIfCollegeCampCheckIn(String date,String collegeId, String checkTypeTime) throws DAOObjectNotFoundException;
 
 	
 	/** 
@@ -47,6 +48,6 @@ public interface CollegeQTrsDAO extends BaseDAO<Car, Map<String, Object>> {
 	 *  College 大學生 營會 當天今天報到重覆打卡
 	 *  collegeId:學生ID 
 	 */
-	public int updateCollegeCampCheckIn(String collegeId, String checkTypeTime, String checkInfo) throws DAOObjectNotFoundException;
+	public int updateCollegeCampCheckIn(String date, String collegeId, String checkTypeTime, String checkInfo) throws DAOObjectNotFoundException;
 	
 }
