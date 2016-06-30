@@ -95,6 +95,12 @@ public class CollegeServiceImpl implements CollegeService {
 		return campActivityDAO.findAll();
 	}
 	
+	@Override
+	public Page<CampActivity> queryCampActivityAllPage(Pageable pageable) throws DAOObjectNotFoundException {
+		
+		return campActivityDAO.findAll(pageable);
+	}
+	
 	
 	@Override
 	public CampActivity queryCampActivity(String activityId) throws DAOObjectNotFoundException {
@@ -549,6 +555,66 @@ public class CollegeServiceImpl implements CollegeService {
 
 		
 		return collegeQTrsDAO.findCampActivitySignupAllByKey(activityId, collegeId, collegeName, pageBounds);
+	}
+	
+	@Override
+	public boolean createCampActivity(CampActivity campActivity) throws DAOObjectNotFoundException {
+	
+		boolean isCorrect = false;
+		
+		try {
+			
+			campActivityDAO.save(campActivity);
+			
+			isCorrect = true;
+			
+		} catch (Exception e) {
+        	isCorrect = false;
+        	log.info("createCampActivity error:" + e.getMessage() );
+		}
+		
+		return isCorrect;
+	}
+	
+	@Override
+	public List<CampActivitySignup> queryCampActivitySignupByActivityId(String activityId) throws DAOObjectNotFoundException {
+		
+		
+		return campActivitySignupDAO.findCampActivitySignupByActivityId(activityId);
+	}
+	
+	@Override
+	public Boolean deleteCampActivity(String activityId) throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		
+		try {
+			isCorrect = false;
+			
+			//刪除
+			Query query = em.createQuery("DELETE FROM CampActivity e WHERE activityId = ?1 ");
+//      	query.setParameter("propertyValue", value);
+			query.setParameter(1, activityId);
+			long rows = query.executeUpdate();
+			
+			if(rows > 0){
+				em.getTransaction().commit();
+				isCorrect = true;
+			}else{
+				em.getTransaction().rollback();
+				isCorrect = false;
+			}
+			
+			em.close();
+		} catch (Exception e) {
+			log.info("deleteCampActivity eror："+e.getMessage());
+			em.close();
+		}
+		
+		return isCorrect;
 	}
 	
 }

@@ -1,5 +1,7 @@
 package com.miracle.dao.jpa;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,4 +16,7 @@ public interface CampActivitySignupDAO extends CrudRepository<CampActivitySignup
 	
 	@Query(value = "select c from CampActivitySignup c where c.activityId = ?1 and c.collegeId = ?2")
 	CampActivitySignup findCampActivitySignup(String activityId, String collegeId);
+	
+	@Query(value = "select c from CampActivitySignup c where c.activityId = ?1 ")
+	List<CampActivitySignup> findCampActivitySignupByActivityId(String activityId);
 }

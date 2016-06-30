@@ -1067,5 +1067,193 @@ public class CollegeController extends BaseController {
 		return "redirect:/college/sign/queryactivitysignup";
 	}
 	
+	
+	//營會功能設定首頁
+	@RequestMapping(value = "/sign/querycampactivity", method = {RequestMethod.GET, RequestMethod.POST})
+	public String queryCampActivity(Model model, @ModelAttribute("pageNumber") String pageNumber1,
+			@ModelAttribute("msg") String msg,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+	
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(pageNumber == null || pageNumber.equals("")){
+			if(pageNumber1 != null && !pageNumber1.equals("")){
+				pageNumber=pageNumber1;//修改頁面而來
+			}else{
+				pageNumber="0";//首頁進來
+			}
+		}
+		
+		int pageIndex = Integer.parseInt(pageNumber); //第幾頁 - 從1開始 0會報錯
+		int pageSize = 7;//每頁幾筆
+		int page = (pageIndex-1)*pageSize;
+		
+//			Sort sort = new Sort (Direction.ASC, "sort");
+		Pageable pageable = new PageRequest(pageIndex, pageSize);
+		
+		//查詢所有資料
+		Page<CampActivity> campActivityList = collegeService.queryCampActivityAllPage(pageable);
+		
+		model.addAttribute(campActivityList.getContent());
+		
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("pageTotal", campActivityList.getTotalPages());
+		
+		model.addAttribute("msg", msg);
+		
+		return "campactivity/queryCampActivity";
+	}
+	
+	
+	//新增營會設定
+	@RequestMapping(value = "/sign/addcampactivity", method = RequestMethod.GET)
+	public String addCampActivity(Model model,
+			@ModelAttribute("msg") String msg, @ModelAttribute("pageNumber") String pageNumber,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+		
+		
+		 model.addAttribute("pageNumber", pageNumber);
+	     model.addAttribute("msg", msg);
+		
+		return "campactivity/addCampActivity";
+	}
+	
+	
+	//營會設定- 新增
+	@RequestMapping(value = "/sign/createcampactivity", method = RequestMethod.POST )
+	public String createCampActivity( 
+			@ModelAttribute CampActivity campActivity,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String resultValue = "";
+		try {
+			
+			TimeMachine idtime = new TimeMachine();
+			String id =  idtime.serial("activity", 0);
+			campActivity.setActivityId(id);
+			Boolean isCorrect = collegeService.createCampActivity(campActivity);
+			
+			if(isCorrect){
+				resultValue="新增成功";
+				
+			}else{
+				resultValue="新增失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		
+		
+		return "redirect:/college/sign/querycampactivity";
+	}
+	
+	
+	//營會資料設定- 修改頁面
+	@RequestMapping(value = "/sign/editcampactivity", method = {RequestMethod.POST, RequestMethod.GET})
+	public String editCampActivity(@ModelAttribute("id") String id1, @ModelAttribute("msg") String msg,
+			@ModelAttribute("pageNumber") String pageNumber1,
+			Model model, HttpServletRequest req, HttpSession s )  throws Exception {
+		
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber1"));//分頁點擊
+		if(StringUtils.isNotBlank(pageNumber1)){
+			pageNumber = pageNumber1;
+		}
+		
+		String id = StringUtils.trimToEmpty(req.getParameter("id"));
+		if(StringUtils.isNotBlank(id1)){
+			id = id1;
+		}
+		
+		//查詢
+		CampActivity campActivity = collegeService.queryCampActivity(id);
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("campActivity", campActivity);
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("id", id);
+		
+		
+		return "campactivity/editCampActivity";
+	}
+	
+	
+	//營會資料設定 - 修改
+	@RequestMapping(value = "/sign/updatecampactivity", method = RequestMethod.POST )
+	public String updateCampActivity(
+			@ModelAttribute CampActivity campActivity,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));
+		
+		String resultValue = "";
+		
+		try {
+			
+			//修改
+			Boolean isCorrect = collegeService.createCampActivity(campActivity);
+			
+			if(isCorrect){
+				resultValue="修改成功";
+				
+			}else{
+				resultValue="修改失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue);
+		attr.addFlashAttribute("pageNumber", pageNumber);
+		
+		
+		return "redirect:/college/sign/querycampactivity";
+	}
+	
+	
+	//刪除營會資料設定
+	@RequestMapping(value = "/sign/deletecampactivity", method = RequestMethod.POST )
+	public String deleteCampActivity( @RequestParam String delId,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		String resultValue = "";
+		
+		try {
+			
+			//查詢營會是否有使用
+			List<CampActivitySignup> campActivitySignupList = collegeService.queryCampActivitySignupByActivityId(delId);
+			
+			if(campActivitySignupList != null && campActivitySignupList.size() >0){
+				
+				resultValue = "此營會ID已經有人報名，不可刪除";
+			}else{
+			
+				//刪除
+				Boolean isCorrect = collegeService.deleteCampActivity(delId);
+				if(isCorrect){
+					resultValue = "刪除成功";
+				}else{
+					resultValue = "刪除失敗";
+				}
+			
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		attr.addFlashAttribute("pageNumber", pageNumber); 
+		
+		return "redirect:/college/sign/querycampactivity";
+	}
 
 }

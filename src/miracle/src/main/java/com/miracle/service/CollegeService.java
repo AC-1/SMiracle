@@ -34,6 +34,9 @@ public interface CollegeService {
 	 */
 	public List<CampActivity> queryCampActivityAll() throws DAOObjectNotFoundException;
 	
+	/** 查詢所有營會資料 - 分頁*/
+	public Page<CampActivity> queryCampActivityAllPage(Pageable pageable) throws DAOObjectNotFoundException;
+	
 	/** 
 	 *  查詢營會資料By Id
 	 */
@@ -142,5 +145,16 @@ public interface CollegeService {
 	
 	/** 查詢所有營會報名人員資料 - BY Key - 分頁*/
 	public List<CampActivitySignupVO> queryCampActivitySignupAllByKey(String activityId, String collegeId, String collegeName, PageBounds pageBounds) throws DAOObjectNotFoundException;
+	
+	/** 新增營會資料設定  */
+	public boolean createCampActivity(CampActivity campActivity) throws DAOObjectNotFoundException;
+	
+	/** 
+	 *  查詢報名表By營會
+	 */
+	public List<CampActivitySignup> queryCampActivitySignupByActivityId(String activityId) throws DAOObjectNotFoundException;
+	
+	/** 刪除營會資料設定*/
+	public Boolean deleteCampActivity(String activityId) throws DAOObjectNotFoundException;
 	
 }
