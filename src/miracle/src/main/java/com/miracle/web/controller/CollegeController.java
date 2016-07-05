@@ -100,21 +100,29 @@ public class CollegeController extends BaseController {
 			
 			//判斷報到到時段
 			//判斷8點到10點
-    		Date start=timeMachine.changeTime(date, 8, 00, 00);
+    		/*Date start=timeMachine.changeTime(date, 8, 00, 00);
     		Date end=timeMachine.changeTime(date, 10, 00, 00);
 			boolean isTime = timeMachine.isDateBetween(date, start, end);
 			//判斷12:30點到14:30點
 			Date start2=timeMachine.changeTime(date, 12, 30, 00);
     		Date end2=timeMachine.changeTime(date, 14, 30, 00);
-			boolean isTime2 = timeMachine.isDateBetween(date, start2, end2);
-			
-			if(isTime){
+			boolean isTime2 = timeMachine.isDateBetween(date, start2, end2);*/
+			/*if(isTime){
 				checkTypeTime = "1";
 			}else if(isTime2){
 				checkTypeTime = "2";
 			}else{
 				isCheckInTime =false;//不在打卡時間之內
-			} 
+			} */
+			
+			Date noon =timeMachine.changeTime(date, 12, 00, 00);
+			boolean isTime = timeMachine.chekLtEqDate(date, noon);
+			
+			if(isTime){
+				checkTypeTime = "1";
+			}else {
+				checkTypeTime = "2";
+			}
 			
 			if(isCheckInTime){
 			

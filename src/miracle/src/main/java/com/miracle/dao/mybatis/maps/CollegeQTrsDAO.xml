@@ -63,6 +63,7 @@
 		from camp_activity_signup A
 		left join college_people B on A.COLLEGE_ID = B.COLLEGE_ID
 		where A.ACTIVITY_ID = #{activityId}
+		order by B.COLLEGE_AREA ASC
 	</select>
 	
 	<select id="findCollegePeopleCheckInAllByDate" parameterType="map" resultMap="collegePeopleVOMap">
@@ -77,6 +78,7 @@
 		<if test="checkTypeTime != null and !''.equals(checkTypeTime)">
 		AND A.CHECK_TYPE_TIME = #{checkTypeTime}
 		</if>
+		order by B.COLLEGE_AREA ASC
 	</select>
 	
 	
@@ -88,6 +90,7 @@
 			select COLLEGE_ID from college_camp_check_in where CAMP_DATE = #{campDate}
 			and ACTIVITY_ID = #{activityId}
 		 )
+		 order by COLLEGE_AREA ASC
 	</select>
 	
 	
