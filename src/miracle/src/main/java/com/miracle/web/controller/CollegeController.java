@@ -1,6 +1,7 @@
 package com.miracle.web.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.github.miemiedev.mybatis.paginator.domain.Order;
-import com.github.miemiedev.mybatis.paginator.domain.PageList;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.github.miemiedev.mybatis.paginator.domain.Order;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.miracle.common.JSONUtils;
 import com.miracle.common.Language;
 import com.miracle.common.SecretUtil;
@@ -39,8 +41,10 @@ import com.miracle.mode.CampActivitySignup;
 import com.miracle.mode.CollegePeople;
 import com.miracle.mode.JSONPObject;
 import com.miracle.mode.vo.CampActivitySignupVO;
+import com.miracle.mode.vo.CheckInReportVO;
 import com.miracle.mode.vo.CollegePeopleVO;
 import com.miracle.service.CollegeService;
+import com.miracle.service.DownloadService;
 
 
 
@@ -68,6 +72,9 @@ public class CollegeController extends BaseController {
 	
 	@Autowired
 	private TimeMachine timeMachine;
+	
+	@Autowired
+	private DownloadService downloadService;
 	
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
@@ -725,12 +732,22 @@ public class CollegeController extends BaseController {
 		
 		try {
 			
-			//刪除
-			Boolean isCorrect = collegeService.deleteCollegePeople(delId);
-			if(isCorrect){
-				resultValue = "刪除成功";
+			//查詢人員是否有使用報名營會
+			List<CampActivitySignup> campActivitySignupList = collegeService.queryCampActivitySignupByCollegeId(delId);
+			
+			if(campActivitySignupList != null && campActivitySignupList.size() >0){
+				
+				resultValue = "此人員ID已經有報名過營會，不可刪除";
 			}else{
-				resultValue = "刪除失敗";
+			
+				//刪除
+				Boolean isCorrect = collegeService.deleteCollegePeople(delId);
+				if(isCorrect){
+					resultValue = "刪除成功";
+				}else{
+					resultValue = "刪除失敗";
+				}
+			
 			}
 			
 		} catch (Exception e) {
@@ -1263,5 +1280,189 @@ public class CollegeController extends BaseController {
 		
 		return "redirect:/college/sign/querycampactivity";
 	}
+	
+	//產生打卡報表首頁
+	@RequestMapping(value = "/sign/checkinreport", method = {RequestMethod.GET, RequestMethod.POST})
+	public String CheckInReport(Model model,
+			@ModelAttribute("msg") String msg,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+	
+		//查營會資料
+		List<CampActivity> campActivityList = collegeService.queryCampActivityAll();
+		model.addAttribute("campActivityList", campActivityList);
+		
+		model.addAttribute("msg", msg);
+		
+		return "checkinreport/CheckInReport";
+	}
+	
+	 //下載匯出報到打卡報表Excel
+	 @RequestMapping(value="/sign/downloadexcel" , method = {RequestMethod.POST, RequestMethod.GET})
+	 public String downloadExcel(HttpServletResponse response, HttpServletRequest req, Model model, RedirectAttributes attr) {
+
+		String datepicker = StringUtils.trimToEmpty(req.getParameter("datepicker"));
+		String activityId = StringUtils.trimToEmpty(req.getParameter("activityId"));
+		 
+		String resultValue = "";
+		String token = "";
+		
+		//匯出PDF用到
+	    String type = "xls";//xls,pdf
+	    HashMap<String, Object> params = new HashMap<String, Object> ();
+	    params.put("title", "報到總表 上午 "+datepicker);
+	    params.put("title1", "報到總表 下午 "+datepicker);
+	    
+			try{
+				
+//				List<CheckInReportVO> checkInReportList =  new ArrayList<CheckInReportVO>();
+				
+				//查上午資料
+				List<CheckInReportVO> checkInReportListAm = collegeService.queryCheckInReport(activityId, datepicker, "1");
+				int amSize = checkInReportListAm.size();
+				//查下午資料
+				List<CheckInReportVO> checkInReportListPm = collegeService.queryCheckInReport(activityId, datepicker, "2");
+				int pmSize = checkInReportListPm.size();
+				
+				params.put("title2", "上午總人數： "+amSize+"\n下午總人數："+pmSize+"\n合計人數："+(amSize+pmSize));
+				
+				if(checkInReportListPm != null && checkInReportListPm.size() >0){
+					int i=0;
+					for(CheckInReportVO checkInReportVOPm :checkInReportListPm){
+						CheckInReportVO checkInReportVOAm = null;
+						if(i>=amSize){
+							checkInReportVOAm = new CheckInReportVO();
+							checkInReportVOAm.setCollegeId("");
+							checkInReportVOAm.setCollegeArea("");
+							checkInReportVOAm.setCollegeGroup("");
+							checkInReportVOAm.setCollegeName("");
+							checkInReportVOAm.setCollegePhone("");
+							checkInReportVOAm.setCheckInTime("");
+							checkInReportVOAm.setCollegeId1(checkInReportVOPm.getCollegeId());
+							checkInReportVOAm.setCollegeArea1(checkInReportVOPm.getCollegeArea());
+							checkInReportVOAm.setCollegeGroup1(checkInReportVOPm.getCollegeGroup());
+							checkInReportVOAm.setCollegeName1(checkInReportVOPm.getCollegeName());
+							checkInReportVOAm.setCollegePhone1(checkInReportVOPm.getCollegePhone());
+							checkInReportVOAm.setCheckInTime1(checkInReportVOPm.getCheckInTime());
+							
+							if(StringUtils.isBlank(checkInReportVOAm.getCollegeName1())){
+								checkInReportVOAm.setCollegeName1("查無此人員資料");
+							}
+							
+							checkInReportListAm.add(i, checkInReportVOAm);
+						}else{
+							checkInReportVOAm = checkInReportListAm.get(i);
+							checkInReportVOAm.setCollegeId1(checkInReportVOPm.getCollegeId());
+							checkInReportVOAm.setCollegeArea1(checkInReportVOPm.getCollegeArea());
+							checkInReportVOAm.setCollegeGroup1(checkInReportVOPm.getCollegeGroup());
+							checkInReportVOAm.setCollegeName1(checkInReportVOPm.getCollegeName());
+							checkInReportVOAm.setCollegePhone1(checkInReportVOPm.getCollegePhone());
+							checkInReportVOAm.setCheckInTime1(checkInReportVOPm.getCheckInTime());
+							
+							if(StringUtils.isBlank(checkInReportVOAm.getCollegeName())){
+								checkInReportVOAm.setCollegeName("查無此人員資料");
+							}
+							if(StringUtils.isBlank(checkInReportVOAm.getCollegeName1())){
+								checkInReportVOAm.setCollegeName1("查無此人員資料");
+							}
+							
+							checkInReportListAm.set(i, checkInReportVOAm);
+						}
+						i++;
+					}
+				}
+				
+				if(checkInReportListAm == null || checkInReportListAm.size() == 0){
+					CheckInReportVO checkInReportVOAm = new CheckInReportVO();
+					checkInReportVOAm.setCollegeId("");
+					checkInReportVOAm.setCollegeArea("");
+					checkInReportVOAm.setCollegeGroup("");
+					checkInReportVOAm.setCollegeName("查無任何資料");
+					checkInReportVOAm.setCollegePhone("");
+					checkInReportVOAm.setCheckInTime("");
+					checkInReportVOAm.setCollegeId1("");
+					checkInReportVOAm.setCollegeArea1("");
+					checkInReportVOAm.setCollegeGroup1("");
+					checkInReportVOAm.setCollegeName1("查無任何資料");
+					checkInReportVOAm.setCollegePhone1("");
+					checkInReportVOAm.setCheckInTime1("");
+					checkInReportListAm.add(checkInReportVOAm);
+				}
+				
+				
+				downloadService.download(type, token, "/report/CheckInExcel.jrxml", "CheckInExcel", params, new JRBeanCollectionDataSource(checkInReportListAm), response);
+			
+				
+				return null;
+			
+			} catch (Exception ex) {
+				
+				resultValue = "匯出檔案發生錯誤："+ex.toString();
+				log.error("匯出檔案發生錯誤：" + ex);
+				
+				//Error，導回頁面
+				attr.addFlashAttribute("msg", resultValue);
+				
+				return "redirect:/college/sign/checkinreport";
+			}
+	 }
+	 
+	 
+	//產生營會報名報表首頁
+	@RequestMapping(value = "/sign/activityreport", method = {RequestMethod.GET, RequestMethod.POST})
+	public String activityReport(Model model,
+			@ModelAttribute("msg") String msg,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+	
+		//查營會資料
+		List<CampActivity> campActivityList = collegeService.queryCampActivityAll();
+		model.addAttribute("campActivityList", campActivityList);
+		
+		model.addAttribute("msg", msg);
+		
+		return "activityreport/activityReport";
+	}
+	
+	
+	//下載匯出營會報名報表Excel
+	 @RequestMapping(value="/sign/activitysignupexcel" , method = {RequestMethod.POST, RequestMethod.GET})
+	 public String activitySignUpExcel(HttpServletResponse response, HttpServletRequest req, Model model, RedirectAttributes attr) {
+
+		String activityId = StringUtils.trimToEmpty(req.getParameter("activityId"));
+		 
+		String resultValue = "";
+		String token = "";
+		
+		//匯出PDF用到
+	    String type = "xls";//xls,pdf
+	    HashMap<String, Object> params = new HashMap<String, Object> ();
+	    params.put("title", "營會報名 ");
+	    
+			try{
+				
+				CampActivity campActivity = collegeService.queryCampActivity(activityId);
+				params.put("title", campActivity.getActivityName()+"營會報名 ");
+				
+				//查資料
+				List<CampActivitySignupVO> campActivitySignupVOList = collegeService.queryCampActivitySignupAllByActivityId(activityId);
+				int amSize = campActivitySignupVOList.size();
+				
+				params.put("title2", "總報名人數： "+amSize);
+				
+				downloadService.download(type, token, "/report/ActivitySignUpExcel.jrxml", "CheckInExcel", params, new JRBeanCollectionDataSource(campActivitySignupVOList), response);
+			
+				
+				return null;
+			
+			} catch (Exception ex) {
+				
+				resultValue = "匯出檔案發生錯誤："+ex.toString();
+				log.error("匯出檔案發生錯誤：" + ex);
+				
+				//Error，導回頁面
+				attr.addFlashAttribute("msg", resultValue);
+				
+				return "redirect:/college/sign/activityreport";
+			}
+	 }
 
 }

@@ -19,4 +19,7 @@ public interface CampActivitySignupDAO extends CrudRepository<CampActivitySignup
 	
 	@Query(value = "select c from CampActivitySignup c where c.activityId = ?1 ")
 	List<CampActivitySignup> findCampActivitySignupByActivityId(String activityId);
+	
+	@Query(value = "select c from CampActivitySignup c where c.collegeId = ?1 ")
+	List<CampActivitySignup> findCampActivitySignupByCollegeId(String collegeId);
 }

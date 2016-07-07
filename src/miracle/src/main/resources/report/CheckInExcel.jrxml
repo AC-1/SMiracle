@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="報到總表" language="groovy" pageWidth="2200" pageHeight="1200" columnWidth="2200" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f688fa3a-a9ce-4d51-a4b0-af20d894e498">
+	<property name="ireport.zoom" value="1.3310000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="title" class="java.lang.String"/>
+	<parameter name="title1" class="java.lang.String"/>
+	<parameter name="title2" class="java.lang.String"/>
+	<field name="collegeId" class="java.lang.String"/>
+	<field name="collegeArea" class="java.lang.String"/>
+	<field name="collegeGroup" class="java.lang.String"/>
+	<field name="collegeName" class="java.lang.String"/>
+	<field name="collegePhone" class="java.lang.String"/>
+	<field name="checkInTime" class="java.lang.String"/>
+	<field name="collegeId1" class="java.lang.String"/>
+	<field name="collegeArea1" class="java.lang.String"/>
+	<field name="collegeGroup1" class="java.lang.String"/>
+	<field name="collegeName1" class="java.lang.String"/>
+	<field name="collegePhone1" class="java.lang.String"/>
+	<field name="checkInTime1" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="85" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="0" width="936" height="51" backcolor="#33CCFF" uuid="c34b66e2-5d53-4a9c-bd97-b0a256577de2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="51" width="213" height="31" uuid="f96bd98a-8d1f-40fd-b6ad-7e134d92a849"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[編號]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="213" y="51" width="80" height="31" uuid="78448139-b4a1-4724-b439-06390bf562d7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[小區]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="51" width="127" height="31" uuid="01b1254b-9fff-49ed-9daf-504bfb9b3c38"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[小組]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="51" width="145" height="31" backcolor="#FFFFFF" uuid="c19dce00-c15a-4ef8-b847-ff60cd24755e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[姓名]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="565" y="51" width="233" height="31" uuid="08aef267-7329-4cda-8ca0-7016da3409db"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[電話]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="798" y="51" width="138" height="31" uuid="6d926aa7-de50-4baa-a049-9dd20d6734a3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[報到時間]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="1044" y="0" width="985" height="51" backcolor="#FF9900" uuid="7e265715-2c54-498c-846e-9d6c22bb4232"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{title1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1044" y="51" width="254" height="31" uuid="6bee14fc-04cc-4168-81a5-4aa79fb214c7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[編號]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1298" y="51" width="80" height="31" uuid="f1780b01-f743-4d9c-917e-d7a7b3359c61"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[小區]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1378" y="51" width="127" height="31" uuid="c2000aac-1728-4948-b499-c44578cd9a93"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[小組]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1505" y="51" width="145" height="31" backcolor="#FFFFFF" uuid="e42e3515-1164-4fa6-a0e5-d28b8893db9c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[姓名]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1650" y="51" width="241" height="31" uuid="15cee71f-1e9c-447c-902d-4d92c1e5c31b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[電話]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1891" y="51" width="138" height="31" uuid="1080b8e7-2541-4840-8f58-01f9f486f939"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[報到時間]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="936" y="1" width="108" height="81" uuid="5f288d75-abf7-4e31-83a3-9a44296a227c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{title2}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="34" splitType="Stretch">
+			<textField>
+				<reportElement x="420" y="0" width="145" height="30" uuid="5f2a02bc-fc5f-4866-920f-fd2562db2537"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{collegeName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1650" y="0" width="241" height="30" uuid="ee61afb1-ebe5-417c-945f-e219910708d6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{collegePhone1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="213" height="30" uuid="48ad9d3d-275d-4c0c-9431-ac4213c54b36"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{collegeId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="213" y="0" width="80" height="30" uuid="df5ddd97-7e6d-471a-ad88-bfc7cc66c48b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{collegeArea}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="293" y="0" width="127" height="30" uuid="448b927f-62ea-4464-b2f6-62aee05b9dae"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{collegeGroup}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="565" y="0" width="233" height="30" uuid="fbbe988a-f76a-4a2c-8817-8cba1826c71a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{collegePhone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="798" y="0" width="138" height="30" uuid="e973a9e6-5421-4448-bfd3-997de06b3cc9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{checkInTime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1044" y="0" width="254" height="30" uuid="2beb0857-01e1-4fd4-ac6e-4f7dfcfa6d1a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{collegeId1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1298" y="0" width="80" height="30" uuid="1df143da-d909-4c61-a1c9-7b24c041717c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{collegeArea1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1505" y="0" width="145" height="30" uuid="fe7d5425-101b-4f20-8413-4ec111207a1f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{collegeName1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1378" y="0" width="127" height="30" uuid="252b6cee-0b67-4702-ae8f-40e1f4cb08bf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{collegeGroup1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1891" y="0" width="138" height="30" uuid="433049c5-2cb3-4cf2-b5a8-6bf0f4386a78"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="MHei-Medium" pdfEncoding="UniCNS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{checkInTime1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -46,6 +46,15 @@
 		<result property="checkTypeTime" column="CHECK_TYPE_TIME" />
 		<result property="checkInfo" column="CHECK_INFO" />
 	</resultMap>
+	
+	<resultMap id="checkInReportVOMap" type="CheckInReportVO">
+		<result property="collegeId" column="COLLEGE_ID" />
+		<result property="collegeName" column="COLLEGE_NAME" />
+		<result property="collegeArea" column="COLLEGE_AREA" />
+		<result property="collegeGroup" column="COLLEGE_GROUP" />
+		<result property="collegePhone" column="COLLEGE_PHONE" />
+		<result property="checkInTime" column="CHECK_IN_TIME" />
+	</resultMap>
 
 	
 	<select id="findIfCollegeCampCheckIn" parameterType="string" resultType="integer">
@@ -57,13 +66,14 @@
 	
 	
 	<select id="findCampActivitySignupAllByActivityId" parameterType="string" resultMap="campActivitySignupVOMap">
-		select A.SIGNUP_ID, A.ACTIVITY_ID, A.COLLEGE_ID, A.IF_CHECK_IN, A.SIGNUP_DATE,
+		select A.SIGNUP_ID, A.ACTIVITY_ID, A.COLLEGE_ID, A.IF_CHECK_IN,
 		       B.COLLEGE_NAME, B.COLLEGE_AREA, B.COLLEGE_GROUP, B.COLLEGE_GENDER, B.COLLEGE_BIRTHDAY, 
-		       B.COLLEGE_SCHOOL_GRADE, B.COLLEGE_PHONE, B.COLLEGE_TEL, B.COLLEGE_GRADE, B.COLLEGE_LEADER
+		       B.COLLEGE_SCHOOL_GRADE, B.COLLEGE_PHONE, B.COLLEGE_TEL, B.COLLEGE_GRADE, B.COLLEGE_LEADER,
+			   DATE_FORMAT(A.SIGNUP_DATE, '%Y-%m-%d %H:%i:%s') SIGNUP_DATE
 		from camp_activity_signup A
-		left join college_people B on A.COLLEGE_ID = B.COLLEGE_ID
+		inner join college_people B on A.COLLEGE_ID = B.COLLEGE_ID
 		where A.ACTIVITY_ID = #{activityId}
-		order by B.COLLEGE_AREA ASC
+		order by B.COLLEGE_GRADE ASC, B.COLLEGE_AREA ASC, B.COLLEGE_LEADER ASC
 	</select>
 	
 	<select id="findCollegePeopleCheckInAllByDate" parameterType="map" resultMap="collegePeopleVOMap">
@@ -72,7 +82,7 @@
 			   B.COLLEGE_ID, B.COLLEGE_NAME, B.COLLEGE_AREA, B.COLLEGE_GROUP, B.COLLEGE_GENDER, B.COLLEGE_BIRTHDAY, 
 		       B.COLLEGE_SCHOOL_GRADE, B.COLLEGE_PHONE, B.COLLEGE_TEL, B.COLLEGE_GRADE, B.COLLEGE_LEADER
 		from  college_camp_check_in A 
-		left join college_people B on A.COLLEGE_ID = B.COLLEGE_ID 
+		inner join college_people B on A.COLLEGE_ID = B.COLLEGE_ID 
 		where A.CAMP_DATE = #{campDate}
 		AND A.ACTIVITY_ID = #{activityId}
 		<if test="checkTypeTime != null and !''.equals(checkTypeTime)">
@@ -158,6 +168,19 @@
 			</when>
 		</choose>
 		ORDER BY A.SIGNUP_DATE DESC
+	</select>
+	
+	<select id="findCheckInReport" parameterType="map" resultMap="checkInReportVOMap">
+		select A.COLLEGE_ID, B.COLLEGE_NAME, B.COLLEGE_AREA, B.COLLEGE_GROUP,
+		       CONCAT('家：',B.COLLEGE_TEL,'; 手機：',B.COLLEGE_PHONE) as COLLEGE_PHONE,
+		       DATE_FORMAT(A.CHECK_IN_TIME, '%Y-%m-%d %H:%i:%s') CHECK_IN_TIME
+		from college_camp_check_in A
+		inner join college_people B on A.COLLEGE_ID = B.COLLEGE_ID 
+		where 
+		A.ACTIVITY_ID = #{activityId}
+		AND A.CAMP_DATE = #{campDate}
+		AND A.CHECK_TYPE_TIME = #{checkTypeTime}
+		order by B.COLLEGE_AREA
 	</select>
 
 </mapper>

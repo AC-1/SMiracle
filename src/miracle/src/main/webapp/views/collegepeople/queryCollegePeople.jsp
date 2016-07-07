@@ -241,6 +241,9 @@
 								
 								
 								<div id="pager"></div><div style="clear: both;"></div>
+								
+								<BR/>
+								<font color="red">人員資料請勿刪除，不然營會查無他的資料</font>
 							
 						<br/>
 												

@@ -9,6 +9,8 @@
 		              <li><a href="<c:url value="college/sign/querycollegepeople"/>">人員資料功能</a></li>
 		              <li><a href="<c:url value="college/sign/handcheckin"/>">手動報到打卡</a></li>
 		              <li><a href="<c:url value="college/sign/queryactivitysignup"/>">營會報名功能</a></li>
+		              <li><a href="<c:url value="college/sign/activityreport"/>">營會報名匯出EXCEL</a></li>
+		              <li><a href="<c:url value="college/sign/checkinreport"/>">報到匯出EXCEL</a></li>
 		            </ul>                
 		            <%-- <ul>                     
 		              <li><a href="<c:url value="learn/holy/index"/>">教學</a></li>

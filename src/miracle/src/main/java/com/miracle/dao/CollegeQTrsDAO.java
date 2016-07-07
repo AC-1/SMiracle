@@ -8,6 +8,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.mode.Car;
 import com.miracle.mode.CollegeCampCheckIn;
 import com.miracle.mode.vo.CampActivitySignupVO;
+import com.miracle.mode.vo.CheckInReportVO;
 import com.miracle.mode.vo.CollegePeopleVO;
 
 
@@ -57,5 +58,13 @@ public interface CollegeQTrsDAO extends BaseDAO<Car, Map<String, Object>> {
 	
 	/** 查詢所有營會報名人員資料 - By Key*/
 	public List<CampActivitySignupVO> findCampActivitySignupAllByKey(String activityId, String collegeId, String collegeName, PageBounds pageBounds) throws DAOObjectNotFoundException;
+	
+	/** 
+	 *  查詢報名打卡資料
+	 *  checkTypeTime 1 :上午，2：下午，3：後台打卡
+	 *  campDate：日期 格式：年-月-日
+	 */
+	public List<CheckInReportVO> findCheckInReport(String activityId, String campDate, String checkTypeTime) throws DAOObjectNotFoundException;
+	
 	
 }

@@ -12,6 +12,7 @@ import com.miracle.mode.CampActivity;
 import com.miracle.mode.CampActivitySignup;
 import com.miracle.mode.CollegePeople;
 import com.miracle.mode.vo.CampActivitySignupVO;
+import com.miracle.mode.vo.CheckInReportVO;
 import com.miracle.mode.vo.CollegePeopleVO;
 
 
@@ -149,12 +150,27 @@ public interface CollegeService {
 	/** 新增營會資料設定  */
 	public boolean createCampActivity(CampActivity campActivity) throws DAOObjectNotFoundException;
 	
+	
 	/** 
 	 *  查詢報名表By營會
 	 */
 	public List<CampActivitySignup> queryCampActivitySignupByActivityId(String activityId) throws DAOObjectNotFoundException;
 	
+	/** 
+	 *  查詢報名表By人員
+	 */
+	public List<CampActivitySignup> queryCampActivitySignupByCollegeId(String collegeId) throws DAOObjectNotFoundException;
+	
+	
 	/** 刪除營會資料設定*/
 	public Boolean deleteCampActivity(String activityId) throws DAOObjectNotFoundException;
+	
+	/** 
+	 *  查詢報名打卡資料
+	 *  checkTypeTime 1 :上午，2：下午，3：後台打卡
+	 *  campDate：日期 格式：年-月-日
+	 */
+	public List<CheckInReportVO> queryCheckInReport(String activityId, String campDate, String checkTypeTime) throws DAOObjectNotFoundException;
+	
 	
 }

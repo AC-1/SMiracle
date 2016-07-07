@@ -35,6 +35,7 @@ import com.miracle.mode.CampActivitySignup;
 import com.miracle.mode.CollegeCampCheckIn;
 import com.miracle.mode.CollegePeople;
 import com.miracle.mode.vo.CampActivitySignupVO;
+import com.miracle.mode.vo.CheckInReportVO;
 import com.miracle.mode.vo.CollegePeopleVO;
 import com.miracle.service.CollegeService;
 
@@ -584,6 +585,13 @@ public class CollegeServiceImpl implements CollegeService {
 	}
 	
 	@Override
+	public List<CampActivitySignup> queryCampActivitySignupByCollegeId(String collegeId) throws DAOObjectNotFoundException {
+		
+		
+		return campActivitySignupDAO.findCampActivitySignupByCollegeId(collegeId);
+	}
+	
+	@Override
 	public Boolean deleteCampActivity(String activityId) throws DAOObjectNotFoundException {
 		
 		boolean isCorrect = false;
@@ -615,6 +623,13 @@ public class CollegeServiceImpl implements CollegeService {
 		}
 		
 		return isCorrect;
+	}
+	
+	@Override
+	public List<CheckInReportVO> queryCheckInReport(String activityId, String campDate, String checkTypeTime) throws DAOObjectNotFoundException {
+		
+		
+		return collegeQTrsDAO.findCheckInReport(activityId, campDate, checkTypeTime);
 	}
 	
 }

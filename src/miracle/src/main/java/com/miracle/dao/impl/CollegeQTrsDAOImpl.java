@@ -13,6 +13,7 @@ import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.mode.Car;
 import com.miracle.mode.CollegeCampCheckIn;
 import com.miracle.mode.vo.CampActivitySignupVO;
+import com.miracle.mode.vo.CheckInReportVO;
 import com.miracle.mode.vo.CollegePeopleVO;
 
 
@@ -93,6 +94,15 @@ public class CollegeQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> im
 		map.put("collegeId", collegeId);
 		map.put("collegeName", collegeName);
 		return this.getSqlSession().selectList(getNameSpace() + ".findCampActivitySignupAllByKey", map, pageBounds);
+	}
+	
+	@Override
+	public List<CheckInReportVO> findCheckInReport(String activityId, String campDate, String checkTypeTime) throws DAOObjectNotFoundException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("activityId", activityId);
+		map.put("campDate", campDate);
+		map.put("checkTypeTime", checkTypeTime);
+		return this.getSqlSession().selectList(getNameSpace() + ".findCheckInReport", map);
 	}
 	
 }
