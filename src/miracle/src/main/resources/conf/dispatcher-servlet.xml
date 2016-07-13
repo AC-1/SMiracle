@@ -16,7 +16,7 @@
 	<mvc:resources mapping="/css/**" location="/css/" />
 	<mvc:resources mapping="/images/**" location="/images/" />
 	<mvc:resources mapping="/js/**" location="/js/" />
-	
+	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
 	
 	<!-- 国际化配置for i18n -->
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
