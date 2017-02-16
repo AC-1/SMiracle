@@ -73,7 +73,7 @@
 			</div>             
 							
 			<div class="phonenumber">
-				<span class="text_orange"><spring:message code="LAB0008"/></span>${loginVo.username}｜ 
+				<span class="text_orange"><spring:message code="LAB0008"/></span>${loginVo.username}-${loginVo.name}｜ 
 				
 				<!-- 登出 -->      
 				<span id="spanLogout" class="text_orange"><a href="<c:url value="/signOut"/>"><spring:message code="Logout" /></a></span>

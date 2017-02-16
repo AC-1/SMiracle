@@ -40,7 +40,7 @@ public class UsersDetailsService implements UserDetailsService{
 			if (StringUtils.equals(users.getUsername(), username)) {
 				UsersRole role = usersRoleDao.findByUserName(username);
 				List<GrantedAuthority> userAuthorities = getRoles(role);
-				UsersDetailsImpl usersDetailsImpl = new UsersDetailsImpl(users, userAuthorities);
+				UsersDetailsImpl usersDetailsImpl = new UsersDetailsImpl(users, role, userAuthorities);
 				Authentication authentication = new UsernamePasswordAuthenticationToken(usersDetailsImpl, users.getPassword(), userAuthorities);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 				return usersDetailsImpl;

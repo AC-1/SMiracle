@@ -34,6 +34,9 @@ public class HomeController {
 //		UsersDetailsImpl usersDetailsImpl = (UsersDetailsImpl)UserDetails;
 		s.setAttribute("loginVo", userDetails.getUsers());
 		s.setMaxInactiveInterval(60*60);
+		
+		String role = userDetails.getUsersRole().getRolename();
+		
 		return "home";
 	}
 	

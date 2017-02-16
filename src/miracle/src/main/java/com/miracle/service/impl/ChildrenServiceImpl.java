@@ -360,5 +360,11 @@ public class ChildrenServiceImpl implements ChildrenService {
 	}
 	
 	
+	@Override
+	public List<PresentWorshipVO> queryPresentWorshipAllPage(PageBounds pageBounds, String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException {
+		
+		
+		return childrenQTrsDAO.findPresentWorshipAllPage(pageBounds, beginTime, endTime, worshId);
+	}
 	
 }

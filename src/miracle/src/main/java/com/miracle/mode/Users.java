@@ -2,11 +2,13 @@ package com.miracle.mode;
 
 import java.io.Serializable;
 
+
+
 public class Users extends UsersRole implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private String id;
 	
 	private String username;
 	
@@ -15,12 +17,16 @@ public class Users extends UsersRole implements Serializable{
 	private UsersRole usersRole;
 	
 	private String createDate;
+	
+	private String name;
 
-	public Long getId() {
+
+	
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -55,5 +61,16 @@ public class Users extends UsersRole implements Serializable{
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
+	
 	
 }

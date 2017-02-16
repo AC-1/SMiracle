@@ -56,4 +56,7 @@ public interface ChildrenQTrsDAO extends BaseDAO<Car, Map<String, Object>> {
 	/** 更新報到登出時間*/
 	public Integer updatePresentWorshipChkoutById(String pid, String cid, String worship) throws DAOObjectNotFoundException;
 	
+	/** 查詢所有崇拜報到資料 - 分頁*/
+	public List<PresentWorshipVO> findPresentWorshipAllPage(PageBounds pageBounds, String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException;
+
 }

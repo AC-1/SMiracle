@@ -2,6 +2,7 @@ package com.miracle.mode;
 
 import java.io.Serializable;
 
+
 /**
  * @desc 使用者權限
  */
@@ -9,7 +10,7 @@ public class UsersRole implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Long id;
+	private String id;
 	
 	private int role;
 	
@@ -17,16 +18,26 @@ public class UsersRole implements Serializable{
 	
 	private String rolename;
 	
-	private Long userId;
+	private String userId;
 	
 	private Users users;
 
-	public Long getId() {
+	
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public int getRole() {
@@ -53,13 +64,7 @@ public class UsersRole implements Serializable{
 		this.rolename = rolename;
 	}
 
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+	
 
 	public Users getUsers() {
 		return users;

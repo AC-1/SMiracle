@@ -179,4 +179,28 @@
 	</update>
 	
 	
+	<select id="findPresentWorshipAllPage" parameterType="map" resultMap="presentWorshipVOMap">
+		select A.ID, A.PID, A.ACTIVITY_ID, A.CHKIN_TIME,
+		 	   B.NAME, B.GRADE, B.GENDER
+		from present_worship A
+		left join people B on A.PID = B.ID
+		<choose>
+			<when test="beginTime != null and !''.equals(beginTime) and
+			            endTime != null and !''.equals(endTime) and
+			            worshId != null and !''.equals(worshId)">
+			where A.CHKIN_TIME BETWEEN #{beginTime} AND #{endTime}
+			  and A.ACTIVITY_ID = #{worshId}
+			</when>
+			<when test="beginTime != null and !''.equals(beginTime) and
+			            endTime != null and !''.equals(endTime)">
+			where A.CHKIN_TIME BETWEEN #{beginTime} AND #{endTime}
+			</when>
+			<when test="worshId != null and !''.equals(worshId)">
+			where A.ACTIVITY_ID = #{worshId}
+			</when>
+		</choose>
+		order by A.CHKIN_TIME DESC
+	</select>
+	
+	
 </mapper>

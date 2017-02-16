@@ -109,4 +109,15 @@ public class ChildrenQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> i
 		map.put("worship", worship);
 		return this.getSqlSession().update(getNameSpace() + ".updatePresentWorshipChkoutById", map);
 	}
+	
+	@Override
+	public List<PresentWorshipVO> findPresentWorshipAllPage(PageBounds pageBounds, String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("beginTime", beginTime);
+		map.put("endTime", endTime);
+		map.put("worshId", worshId);
+		return this.getSqlSession().selectList(getNameSpace() + ".findPresentWorshipAllPage", map, pageBounds);
+	}
+	
 }

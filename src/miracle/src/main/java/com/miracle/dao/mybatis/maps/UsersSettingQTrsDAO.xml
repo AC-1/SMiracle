@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miracle.dao.UsersSettingQTrsDAO">
+
+	<!-- <cache /> -->
+	
+	<resultMap id="usersVOMap" type="UsersVO">
+		<result property="id" column="id" />
+		<result property="username" column="username" />
+		<result property="name" column="name" />
+		<result property="roleDesc" column="ROLE_DESC" />
+		<result property="createDate" column="create_date" />
+		<result property="password" column="password" />
+		<result property="roleId" column="roleId" />
+		<result property="roleName" column="rolename" />
+		<result property="userRoldId" column="userRoldId" />
+	</resultMap>
+	
+	<resultMap id="usersRoleSettingMap" type="UsersRoleSetting">
+		<result property="roleId" column="ROLE_ID" />
+		<result property="roleName" column="ROLE_NAME" />
+		<result property="roleDesc" column="ROLE_DESC" />
+	</resultMap>
+	
+	
+	<select id="findUsersAll" parameterType="string" resultMap="usersVOMap">
+		SELECT A.id, A.username, A.name, C.ROLE_DESC,
+			   DATE_FORMAT(A.create_date, '%Y-%m-%d %H:%i') create_date
+		FROM users A
+		left join users_role B on A.id = B.userId
+		left join users_role_setting C on B.role = C.ROLE_ID
+	</select>
+	
+	<select id="findUsersRoleSettingAll"  resultMap="usersRoleSettingMap">
+		SELECT ROLE_ID, ROLE_NAME, ROLE_DESC
+		FROM USERS_ROLE_SETTING
+	</select>
+	
+	<select id="findUsersRoleSettingById" parameterType="string" resultMap="usersRoleSettingMap">
+		SELECT ROLE_ID, ROLE_NAME, ROLE_DESC
+		FROM USERS_ROLE_SETTING
+		WHERE ROLE_ID = #{roleId}
+	</select>
+	
+	<select id="findUsersChk" parameterType="string" resultType="integer">
+		SELECT count(0) count
+		FROM users
+		WHERE username = #{username}
+	</select>
+	
+	<insert id="createUsersData" parameterType="usersVO">
+		insert into users ( id, password, username, name )
+		values (#{id}, #{password}, #{username}, #{name} )
+	</insert>
+	
+	<insert id="createUsersRoleData" parameterType="usersVO">
+		insert into users_role ( id, role, rolename, username, userId )
+		values (#{userRoldId}, #{roleId}, #{roleName}, #{username}, #{id} )
+	</insert>
+	
+	<select id="findUsersById" parameterType="string" resultMap="usersVOMap">
+		SELECT A.id, A.password, A.username, A.name, B.role as roleId, B.rolename, B.id as userRoldId
+		FROM users A
+		left join users_role B on A.id = B.userId
+		WHERE A.id = #{id}
+	</select>
+	
+	<update id="updateUsersData" parameterType="usersVO">
+		update users
+		set password=#{password}, 
+		    username=#{username},
+		    name=#{name}
+		where id=#{id}
+	</update>
+	
+	<update id="updateUsersRoleData" parameterType="usersVO">
+		update users_role
+		set role=#{roleId}, 
+		    rolename=#{roleName}
+		where id=#{userRoldId}
+	</update>
+	
+	<delete id="deleteUsersRoleData" parameterType="string">
+		delete from users_role
+		where username=#{username}
+	</delete>
+	
+	<delete id="deleteUsersData" parameterType="string">
+		delete from users
+		where id=#{id}
+	</delete>
+		
+
+</mapper>

@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.miracle.mode.Users;
+import com.miracle.mode.UsersRole;
 
 public class UsersDetailsImpl implements UserDetails {
 
@@ -14,10 +15,13 @@ public class UsersDetailsImpl implements UserDetails {
     
 	private Users users;
 	
+	private UsersRole usersRole;
+	
     private List<GrantedAuthority> roles;
     
-    public UsersDetailsImpl(Users users, List<GrantedAuthority> roles) {
+    public UsersDetailsImpl(Users users, UsersRole usersRole, List<GrantedAuthority> roles) {
         this.users = users;
+        this.usersRole = usersRole;
         this.roles = roles;
     }
     
@@ -59,6 +63,11 @@ public class UsersDetailsImpl implements UserDetails {
 	public Users getUsers() {
         return users;
     }
+
+	public UsersRole getUsersRole() {
+		return usersRole;
+	}
+	
 	
 
 }

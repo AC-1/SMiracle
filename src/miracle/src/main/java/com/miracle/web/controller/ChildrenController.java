@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,7 @@ import com.miracle.common.SecretUtil;
 import com.miracle.common.SysParameterUtil;
 import com.miracle.common.TimeMachine;
 import com.miracle.common.Tools;
+import com.miracle.mode.CampActivity;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
 import com.miracle.mode.JSONPObject;
@@ -39,6 +41,7 @@ import com.miracle.mode.People;
 import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
 import com.miracle.mode.Worship;
+import com.miracle.mode.vo.CampActivitySignupVO;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 import com.miracle.mode.vo.WorshipReportVO;
@@ -572,6 +575,110 @@ public class ChildrenController extends BaseController {
 	}
 	
 	
+	
+	
+//--查詢崇拜報到資料-------------------------------------------------------------------------------
+	
+	/** 
+	 * 查詢崇拜報到資料
+	 */
+	@RequestMapping(value = "/sign/querypresentworshipcheckinall", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
+	public String queryPresentWorshipCheckInAll(
+			Model model, HttpServletRequest req, 
+			@ModelAttribute("pageNumber") String pageNumber1,
+			@ModelAttribute("msg") String msg,
+			@ModelAttribute("selectType") String selectType1,
+			@ModelAttribute("beginTime") String beginTime1,
+			@ModelAttribute("endTime") String endTime1,
+			@ModelAttribute("worshId") String worshId1,
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(pageNumber == null || pageNumber.equals("")){
+			if(pageNumber1 != null && !pageNumber1.equals("")){
+				pageNumber=pageNumber1;//修改頁面而來
+			}else{
+				pageNumber="0";//首頁進來
+			}
+		}
+		
+		String selectType = StringUtils.trimToEmpty(req.getParameter("selectType"));
+		if(selectType == null || selectType.equals("")){
+			if(selectType1 != null && !selectType1.equals("")){
+				selectType=selectType1;
+			}else{
+				selectType="";//首頁進來
+			}
+		}
+		
+		String beginTime = StringUtils.trimToEmpty(req.getParameter("beginTime"));
+		if(beginTime == null || beginTime.equals("")){
+			if(beginTime1 != null && !beginTime1.equals("")){
+				beginTime=beginTime1;
+			}else{
+				beginTime="";//首頁進來
+			}
+		}
+		
+		String endTime = StringUtils.trimToEmpty(req.getParameter("endTime"));
+		if(endTime == null || endTime.equals("")){
+			if(endTime1 != null && !endTime1.equals("")){
+				endTime=endTime1;
+			}else{
+				endTime="";//首頁進來
+			}
+		}
+		
+		String worshId = StringUtils.trimToEmpty(req.getParameter("worshId"));
+		if(worshId == null || worshId.equals("")){
+			if(worshId1 != null && !worshId1.equals("")){
+				worshId=worshId1;
+			}else{
+				worshId="";//首頁進來
+			}
+		}
+		
+		model.addAttribute("pageNumber", pageNumber);
+	    model.addAttribute("msg", msg);
+		
+	    int page = Integer.parseInt(pageNumber); //目前的??
+		int pageSize = 7; //每??据??
+		String sortString = "";//如果你想排序的?逗?分隔可以排序多列->name.asc
+		PageBounds pageBounds = new PageBounds(page, pageSize, Order.formString(sortString), true);
+		
+		List<PresentWorshipVO> presentWorshipVOList = null;
+		/*if(StringUtils.isNotBlank(selectType) && selectType.equals("1")){
+			if(StringUtils.isBlank(collegeId) && StringUtils.isBlank(collegeName)
+					&& StringUtils.isBlank(activityId)){
+				
+				campActivitySignupVOList = collegeService.queryCampActivitySignupAll(pageBounds);
+			
+			}else {
+				
+				campActivitySignupVOList = collegeService.queryCampActivitySignupAllByKey(activityId, collegeId, collegeName, pageBounds);
+			}
+			
+		}else{
+			
+			//查詢所有資料
+			campActivitySignupVOList = collegeService.queryCampActivitySignupAll(pageBounds);
+		}*/
+		
+		presentWorshipVOList = childrenService.queryPresentWorshipAllPage(pageBounds, beginTime, endTime, worshId);
+		
+		//查詢所有資料
+		PageList<PresentWorshipVO> pageList = (PageList<PresentWorshipVO>)presentWorshipVOList;
+		int pageTotal = pageList.getPaginator().getTotalPages();//總共頁數
+		model.addAttribute("presentWorshipVOList", presentWorshipVOList);
+		
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("pageTotal", pageTotal);
+		
+		model.addAttribute("msg", msg);
+		
+		
+		return "presentworshipcheckin/queryPresentWorshipCheckInAll";
+	}
 	
 
 }

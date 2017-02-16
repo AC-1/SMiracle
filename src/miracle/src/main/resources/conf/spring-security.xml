@@ -19,9 +19,9 @@
 		 -->
 		 
 		<intercept-url pattern="/signIn**" access="isAnonymous()" />
-	    <intercept-url pattern="/" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" />
-	    <intercept-url pattern="/*/miracle/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" />
-	    <intercept-url pattern="/*/sign/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" />
+	    <intercept-url pattern="/" access="hasAnyRole('ROLE_ADMIN', 'ROLE_COLLEGE', 'ROLE_MIRACLE')" />
+	    <intercept-url pattern="/*/miracle/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_COLLEGE', 'ROLE_MIRACLE')" />
+	    <intercept-url pattern="/*/sign/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_COLLEGE', 'ROLE_MIRACLE')" />
 	    <intercept-url pattern="/*" access="permitAll()" />
 	    <intercept-url pattern="/**" access="permitAll()" />
 		

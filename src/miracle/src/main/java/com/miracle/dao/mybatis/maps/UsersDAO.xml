@@ -11,12 +11,13 @@
 		<result property="createDate" column="create_date" />
 		<result property="password" column="password" />
 		<result property="username" column="username" />
+		<result property="name" column="name" />
 	</resultMap>
 	
 	
 
 	<select id="findByUsersName" parameterType="string" resultMap="usersMap">
-		select id, create_date, password, username 
+		select id, create_date, password, username, name
 		from users 
 		where username = #{usersName}
 	</select>
