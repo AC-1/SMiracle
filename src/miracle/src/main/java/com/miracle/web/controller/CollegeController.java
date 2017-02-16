@@ -1,7 +1,6 @@
 package com.miracle.web.controller;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,10 +35,10 @@ import com.miracle.common.SecretUtil;
 import com.miracle.common.SysParameterUtil;
 import com.miracle.common.TimeMachine;
 import com.miracle.common.Tools;
-import com.miracle.mode.CampActivity;
-import com.miracle.mode.CampActivitySignup;
-import com.miracle.mode.CollegePeople;
 import com.miracle.mode.JSONPObject;
+import com.miracle.mode.jpa.CampActivity;
+import com.miracle.mode.jpa.CampActivitySignup;
+import com.miracle.mode.jpa.CollegePeople;
 import com.miracle.mode.vo.CampActivitySignupVO;
 import com.miracle.mode.vo.CheckInReportVO;
 import com.miracle.mode.vo.CollegePeopleVO;

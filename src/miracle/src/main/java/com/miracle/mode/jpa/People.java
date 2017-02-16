@@ -1,4 +1,4 @@
-package com.miracle.mode;
+package com.miracle.mode.jpa;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;

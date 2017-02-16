@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.miracle.mode.People;
+import com.miracle.mode.jpa.People;
 
 
 @Repository("peopleDAO")

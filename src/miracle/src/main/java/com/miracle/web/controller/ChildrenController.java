@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.github.miemiedev.mybatis.paginator.domain.Order;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
@@ -33,19 +34,19 @@ import com.miracle.common.SecretUtil;
 import com.miracle.common.SysParameterUtil;
 import com.miracle.common.TimeMachine;
 import com.miracle.common.Tools;
-import com.miracle.mode.CampActivity;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
 import com.miracle.mode.JSONPObject;
-import com.miracle.mode.People;
-import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
-import com.miracle.mode.Worship;
-import com.miracle.mode.vo.CampActivitySignupVO;
+import com.miracle.mode.jpa.CampActivity;
+import com.miracle.mode.jpa.CampActivitySignup;
+import com.miracle.mode.jpa.People;
+import com.miracle.mode.jpa.PeopleGroup;
+import com.miracle.mode.jpa.PresentWorship;
+import com.miracle.mode.jpa.Worship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 import com.miracle.mode.vo.WorshipReportVO;
-import com.miracle.mode.vo.WorshipVO;
 import com.miracle.service.ChildrenService;
 
 
@@ -678,6 +679,185 @@ public class ChildrenController extends BaseController {
 		
 		
 		return "presentworshipcheckin/queryPresentWorshipCheckInAll";
+	}
+	
+	
+	//小組功能設定首頁
+	@RequestMapping(value = "/sign/querypeoplegroup", method = {RequestMethod.GET, RequestMethod.POST})
+	public String queryPeopleGroup(Model model, @ModelAttribute("pageNumber") String pageNumber1,
+			@ModelAttribute("msg") String msg,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+	
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(pageNumber == null || pageNumber.equals("")){
+			if(pageNumber1 != null && !pageNumber1.equals("")){
+				pageNumber=pageNumber1;//修改頁面而來
+			}else{
+				pageNumber="0";//首頁進來
+			}
+		}
+		
+		int pageIndex = Integer.parseInt(pageNumber); //第幾頁 - 從1開始 0會報錯
+		int pageSize = 7;//每頁幾筆
+		int page = (pageIndex-1)*pageSize;
+		
+//				Sort sort = new Sort (Direction.ASC, "sort");
+		Pageable pageable = new PageRequest(pageIndex, pageSize);
+		
+		//查詢所有資料
+		Page<PeopleGroup> peopleGroupList = childrenService.queryPeopleGroupAllPage(pageable);
+		
+		model.addAttribute(peopleGroupList.getContent());
+		
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("pageTotal", peopleGroupList.getTotalPages());
+		
+		model.addAttribute("msg", msg);
+		
+		return "peoplegroup/queryPeopleGroup";
+	}
+	
+	
+	//新增小組功能設定設定
+	@RequestMapping(value = "/sign/addpeoplegroup", method = RequestMethod.GET)
+	public String addPeopleGroup(Model model,
+			@ModelAttribute("msg") String msg, @ModelAttribute("pageNumber") String pageNumber,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+		
+		
+		 model.addAttribute("pageNumber", pageNumber);
+	     model.addAttribute("msg", msg);
+		
+		return "peoplegroup/addPeopleGroup";
+	}
+	
+	
+	//小組功能設定- 新增
+	@RequestMapping(value = "/sign/createpeoplegroup", method = RequestMethod.POST )
+	public String createPeopleGroup( 
+			@ModelAttribute PeopleGroup peopleGroup,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String resultValue = "";
+		try {
+			
+			TimeMachine idtime = new TimeMachine();
+			String id =  idtime.serial("group", 0);
+			peopleGroup.setId(id);
+			Boolean isCorrect = childrenService.createPeopleGroup(peopleGroup);
+			
+			if(isCorrect){
+				resultValue="新增成功";
+				
+			}else{
+				resultValue="新增失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		
+		
+		return "redirect:/children/sign/querypeoplegroup";
+	}
+	
+	
+	//小組功能設定- 修改頁面
+	@RequestMapping(value = "/sign/editpeoplegroup", method = {RequestMethod.POST, RequestMethod.GET})
+	public String editPeopleGroup(@ModelAttribute("id") String id1, @ModelAttribute("msg") String msg,
+			@ModelAttribute("pageNumber") String pageNumber1,
+			Model model, HttpServletRequest req, HttpSession s )  throws Exception {
+		
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber1"));//分頁點擊
+		if(StringUtils.isNotBlank(pageNumber1)){
+			pageNumber = pageNumber1;
+		}
+		
+		String id = StringUtils.trimToEmpty(req.getParameter("id"));
+		if(StringUtils.isNotBlank(id1)){
+			id = id1;
+		}
+		
+		//查詢
+		PeopleGroup peopleGroup = childrenService.queryPeopleGroup(id);
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("peopleGroup", peopleGroup);
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("id", id);
+		
+		
+		return "peoplegroup/editPeopleGroup";
+	}
+	
+	
+	//小組功能設定 - 修改
+	@RequestMapping(value = "/sign/updatepeoplegroup", method = RequestMethod.POST )
+	public String updatePeopleGroup(
+			@ModelAttribute PeopleGroup peopleGroup,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));
+		
+		String resultValue = "";
+		
+		try {
+			
+			//修改
+			Boolean isCorrect = childrenService.createPeopleGroup(peopleGroup);
+			
+			if(isCorrect){
+				resultValue="修改成功";
+				
+			}else{
+				resultValue="修改失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue);
+		attr.addFlashAttribute("pageNumber", pageNumber);
+		
+		
+		return "redirect:/children/sign/querypeoplegroup";
+	}
+	
+	
+	//刪除小組功能設定
+	@RequestMapping(value = "/sign/deletepeoplegroup", method = RequestMethod.POST )
+	public String deletePeopleGroup( @RequestParam String id,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		String resultValue = "";
+		
+		try {
+			
+			//刪除
+			Boolean isCorrect = childrenService.deletePeopleGroup(id);
+			if(isCorrect){
+				resultValue = "刪除成功";
+			}else{
+				resultValue = "刪除失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		attr.addFlashAttribute("pageNumber", pageNumber); 
+		
+		return "redirect:/children/sign/querypeoplegroup";
 	}
 	
 

@@ -1,18 +1,17 @@
 package com.miracle.dao;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-import com.miracle.mode.Car;
-import com.miracle.mode.CollegeCampCheckIn;
+import com.miracle.mode.jpa.CarJpa;
+import com.miracle.mode.jpa.CollegeCampCheckIn;
 import com.miracle.mode.vo.CampActivitySignupVO;
 import com.miracle.mode.vo.CheckInReportVO;
 import com.miracle.mode.vo.CollegePeopleVO;
 
 
-public interface CollegeQTrsDAO extends BaseDAO<Car, Map<String, Object>> {
+public interface CollegeQTrsDAO extends BaseDAO<CarJpa, Map<String, Object>> {
 	
 	
 	/** College 大學生 營會 查詢是否報到過*/

@@ -36,7 +36,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.miracle.common.JSONUtils;
 import com.miracle.common.SysParameterUtil;
 import com.miracle.common.Tools;
-import com.miracle.mode.Car;
+import com.miracle.mode.jpa.CarJpa;
 import com.miracle.mode.vo.CarVO;
 import com.miracle.service.CarService;
 
@@ -69,7 +69,7 @@ public class LearnController extends BaseController  {
 
 
 	@RequestMapping(value = "/holy/index", method = RequestMethod.GET)
-	public String findCar(@ModelAttribute Car car, Model model, HttpSession session) throws HttpSessionRequiredException{
+	public String findCar(@ModelAttribute CarJpa car, Model model, HttpSession session) throws HttpSessionRequiredException{
 		
 		
 		return "learn/home";
@@ -78,7 +78,7 @@ public class LearnController extends BaseController  {
 	
 	//查詢資料
 	@RequestMapping(value = "/holy/queryData", method = RequestMethod.GET)
-	public String queryData(@ModelAttribute Car car, Model model,@RequestParam Integer pageNumber,
+	public String queryData(@ModelAttribute CarJpa car, Model model,@RequestParam Integer pageNumber,
 			HttpSession session) throws HttpSessionRequiredException{
 //====================分頁用法加此 pageBounds ==========Begin==========		
 		int page = pageNumber; //目前的页号
@@ -94,10 +94,10 @@ public class LearnController extends BaseController  {
 		PageBounds pageBounds = new PageBounds(page, pageSize, Order.formString(sortString), true);
 		
 		//查詢所有車輛
-		List<Car> carList = new ArrayList<Car>();
+		List<CarJpa> carList = new ArrayList<CarJpa>();
 		carList = carService.queryCarAll(pageBounds);
 		//获得结果集条总数
-		PageList<Car> pageList = (PageList<Car>)carList;
+		PageList<CarJpa> pageList = (PageList<CarJpa>)carList;
 		int pageTotal = pageList.getPaginator().getTotalPages();//總共頁數
 //		System.out.println("totalCount1: " + pageList.getPaginator().getTotalCount());//總數EX:13
 //		System.out.println("totalCount2: " + pageList.getPaginator().getLimit());//每页数据条数EX:5
@@ -109,7 +109,7 @@ public class LearnController extends BaseController  {
 //		System.out.println("totalCount8: " + pageList.getPaginator().getOffset());//之前最後尾數是第幾個EX:5
 //		System.out.println("totalCount9: " + pageList.getPaginator().getEndRow());//第一頁到這頁共有幾個總數EX:10
 		System.out.println("查詢所有車輛========================================");
-		for(Car car1 :carList){
+		for(CarJpa car1 :carList){
 			log.info("car id :"+car1.getId()+"  car name:"+car1.getName());
 		}
 		model.addAttribute("carList",carList);
@@ -161,7 +161,7 @@ public class LearnController extends BaseController  {
 	
 	//新增資料
 	@RequestMapping(value = "/holy/createCar", method = RequestMethod.POST)
-	public String createCar(@ModelAttribute Car car, Model model, @RequestParam int id, @RequestParam String name, Locale locale) throws Exception{
+	public String createCar(@ModelAttribute CarJpa car, Model model, @RequestParam int id, @RequestParam String name, Locale locale) throws Exception{
 		
 		boolean isCorrect = false;
 		
@@ -203,11 +203,11 @@ public class LearnController extends BaseController  {
 		PageBounds pageBounds = new PageBounds(page, pageSize, Order.formString(sortString));
 		
 		//查詢所有車輛
-		List<Car> carList = new ArrayList<Car>();
+		List<CarJpa> carList = new ArrayList<CarJpa>();
 		carList = carService.queryCarAll(pageBounds);
 		
 		//获得结果集条总数
-		PageList<Car> pageList = (PageList<Car>)carList;
+		PageList<CarJpa> pageList = (PageList<CarJpa>)carList;
 		int pageTotal = pageList.getPaginator().getTotalPages();//總共頁數
 //		System.out.println("totalCount1: " + pageList.getPaginator().getTotalCount());//總數EX:13
 //		System.out.println("totalCount2: " + pageList.getPaginator().getLimit());//每页数据条数EX:5
@@ -221,7 +221,7 @@ public class LearnController extends BaseController  {
 //====================分頁用法加此 pageBounds ==========End==========			
 		
 		System.out.println("查詢所有車輛========================================");
-		for(Car car1 :carList){
+		for(CarJpa car1 :carList){
 			log.info("car id :"+car1.getId()+"  car name:"+car1.getName());
 		}
 		model.addAttribute("carList",carList);
@@ -348,7 +348,7 @@ public class LearnController extends BaseController  {
 	@RequestMapping(value = "/holy/basecar", method = RequestMethod.GET)
 	public String baseCar(Model model) throws Exception{
 		
-		Car car = new Car();
+		CarJpa car = new CarJpa();
 		car.setId(999);
 		car.setName("BMW");
 		carService.baseCar(car, "BZ");
@@ -361,7 +361,7 @@ public class LearnController extends BaseController  {
 	//進入此Method時SecurityInterceptor.Java會做攔截判斷有沒loginHomeSession session，沒session則導回首頁index/home
 	//導內部Method要用redirect:/index/value導頁，用 RedirectAttributes 傳值
 	@RequestMapping(value = "/holy/security", method = RequestMethod.GET)
-	public String security(@ModelAttribute Car car, Model model, HttpSession session,
+	public String security(@ModelAttribute CarJpa car, Model model, HttpSession session,
 			 RedirectAttributes attr) throws HttpSessionRequiredException{
 		log.info("security Login");
 		
@@ -374,7 +374,7 @@ public class LearnController extends BaseController  {
 	
 	//接收別的Method傳來的值用@ModelAttribute("value")
 	@RequestMapping(value = "/holy/securityindex", method = RequestMethod.GET)
-	public String value(@ModelAttribute Car car, Model model, HttpSession session,
+	public String value(@ModelAttribute CarJpa car, Model model, HttpSession session,
 			@ModelAttribute("shopId") String shopId , @ModelAttribute("password") String password) throws HttpSessionRequiredException{
 		
 		log.info(shopId);

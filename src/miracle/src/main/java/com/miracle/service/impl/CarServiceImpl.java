@@ -12,12 +12,11 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.dao.CarQTrsDAO;
-import com.miracle.mode.Car;
+import com.miracle.mode.jpa.CarJpa;
 import com.miracle.mode.vo.CarVO;
 import com.miracle.service.CarService;
 
@@ -34,25 +33,25 @@ public class CarServiceImpl implements CarService {
 	private DefaultTransactionDefinition def;
 
 	@Override
-	public Car queryCarById(String id) {
+	public CarJpa queryCarById(String id) {
 		
 		return carQTrsDAO.findById(id);
 	}
 
 	@Override
-	public Car queryByIdName(String id, String name) {
+	public CarJpa queryByIdName(String id, String name) {
 		
 		return carQTrsDAO.findByIdName(id, name);
 	}
 
 	@Override
-	public List<Car> queryCarAll(PageBounds pageBounds) {
+	public List<CarJpa> queryCarAll(PageBounds pageBounds) {
 		
 		return carQTrsDAO.findCarAll(pageBounds);
 	}
 
 	@Override
-	public Car queryByCarMode(Car car) {
+	public CarJpa queryByCarMode(CarJpa car) {
 		
 		return carQTrsDAO.findByCarModel(car);
 	}
@@ -78,7 +77,7 @@ public class CarServiceImpl implements CarService {
 	}
 
 	@Override
-	public Boolean insertCarByCar(Car car) {
+	public Boolean insertCarByCar(CarJpa car) {
 		
 		boolean isCorrect = false;
 		
@@ -173,7 +172,7 @@ public class CarServiceImpl implements CarService {
 	}
 
 	@Override
-	public void baseCar(Car car, String newName) {
+	public void baseCar(CarJpa car, String newName) {
 		
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("id", car.getId());
@@ -186,10 +185,10 @@ public class CarServiceImpl implements CarService {
 		carQTrsDAO.update(car);
 		
 		//查詢
-		List<Car> carList = (List<Car>)carQTrsDAO.findAll();
+		List<CarJpa> carList = (List<CarJpa>)carQTrsDAO.findAll();
 		log.info(carList.get(0).getName());
 		
-		Car car2 = (Car)carQTrsDAO.findByKey(map);
+		CarJpa car2 = (CarJpa)carQTrsDAO.findByKey(map);
 		log.info(car2.getName());
 		
 		//刪除

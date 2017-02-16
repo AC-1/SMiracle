@@ -1,24 +1,31 @@
-package com.miracle.mode.vo;
+package com.miracle.mode.jpa;
 
 import java.io.Serializable;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 
-/** Car VO */
-public class CarVO implements Serializable {
+/** Car */
+@Entity
+@Table(name="car",catalog="miracle")
+public class CarJpa implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
+	@Id  
+	@Column(name="ID")
 	private int id;
 	
+	@Column(name="NAME")
 	private String name;
 	
-	private List<Integer> ids;
 	
-	private List<String> names;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -33,23 +40,6 @@ public class CarVO implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	
-	public List<Integer> getIds() {
-		return ids;
-	}
-
-	public void setIds(List<Integer> ids) {
-		this.ids = ids;
-	}
-
-	public List<String> getNames() {
-		return names;
-	}
-
-	public void setNames(List<String> names) {
-		this.names = names;
 	}
 
 	public String toString(){

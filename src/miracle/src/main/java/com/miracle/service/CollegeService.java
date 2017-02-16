@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.dao.DAOObjectNotFoundException;
-import com.miracle.mode.CampActivity;
-import com.miracle.mode.CampActivitySignup;
-import com.miracle.mode.CollegePeople;
+import com.miracle.mode.jpa.CampActivity;
+import com.miracle.mode.jpa.CampActivitySignup;
+import com.miracle.mode.jpa.CollegePeople;
 import com.miracle.mode.vo.CampActivitySignupVO;
 import com.miracle.mode.vo.CheckInReportVO;
 import com.miracle.mode.vo.CollegePeopleVO;

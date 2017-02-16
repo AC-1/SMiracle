@@ -1,6 +1,5 @@
 package com.miracle.dao.impl;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,15 +9,15 @@ import org.springframework.stereotype.Repository;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.dao.CollegeQTrsDAO;
 import com.miracle.dao.DAOObjectNotFoundException;
-import com.miracle.mode.Car;
-import com.miracle.mode.CollegeCampCheckIn;
+import com.miracle.mode.jpa.CarJpa;
+import com.miracle.mode.jpa.CollegeCampCheckIn;
 import com.miracle.mode.vo.CampActivitySignupVO;
 import com.miracle.mode.vo.CheckInReportVO;
 import com.miracle.mode.vo.CollegePeopleVO;
 
 
 @Repository("collegeQTrsDAO")
-public class CollegeQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> implements CollegeQTrsDAO {
+public class CollegeQTrsDAOImpl extends BaseDAOImpl<CarJpa, Map<String, Object>> implements CollegeQTrsDAO {
 
 	
 	@Override

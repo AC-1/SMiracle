@@ -6,7 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-import com.miracle.mode.Car;
+import com.miracle.mode.jpa.CarJpa;
 import com.miracle.mode.vo.CarVO;
 
 
@@ -14,13 +14,13 @@ public interface CarService {
 	
 	final Log log = LogFactory.getLog(CarService.class);
 	
-	public Car queryCarById(String id);
+	public CarJpa queryCarById(String id);
 	
-	public Car queryByIdName(String id, String name);
+	public CarJpa queryByIdName(String id, String name);
 	
-	public List<Car> queryCarAll(PageBounds pageBounds);
+	public List<CarJpa> queryCarAll(PageBounds pageBounds);
 	
-	public Car queryByCarMode(Car car);
+	public CarJpa queryByCarMode(CarJpa car);
 	
 	public CarVO queryByCarVO(CarVO carVO);
 	
@@ -29,7 +29,7 @@ public interface CarService {
 	public Boolean insertCar(Integer id, String name);
 	
 	/** 新增車輛，以Car Model來新增*/
-	public Boolean insertCarByCar(Car car);
+	public Boolean insertCarByCar(CarJpa car);
 	
 	/** 新增車輛，以Car VO來新增*/
 	public Boolean insertCarByCarVO(CarVO carVO);
@@ -47,7 +47,7 @@ public interface CarService {
 	public Boolean insertUpdateCar(String id, String name, String newName);
 	
 	/** 基本新增修改刪除Base用法*/
-	public void baseCar(Car car, String newName);
+	public void baseCar(CarJpa car, String newName);
 	
 	
 }

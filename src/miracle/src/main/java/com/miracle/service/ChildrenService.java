@@ -9,11 +9,12 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
-import com.miracle.mode.People;
-import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
-import com.miracle.mode.Worship;
-import com.miracle.mode.vo.CampActivitySignupVO;
+import com.miracle.mode.jpa.CampActivity;
+import com.miracle.mode.jpa.People;
+import com.miracle.mode.jpa.PeopleGroup;
+import com.miracle.mode.jpa.PresentWorship;
+import com.miracle.mode.jpa.Worship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 import com.miracle.mode.vo.WorshipReportVO;
@@ -81,4 +82,19 @@ public interface ChildrenService {
 	/** 查詢所有崇拜報到資料 - 分頁*/
 	public List<PresentWorshipVO> queryPresentWorshipAllPage(PageBounds pageBounds, String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException;
 
+/**--------小組設定------------------------------------------------------------*/
+	/** 查小組設定 - 分頁*/
+	public Page<PeopleGroup> queryPeopleGroupAllPage(Pageable pageable) throws DAOObjectNotFoundException;
+	
+	/** 新增小組設定   */
+	public boolean createPeopleGroup(PeopleGroup peopleGroup) throws DAOObjectNotFoundException;
+
+	/** 
+	 *  查詢小組設定By Id
+	 */
+	public PeopleGroup queryPeopleGroup(String id) throws DAOObjectNotFoundException;
+	
+	/** 刪除小組設定*/
+	public Boolean deletePeopleGroup(String id) throws DAOObjectNotFoundException;
+	
 }

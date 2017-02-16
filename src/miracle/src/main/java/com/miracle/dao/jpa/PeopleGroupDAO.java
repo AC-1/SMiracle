@@ -4,12 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.miracle.mode.jpa.Worship;
+import com.miracle.mode.jpa.PeopleGroup;
 
 
-@Repository("worshipDAO")
-public interface WorshipDAO extends CrudRepository<Worship, Long>, JpaRepository<Worship, Long>{
+@Repository("peopleGroupDAO")
+public interface PeopleGroupDAO extends CrudRepository<PeopleGroup, Long>, JpaRepository<PeopleGroup, Long>{
 
-	
 	
 }

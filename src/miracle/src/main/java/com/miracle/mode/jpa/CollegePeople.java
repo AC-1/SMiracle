@@ -1,4 +1,4 @@
-package com.miracle.mode;
+package com.miracle.mode.jpa;
 import java.io.Serializable;
 
 import javax.persistence.Column;

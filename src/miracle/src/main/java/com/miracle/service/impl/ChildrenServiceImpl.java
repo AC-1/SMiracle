@@ -28,13 +28,15 @@ import com.miracle.dao.ChildrenQTrsDAO;
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.dao.jpa.ChildrenDAO;
 import com.miracle.dao.jpa.PeopleDAO;
+import com.miracle.dao.jpa.PeopleGroupDAO;
 import com.miracle.dao.jpa.WorshipDAO;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
-import com.miracle.mode.People;
-import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
-import com.miracle.mode.Worship;
+import com.miracle.mode.jpa.People;
+import com.miracle.mode.jpa.PeopleGroup;
+import com.miracle.mode.jpa.PresentWorship;
+import com.miracle.mode.jpa.Worship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 import com.miracle.mode.vo.WorshipReportVO;
@@ -58,6 +60,9 @@ public class ChildrenServiceImpl implements ChildrenService {
 	
 	@Autowired
 	private WorshipDAO worshipDAO;
+	
+	@Autowired
+	private PeopleGroupDAO peopleGroupDAO;
 	
 	@PersistenceUnit
     private EntityManagerFactory emf; 
@@ -365,6 +370,60 @@ public class ChildrenServiceImpl implements ChildrenService {
 		
 		
 		return childrenQTrsDAO.findPresentWorshipAllPage(pageBounds, beginTime, endTime, worshId);
+	}
+	
+	@Override
+	public Page<PeopleGroup> queryPeopleGroupAllPage(Pageable pageable) throws DAOObjectNotFoundException {
+		
+		
+		return peopleGroupDAO.findAll(pageable);
+	}
+	
+	@Override
+	public boolean createPeopleGroup(PeopleGroup peopleGroup) throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		try {
+			
+			peopleGroupDAO.save(peopleGroup);
+			
+			isCorrect = true;
+			
+		} catch (Exception e) {
+        	isCorrect = false;
+        	log.info("createPeopleGroup error:" + e.getMessage() );
+		}
+		
+		return isCorrect;
+	}
+	
+	@Override
+	public PeopleGroup queryPeopleGroup(String id) throws DAOObjectNotFoundException {
+		
+		
+		return entityManager.find(PeopleGroup.class, id);
+	}
+	
+	@Override
+	public Boolean deletePeopleGroup(String id) throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		try {
+			
+			PeopleGroup peopleGroup = new PeopleGroup();
+			peopleGroup.setId(id);
+			peopleGroupDAO.delete(peopleGroup);
+			
+			isCorrect = true;
+			
+		} catch (Exception e) {
+			log.info("deletePeopleGroup error :"+e.getMessage());
+			isCorrect = false;
+		}
+		
+		return isCorrect;
 	}
 	
 }

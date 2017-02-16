@@ -11,17 +11,15 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 
 /** Car */
-@Entity
-@Table(name="car",catalog="miracle")
+
 public class Car implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@Id  
-	@Column(name="ID")
+
 	private int id;
 	
-	@Column(name="NAME")
+	
 	private String name;
 	
 	

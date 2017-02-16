@@ -4,19 +4,17 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-import com.miracle.mode.Car;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
-import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
-import com.miracle.mode.Worship;
+import com.miracle.mode.jpa.CarJpa;
+import com.miracle.mode.jpa.PresentWorship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 import com.miracle.mode.vo.WorshipReportVO;
-import com.miracle.mode.vo.WorshipVO;
 
 
-public interface ChildrenQTrsDAO extends BaseDAO<Car, Map<String, Object>> {
+public interface ChildrenQTrsDAO extends BaseDAO<CarJpa, Map<String, Object>> {
 	
 	/** 查詢單個人資料及牧區資料*/
 	public PeopleVO findPeopleData(String peopleId) throws DAOObjectNotFoundException;

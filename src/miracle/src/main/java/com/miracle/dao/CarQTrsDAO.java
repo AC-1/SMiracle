@@ -4,24 +4,24 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-import com.miracle.mode.Car;
+import com.miracle.mode.jpa.CarJpa;
 import com.miracle.mode.vo.CarVO;
 
 
-public interface CarQTrsDAO extends BaseDAO<Car, Map<String, Object>> {
+public interface CarQTrsDAO extends BaseDAO<CarJpa, Map<String, Object>> {
 	
 	
 	/** 查詢車子以ID方式詢找*/
-	public Car findById(String id) throws DAOObjectNotFoundException;
+	public CarJpa findById(String id) throws DAOObjectNotFoundException;
 	
 	/** 查詢車子以ID和NAME方式尋找*/
-	public Car findByIdName(String id, String name) throws DAOObjectNotFoundException;
+	public CarJpa findByIdName(String id, String name) throws DAOObjectNotFoundException;
 	
 	/** 查詢所有車子*/
-	public List<Car> findCarAll(PageBounds pageBounds) throws DAOObjectNotFoundException;
+	public List<CarJpa> findCarAll(PageBounds pageBounds) throws DAOObjectNotFoundException;
 	
 	/** 查詢車子以car Model方式詢找*/
-	public Car findByCarModel(Car car) throws DAOObjectNotFoundException;
+	public CarJpa findByCarModel(CarJpa car) throws DAOObjectNotFoundException;
 	
 	/** 查詢車子以VO方式詢找*/
 	public CarVO findByCarVO(CarVO carVO) throws DAOObjectNotFoundException;
@@ -31,7 +31,7 @@ public interface CarQTrsDAO extends BaseDAO<Car, Map<String, Object>> {
 	public int insertCar(Integer id, String name);
 	
 	/** 新增車輛，以Car Model來新增*/
-	public int insertCarByCar(Car car);
+	public int insertCarByCar(CarJpa car);
 	
 	/** 新增車輛，以Car VO來新增*/
 	public int insertCarByCarVO(CarVO carVO);

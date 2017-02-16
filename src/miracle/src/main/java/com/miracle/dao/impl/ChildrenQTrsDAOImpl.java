@@ -9,19 +9,18 @@ import org.springframework.stereotype.Repository;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.miracle.dao.ChildrenQTrsDAO;
 import com.miracle.dao.DAOObjectNotFoundException;
-import com.miracle.mode.Car;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
-import com.miracle.mode.PresentWorship;
 import com.miracle.mode.Statement;
+import com.miracle.mode.jpa.CarJpa;
+import com.miracle.mode.jpa.PresentWorship;
 import com.miracle.mode.vo.PeopleVO;
 import com.miracle.mode.vo.PresentWorshipVO;
 import com.miracle.mode.vo.WorshipReportVO;
-import com.miracle.mode.vo.WorshipVO;
 
 
 @Repository("childrenQTrsDAO")
-public class ChildrenQTrsDAOImpl extends BaseDAOImpl<Car, Map<String, Object>> implements ChildrenQTrsDAO {
+public class ChildrenQTrsDAOImpl extends BaseDAOImpl<CarJpa, Map<String, Object>> implements ChildrenQTrsDAO {
 
 	@Override
 	public PeopleVO findPeopleData(String peopleId) throws DAOObjectNotFoundException {
