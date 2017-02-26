@@ -426,4 +426,60 @@ public class ChildrenServiceImpl implements ChildrenService {
 		return isCorrect;
 	}
 	
+	
+	@Override
+	public Page<Worship> queryWorshipAllPage(Pageable pageable) throws DAOObjectNotFoundException {
+		
+		
+		return worshipDAO.findAll(pageable);
+	}
+	
+	@Override
+	public boolean createWorship(Worship worship) throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		try {
+			
+			worshipDAO.save(worship);
+			
+			isCorrect = true;
+			
+		} catch (Exception e) {
+        	isCorrect = false;
+        	log.info("createWorship error:" + e.getMessage() );
+		}
+		
+		return isCorrect;
+	}
+	
+	
+	@Override
+	public Worship queryWorship(String id) throws DAOObjectNotFoundException {
+		
+		
+		return entityManager.find(Worship.class, id);
+	}
+	
+	@Override
+	public Boolean deleteWorship(String id) throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		try {
+			
+			Worship worship = new Worship();
+			worship.setId(id);
+			worshipDAO.delete(worship);
+			
+			isCorrect = true;
+			
+		} catch (Exception e) {
+			log.info("deleteWorship error :"+e.getMessage());
+			isCorrect = false;
+		}
+		
+		return isCorrect;
+	}
+	
 }

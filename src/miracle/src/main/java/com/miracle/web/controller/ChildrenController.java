@@ -860,5 +860,189 @@ public class ChildrenController extends BaseController {
 		return "redirect:/children/sign/querypeoplegroup";
 	}
 	
+	
+	/** 
+	 * 查詢崇拜主檔
+	 */
+	@RequestMapping(value = "/sign/queryworshipdata", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
+	public String queryWorshipData(
+			Model model, HttpServletRequest req, 
+			@ModelAttribute("pageNumber") String pageNumber1,
+			@ModelAttribute("msg") String msg,
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(pageNumber == null || pageNumber.equals("")){
+			if(pageNumber1 != null && !pageNumber1.equals("")){
+				pageNumber=pageNumber1;//修改頁面而來
+			}else{
+				pageNumber="0";//首頁進來
+			}
+		}
+		
+		int pageIndex = Integer.parseInt(pageNumber); //第幾頁 - 從1開始 0會報錯
+		int pageSize = 7;//每頁幾筆
+		int page = (pageIndex-1)*pageSize;
+		
+//				Sort sort = new Sort (Direction.ASC, "sort");
+		Pageable pageable = new PageRequest(pageIndex, pageSize);
+		
+		//查詢所有資料
+		Page<Worship> worshipList = childrenService.queryWorshipAllPage(pageable);
+		
+		model.addAttribute(worshipList.getContent());
+		
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("pageTotal", worshipList.getTotalPages());
+		
+		model.addAttribute("msg", msg);
+		
+		return "worship/queryWorship";
+	}
+	
+	
+	//新增崇拜設定
+	@RequestMapping(value = "/sign/addworship", method = RequestMethod.GET)
+	public String addWorship(Model model,
+			@ModelAttribute("msg") String msg, @ModelAttribute("pageNumber") String pageNumber,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+		
+		
+		 model.addAttribute("pageNumber", pageNumber);
+	     model.addAttribute("msg", msg);
+	     
+		
+		return "worship/addWorship";
+	}
+	
+	
+	//崇拜設定- 新增
+	@RequestMapping(value = "/sign/createworship", method = RequestMethod.POST )
+	public String createWorship( 
+			@ModelAttribute Worship worship,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String resultValue = "";
+		try {
+			
+			TimeMachine idtime = new TimeMachine();
+			String id =  idtime.serial("worship", 0);
+			worship.setId(id);
+			Boolean isCorrect = childrenService.createWorship(worship);
+			
+			if(isCorrect){
+				resultValue="新增成功";
+				
+			}else{
+				resultValue="新增失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		
+		
+		return "redirect:/children/sign/queryworshipdata";
+	}
+	
+	
+	//崇拜設定- 修改頁面
+	@RequestMapping(value = "/sign/editworship", method = {RequestMethod.POST, RequestMethod.GET})
+	public String editWorship(@ModelAttribute("id") String id1, @ModelAttribute("msg") String msg,
+			@ModelAttribute("pageNumber") String pageNumber1,
+			Model model, HttpServletRequest req, HttpSession s )  throws Exception {
+		
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber1"));//分頁點擊
+		if(StringUtils.isNotBlank(pageNumber1)){
+			pageNumber = pageNumber1;
+		}
+		
+		String id = StringUtils.trimToEmpty(req.getParameter("id"));
+		if(StringUtils.isNotBlank(id1)){
+			id = id1;
+		}
+		
+		//查詢
+		Worship worship = childrenService.queryWorship(id);
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("worship", worship);
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("id", id);
+		
+		
+		return "worship/editWorship";
+	}
+	
+	
+	//崇拜設定 - 修改
+	@RequestMapping(value = "/sign/updateworship", method = RequestMethod.POST )
+	public String updateWorship(
+			@ModelAttribute Worship worship,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));
+		
+		String resultValue = "";
+		
+		try {
+			
+			//修改
+			Boolean isCorrect = childrenService.createWorship(worship);
+			
+			if(isCorrect){
+				resultValue="修改成功";
+				
+			}else{
+				resultValue="修改失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue);
+		attr.addFlashAttribute("pageNumber", pageNumber);
+		
+		
+		return "redirect:/children/sign/queryworshipdata";
+	}
+	
+	
+	//刪除崇拜設定
+	@RequestMapping(value = "/sign/deleteworship", method = RequestMethod.POST )
+	public String deleteWorship( @RequestParam String id,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		String resultValue = "";
+		
+		try {
+			
+			//刪除
+			Boolean isCorrect = childrenService.deleteWorship(id);
+			if(isCorrect){
+				resultValue = "刪除成功";
+			}else{
+				resultValue = "刪除失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		attr.addFlashAttribute("pageNumber", pageNumber); 
+		
+		return "redirect:/children/sign/queryworshipdata";
+	}
+	
 
 }

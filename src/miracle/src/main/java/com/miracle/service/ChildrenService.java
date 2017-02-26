@@ -97,4 +97,20 @@ public interface ChildrenService {
 	/** 刪除小組設定*/
 	public Boolean deletePeopleGroup(String id) throws DAOObjectNotFoundException;
 	
+/**--------崇拜設定------------------------------------------------------------*/
+	
+	/** 查崇拜設定 - 分頁*/
+	public Page<Worship> queryWorshipAllPage(Pageable pageable) throws DAOObjectNotFoundException;
+	
+	/** 新增崇拜設定   */
+	public boolean createWorship(Worship worship) throws DAOObjectNotFoundException;
+	
+	/** 
+	 *  查詢崇拜By Id
+	 */
+	public Worship queryWorship(String id) throws DAOObjectNotFoundException;
+	
+	/** 刪除崇拜設定*/
+	public Boolean deleteWorship(String id) throws DAOObjectNotFoundException;
+	
 }

@@ -7,6 +7,7 @@
 	          		<h2>兒童牧區</h2>  
 		            <ul>
 		              <li><a href="<c:url value="children/sign/querypeoplegroup"/>">小組功能設定</a></li> 
+		              <li><a href="<c:url value="children/sign/queryworshipdata"/>">崇拜主檔設定</a></li> 
 		              <%-- <li><a href="<c:url value="college/sign/querypresentworshipcheckinall"/>">查崇拜報到資料</a></li> --%>                     
 		            </ul> 
 	          		</sec:authorize>
