@@ -119,4 +119,18 @@ public class ChildrenQTrsDAOImpl extends BaseDAOImpl<CarJpa, Map<String, Object>
 		return this.getSqlSession().selectList(getNameSpace() + ".findPresentWorshipAllPage", map, pageBounds);
 	}
 	
+	@Override
+	public List<PeopleVO> findAllPeople(PageBounds pageBounds) throws DAOObjectNotFoundException {
+		
+		
+		return this.getSqlSession().selectList(getNameSpace() + ".findAllPeople", null, pageBounds);
+	}
+	
+	@Override
+	public List<PeopleVO> findAllPeopleByName(PageBounds pageBounds, String name) throws DAOObjectNotFoundException {
+		
+		
+		return this.getSqlSession().selectList(getNameSpace() + ".findAllPeopleByName", name, pageBounds);
+	}
+	
 }

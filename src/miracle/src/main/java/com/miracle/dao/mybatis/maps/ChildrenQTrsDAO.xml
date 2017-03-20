@@ -19,7 +19,19 @@
 		<result property="careWeekday" column="CARE_WEEKDAY" />
 		<result property="caretStime" column="CARE_STIME" />
 		<result property="caretEtime" column="CARE_ETIME" />
+		<result property="role" column="ROLE" />
+		<result property="status" column="STATUS" />
+		<result property="tel1" column="TEL1" />
+		<result property="tel2" column="TEL2" />
+		<result property="addr" column="ADDR" />
+		<result property="email" column="EMAIL" />
+		<result property="commName" column="COMM_NAME" />
+		<result property="edu" column="EDU" />
+		<result property="createTime" column="CREATE_TIME" />
+		<result property="lastUpdate" column="LAST_UPDATE" />
+		<result property="note" column="NOTE" />
 	</resultMap>
+	
 	
 	<resultMap id="contactMap" type="Contact">
 		<result property="name" column="NAME" />
@@ -153,7 +165,8 @@
 		Select YEAR(CHKIN_TIME) AS YEAR_VALUE, MONTH(CHKIN_TIME) AS MONTH_VALUE,
 		       CEILING(FLOOR(DAYOFMONTH(CHKIN_TIME)-1)/7)+1 AS WEEK_VALUE, 
 		 COUNT(*) worshCount, CHKIN_TIME  from present_worship
-		where CHKIN_TIME BETWEEN '2015-05-01 16:50:48' AND '2016-09-06 16:07:17'
+		where CHKIN_TIME BETWEEN #{beginTime} AND #{endTime}
+		and ACTIVITY_ID = #{worshId}
 		GROUP 
 		     BY YEAR(CHKIN_TIME)
 		      , MONTH(CHKIN_TIME)
@@ -200,6 +213,36 @@
 			</when>
 		</choose>
 		order by A.CHKIN_TIME DESC
+	</select>
+	
+	
+	<select id="findAllPeople" resultMap="peopleVOMap">
+		select A.ID, A.NAME, A.GENDER, A.ROLE, A.STATUS, A.TEL1, A.TEL2, A.ADDR, A.EMAIL,
+			   DATE_FORMAT(A.BIRTHDAY, '%Y-%m-%d') BIRTHDAY,
+			   B.NAME AS COMM_NAME, C.NAME as GROUP_NAME, A.EDU, A.SCHOOL, A.GRADE, 
+			   D.NAME as WORSHIP_NAME,
+			   DATE_FORMAT(A.CREATE_TIME, '%Y-%m-%d %H:%i:%s') CREATE_TIME,
+			   DATE_FORMAT(A.LAST_UPDATE, '%Y-%m-%d %H:%i:%s') LAST_UPDATE,
+			   A.NOTE
+		from people A
+		left join comm B on A.COMM = B.ID
+		left join people_group C on A.GROUP_ID = C.ID
+		left join worship D on A.WORSHIP = D.ID
+	</select>
+	
+	<select id="findAllPeopleByName" parameterType="string" resultMap="peopleVOMap">
+		select A.ID, A.NAME, A.GENDER, A.ROLE, A.STATUS, A.TEL1, A.TEL2, A.ADDR, A.EMAIL,
+			   DATE_FORMAT(A.BIRTHDAY, '%Y-%m-%d') BIRTHDAY,
+			   B.NAME AS COMM_NAME, C.NAME as GROUP_NAME, A.EDU, A.SCHOOL, A.GRADE, 
+			   D.NAME as WORSHIP_NAME,
+			   DATE_FORMAT(A.CREATE_TIME, '%Y-%m-%d %H:%i:%s') CREATE_TIME,
+			   DATE_FORMAT(A.LAST_UPDATE, '%Y-%m-%d %H:%i:%s') LAST_UPDATE,
+			   A.NOTE
+		from people A
+		left join comm B on A.COMM = B.ID
+		left join people_group C on A.GROUP_ID = C.ID
+		left join worship D on A.WORSHIP = D.ID
+		WHERE A.NAME like CONCAT('%',#{name},'%')
 	</select>
 	
 	

@@ -27,12 +27,14 @@ import com.miracle.common.TimeMachine;
 import com.miracle.dao.ChildrenQTrsDAO;
 import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.dao.jpa.ChildrenDAO;
+import com.miracle.dao.jpa.CommDAO;
 import com.miracle.dao.jpa.PeopleDAO;
 import com.miracle.dao.jpa.PeopleGroupDAO;
 import com.miracle.dao.jpa.WorshipDAO;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
 import com.miracle.mode.Statement;
+import com.miracle.mode.jpa.Comm;
 import com.miracle.mode.jpa.People;
 import com.miracle.mode.jpa.PeopleGroup;
 import com.miracle.mode.jpa.PresentWorship;
@@ -63,6 +65,9 @@ public class ChildrenServiceImpl implements ChildrenService {
 	
 	@Autowired
 	private PeopleGroupDAO peopleGroupDAO;
+	
+	@Autowired
+	private CommDAO commDAO;
 	
 	@PersistenceUnit
     private EntityManagerFactory emf; 
@@ -480,6 +485,134 @@ public class ChildrenServiceImpl implements ChildrenService {
 		}
 		
 		return isCorrect;
+	}
+	
+	@Override
+	public Page<Comm> queryCommAllPage(Pageable pageable) throws DAOObjectNotFoundException {
+		
+		
+		return commDAO.findAll(pageable);
+	}
+	
+	@Override
+	public boolean createComm(Comm comm) throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		try {
+			
+			commDAO.save(comm);
+			
+			isCorrect = true;
+			
+		} catch (Exception e) {
+        	isCorrect = false;
+        	log.info("createComm error:" + e.getMessage() );
+		}
+		
+		return isCorrect;
+	}
+	
+	@Override
+	public Comm queryComm(String id) throws DAOObjectNotFoundException {
+		
+		
+		return entityManager.find(Comm.class, id);
+	}
+	
+	@Override
+	public Boolean deleteComm(String id) throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		try {
+			
+			Comm comm = new Comm();
+			comm.setId(id);
+			commDAO.delete(comm);
+			
+			isCorrect = true;
+			
+		} catch (Exception e) {
+			log.info("deleteComm error :"+e.getMessage());
+			isCorrect = false;
+		}
+		
+		return isCorrect;
+	}
+	
+	@Override
+	public List<PeopleVO> queryPeopleAllPage(PageBounds pageBounds) throws DAOObjectNotFoundException {
+		
+		
+		return childrenQTrsDAO.findAllPeople(pageBounds);
+	}
+	
+	@Override
+	public List<Comm> queryCommAll() throws DAOObjectNotFoundException {
+		
+		return commDAO.findAll();
+	}
+	
+	@Override
+	public List<PeopleGroup> queryPeopleGroupAll() throws DAOObjectNotFoundException {
+		
+		
+		return peopleGroupDAO.findAll();
+	}
+	
+	@Override
+	public boolean createPeople(People people)throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		try {
+			
+			peopleDAO.save(people);
+			
+			isCorrect = true;
+			
+		} catch (Exception e) {
+        	isCorrect = false;
+        	log.info("createPeople error:" + e.getMessage() );
+		}
+		
+		return isCorrect;
+	}
+	
+	@Override
+	public People queryPeople(String id) throws DAOObjectNotFoundException {
+		
+		
+		return entityManager.find(People.class, id);
+	}
+	
+	@Override
+	public Boolean deletePeople(String id) throws DAOObjectNotFoundException {
+		
+		boolean isCorrect = false;
+		
+		try {
+			
+			People people = new People();
+			people.setId(id);
+			peopleDAO.delete(people);
+			
+			isCorrect = true;
+			
+		} catch (Exception e) {
+			log.info("deletePeople error :"+e.getMessage());
+			isCorrect = false;
+		}
+		
+		return isCorrect;
+	}
+	
+	@Override
+	public List<PeopleVO> queryPeopleAllPageByName(PageBounds pageBounds, String name) throws DAOObjectNotFoundException {
+		
+		
+		return childrenQTrsDAO.findAllPeopleByName(pageBounds, name);
 	}
 	
 }

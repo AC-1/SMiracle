@@ -1,6 +1,7 @@
 package com.miracle.web.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +39,7 @@ import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
 import com.miracle.mode.JSONPObject;
 import com.miracle.mode.Statement;
-import com.miracle.mode.jpa.CampActivity;
-import com.miracle.mode.jpa.CampActivitySignup;
+import com.miracle.mode.jpa.Comm;
 import com.miracle.mode.jpa.People;
 import com.miracle.mode.jpa.PeopleGroup;
 import com.miracle.mode.jpa.PresentWorship;
@@ -85,9 +85,9 @@ public class ChildrenController extends BaseController {
 	public JSONPObject queryChildrenData(
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
-			@RequestParam String peopleId,
 			HttpServletResponse res,  HttpSession session ) throws Exception{
 		
+		String peopleId = StringUtils.trimToEmpty(req.getParameter("peopleId"));
 		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
 		if(pageNumber == null || pageNumber.equals("")){
 			pageNumber="0";//首頁進來
@@ -151,9 +151,9 @@ public class ChildrenController extends BaseController {
 	public JSONPObject queryPresentWorship(
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
-			@RequestParam String peopleId,
 			HttpServletResponse res,  HttpSession session ) throws Exception{
 		
+		String peopleId = StringUtils.trimToEmpty(req.getParameter("peopleId"));
 		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
 		if(pageNumber == null || pageNumber.equals("")){
 			pageNumber="0";//首頁進來
@@ -202,9 +202,9 @@ public class ChildrenController extends BaseController {
 	public JSONPObject queryStatement (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
-			@RequestParam String peopleId,
 			HttpServletResponse res,  HttpSession session ) throws Exception{
 		
+		String peopleId = StringUtils.trimToEmpty(req.getParameter("peopleId"));
 		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
 		if(pageNumber == null || pageNumber.equals("")){
 			pageNumber="0";//首頁進來
@@ -316,9 +316,11 @@ public class ChildrenController extends BaseController {
 	public JSONPObject callRollChkout (
 			@RequestParam(required=false) String callback,
 			Model model, HttpServletRequest req, 
-			@RequestParam String pid, @RequestParam String cid,
-			@RequestParam String worship,
 			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pid = StringUtils.trimToEmpty(req.getParameter("pid"));
+		String cid = StringUtils.trimToEmpty(req.getParameter("cid"));
+		String worship = StringUtils.trimToEmpty(req.getParameter("worship"));
 		
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		String result = "";
@@ -348,7 +350,7 @@ public class ChildrenController extends BaseController {
 	/** 
 	 * 新增兒童基本資料
 	 */
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/savechildrendata", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
 	public Map<String, Object> saveChildrenData(Model model, HttpServletRequest req,  HttpServletResponse res,  HttpSession session ) throws Exception{
 		
@@ -385,7 +387,7 @@ public class ChildrenController extends BaseController {
 		}
 		
 		return jsonMap;
-	}
+	}*/
 	
 	
 	/** 
@@ -549,8 +551,8 @@ public class ChildrenController extends BaseController {
 		String beginTime = StringUtils.trimToEmpty(req.getParameter("beginTime"));
 		String endTime = StringUtils.trimToEmpty(req.getParameter("endTime"));
 		String worshId = StringUtils.trimToEmpty(req.getParameter("worshId"));
-		String filter = StringUtils.trimToEmpty(req.getParameter("filter"));
-		String count = StringUtils.trimToEmpty(req.getParameter("count"));
+//		String filter = StringUtils.trimToEmpty(req.getParameter("filter"));
+//		String count = StringUtils.trimToEmpty(req.getParameter("count"));
 
 		
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
@@ -742,9 +744,7 @@ public class ChildrenController extends BaseController {
 		String resultValue = "";
 		try {
 			
-			TimeMachine idtime = new TimeMachine();
-			String id =  idtime.serial("group", 0);
-			peopleGroup.setId(id);
+			peopleGroup.setId(timeMachine.newRandomUUID());
 			Boolean isCorrect = childrenService.createPeopleGroup(peopleGroup);
 			
 			if(isCorrect){
@@ -926,9 +926,7 @@ public class ChildrenController extends BaseController {
 		String resultValue = "";
 		try {
 			
-			TimeMachine idtime = new TimeMachine();
-			String id =  idtime.serial("worship", 0);
-			worship.setId(id);
+			worship.setId(timeMachine.newRandomUUID());
 			Boolean isCorrect = childrenService.createWorship(worship);
 			
 			if(isCorrect){
@@ -1042,6 +1040,453 @@ public class ChildrenController extends BaseController {
 		attr.addFlashAttribute("pageNumber", pageNumber); 
 		
 		return "redirect:/children/sign/queryworshipdata";
+	}
+	
+	
+	//牧區設定首頁
+	@RequestMapping(value = "/sign/querycomm", method = {RequestMethod.GET, RequestMethod.POST})
+	public String queryComm(Model model, @ModelAttribute("pageNumber") String pageNumber1,
+			@ModelAttribute("msg") String msg,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+	
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(pageNumber == null || pageNumber.equals("")){
+			if(pageNumber1 != null && !pageNumber1.equals("")){
+				pageNumber=pageNumber1;//修改頁面而來
+			}else{
+				pageNumber="0";//首頁進來
+			}
+		}
+		
+		int pageIndex = Integer.parseInt(pageNumber); //第幾頁 - 從1開始 0會報錯
+		int pageSize = 7;//每頁幾筆
+		int page = (pageIndex-1)*pageSize;
+		
+//					Sort sort = new Sort (Direction.ASC, "sort");
+		Pageable pageable = new PageRequest(pageIndex, pageSize);
+		
+		//查詢所有資料
+		Page<Comm> commList = childrenService.queryCommAllPage(pageable);
+		
+		model.addAttribute(commList.getContent());
+		
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("pageTotal", commList.getTotalPages());
+		
+		model.addAttribute("msg", msg);
+		
+		return "comm/queryComm";
+	}
+	
+	
+	//新增牧區功能設定設定
+	@RequestMapping(value = "/sign/addcomm", method = RequestMethod.GET)
+	public String addComm(Model model,
+			@ModelAttribute("msg") String msg, @ModelAttribute("pageNumber") String pageNumber,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+		
+		
+		 model.addAttribute("pageNumber", pageNumber);
+	     model.addAttribute("msg", msg);
+		
+		return "comm/addComm";
+	}
+	
+	
+	//牧區功能設定- 新增
+	@RequestMapping(value = "/sign/createcomm", method = RequestMethod.POST )
+	public String createComm( 
+			@ModelAttribute Comm comm,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String resultValue = "";
+		try {
+			
+			comm.setId(timeMachine.newRandomUUID());
+			Boolean isCorrect = childrenService.createComm(comm);
+			
+			if(isCorrect){
+				resultValue="新增成功";
+				
+			}else{
+				resultValue="新增失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		
+		
+		return "redirect:/children/sign/querycomm";
+	}
+	
+	
+	//牧區功能設定- 修改頁面
+	@RequestMapping(value = "/sign/editcomm", method = {RequestMethod.POST, RequestMethod.GET})
+	public String editComm(@ModelAttribute("id") String id1, @ModelAttribute("msg") String msg,
+			@ModelAttribute("pageNumber") String pageNumber1,
+			Model model, HttpServletRequest req, HttpSession s )  throws Exception {
+		
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(StringUtils.isNotBlank(pageNumber1)){
+			pageNumber = pageNumber1;
+		}
+		
+		String id = StringUtils.trimToEmpty(req.getParameter("id"));
+		if(StringUtils.isNotBlank(id1)){
+			id = id1;
+		}
+		
+		//查詢
+		Comm comm = childrenService.queryComm(id);
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("comm", comm);
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("id", id);
+		
+		
+		return "comm/editComm";
+	}
+	
+	
+	//牧區功能設定 - 修改
+	@RequestMapping(value = "/sign/updatecomm", method = RequestMethod.POST )
+	public String updateComm(
+			@ModelAttribute Comm comm,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));
+		
+		String resultValue = "";
+		
+		try {
+			
+			//修改
+			Boolean isCorrect = childrenService.createComm(comm);
+			
+			if(isCorrect){
+				resultValue="修改成功";
+				
+			}else{
+				resultValue="修改失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue);
+		attr.addFlashAttribute("pageNumber", pageNumber);
+		
+		
+		return "redirect:/children/sign/querycomm";
+	}
+	
+	
+	//刪除牧區功能設定
+	@RequestMapping(value = "/sign/deletecomm", method = RequestMethod.POST )
+	public String deleteComm( @RequestParam String id,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		String resultValue = "";
+		
+		try {
+			
+			//刪除
+			Boolean isCorrect = childrenService.deleteComm(id);
+			if(isCorrect){
+				resultValue = "刪除成功";
+			}else{
+				resultValue = "刪除失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		attr.addFlashAttribute("pageNumber", pageNumber); 
+		
+		return "redirect:/children/sign/querycomm";
+	}
+	
+	/** 
+	 * 個人資料主檔
+	 */
+	@RequestMapping(value = "/sign/querypeople", method = {RequestMethod.POST, RequestMethod.GET} , headers="Accept=application/json" )
+	public String queryPeople(
+			Model model, HttpServletRequest req, 
+			@ModelAttribute("pageNumber") String pageNumber1,
+			@ModelAttribute("selectType") String selectType1,
+			@ModelAttribute("name") String name1,
+			@ModelAttribute("msg") String msg,
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(pageNumber == null || pageNumber.equals("")){
+			if(pageNumber1 != null && !pageNumber1.equals("")){
+				pageNumber=pageNumber1;//修改頁面而來
+			}else{
+				pageNumber="0";//首頁進來
+			}
+		}
+		
+		String selectType = StringUtils.trimToEmpty(req.getParameter("selectType"));
+		if(selectType == null || selectType.equals("")){
+			if(selectType1 != null && !selectType1.equals("")){
+				selectType=selectType1;
+			}else{
+				selectType="";//首頁進來
+			}
+		}
+		
+		String name = StringUtils.trimToEmpty(req.getParameter("name"));
+		if(name == null || name.equals("")){
+			if(name1 != null && !name1.equals("")){
+				name=name1;
+			}else{
+				name="";//首頁進來
+			}
+		}
+		
+		//查詢所有資料
+//		Page<People> peopleList = childrenService.queryPeopleAllPage(pageable);
+		
+		int page = Integer.parseInt(pageNumber); //目前的页号
+		int pageSize = 7; //每页数据条数
+		String sortString = "";//如果你想排序的话逗号分隔可以排序多列->name.asc
+		PageBounds pageBounds = new PageBounds(page, pageSize, Order.formString(sortString), true);
+		
+		//查詢所有
+		List<PeopleVO> peopleVOList = null;
+		if(StringUtils.isNotBlank(selectType) && selectType.equals("1")){
+			if(StringUtils.isNotBlank(name)){
+				//查詢資料
+				peopleVOList = childrenService.queryPeopleAllPageByName(pageBounds, name);
+			}else{
+				
+				peopleVOList = childrenService.queryPeopleAllPage(pageBounds);
+			}
+		}else{
+			
+			peopleVOList = childrenService.queryPeopleAllPage(pageBounds);
+		}
+		
+		PageList<PeopleVO> pageList = (PageList<PeopleVO>)peopleVOList;
+		int pageTotal = pageList.getPaginator().getTotalPages();//總共頁數
+		
+		model.addAttribute("peopleVOList", peopleVOList);
+		model.addAttribute("pageTotal", pageTotal);
+		
+		model.addAttribute("name", name);
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("msg", msg);
+		
+		return "people/queryPeople";
+	}
+	
+	
+	//新增個人資料設定
+	@RequestMapping(value = "/sign/addpeople", method = RequestMethod.GET)
+	public String addPeople(Model model,
+			@ModelAttribute("msg") String msg, @ModelAttribute("pageNumber") String pageNumber,
+			HttpServletRequest req, HttpSession s)  throws Exception {
+		
+		String selectType = StringUtils.trimToEmpty(req.getParameter("selectType"));
+		String nameParent = StringUtils.trimToEmpty(req.getParameter("nameParent"));
+		
+		//查所有牧區
+		List<Comm> commList = childrenService.queryCommAll();
+		model.addAttribute("commList", commList);
+		
+		//查所有群組
+		List<PeopleGroup> peopleGroupList = childrenService.queryPeopleGroupAll();
+		model.addAttribute("peopleGroupList", peopleGroupList);
+		
+		//查所有崇拜
+		List<Worship> worshipList = childrenService.queryWorshipAll();
+		model.addAttribute("worshipList", worshipList);
+		
+		model.addAttribute("selectType", selectType);
+		model.addAttribute("nameParent", nameParent);
+		model.addAttribute("pageNumber", pageNumber);
+	    model.addAttribute("msg", msg);
+	     
+		
+		return "people/addPeople";
+	}
+	
+	
+	//個人資料設定- 新增
+	@RequestMapping(value = "/sign/createpeople", method = RequestMethod.POST )
+	public String createPeople( 
+			@ModelAttribute People people,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String selectType = StringUtils.trimToEmpty(req.getParameter("selectType"));
+		String nameParent = StringUtils.trimToEmpty(req.getParameter("nameParent"));
+		
+		String resultValue = "";
+		try {
+			
+			people.setId(timeMachine.newRandomUUID());
+			people.setCreateTime(timeMachine.dateFormat(new Date()));
+			Boolean isCorrect = childrenService.createPeople(people);
+			
+			if(isCorrect){
+				resultValue="新增成功";
+				
+			}else{
+				resultValue="新增失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addAttribute("selectType", selectType);
+		attr.addFlashAttribute("name", nameParent); 
+		attr.addFlashAttribute("msg", resultValue); 
+		
+		return "redirect:/children/sign/querypeople";
+	}
+	
+	//個人資料設定- 修改頁面
+	@RequestMapping(value = "/sign/editpeople", method = {RequestMethod.POST, RequestMethod.GET})
+	public String editPeople(@ModelAttribute("id") String id1, @ModelAttribute("msg") String msg,
+			@ModelAttribute("pageNumber") String pageNumber1,
+			@ModelAttribute("selectType") String selectType1,
+			@ModelAttribute("nameParent") String nameParent1,
+			Model model, HttpServletRequest req, HttpSession s )  throws Exception {
+		
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		if(StringUtils.isNotBlank(pageNumber1)){
+			pageNumber = pageNumber1;
+		}
+		
+		String id = StringUtils.trimToEmpty(req.getParameter("id"));
+		if(StringUtils.isNotBlank(id1)){
+			id = id1;
+		}
+		
+		String selectType = StringUtils.trimToEmpty(req.getParameter("selectType"));
+		if(StringUtils.isNotBlank(selectType1)){
+			selectType = selectType1;
+		}
+		
+		String nameParent = StringUtils.trimToEmpty(req.getParameter("nameParent"));
+		if(StringUtils.isNotBlank(nameParent1)){
+			nameParent = nameParent1;
+		}
+		
+		//查詢
+		People people = childrenService.queryPeople(id);
+		model.addAttribute("people", people);
+		
+		//查所有牧區
+		List<Comm> commList = childrenService.queryCommAll();
+		model.addAttribute("commList", commList);
+		
+		//查所有群組
+		List<PeopleGroup> peopleGroupList = childrenService.queryPeopleGroupAll();
+		model.addAttribute("peopleGroupList", peopleGroupList);
+		
+		//查所有崇拜
+		List<Worship> worshipList = childrenService.queryWorshipAll();
+		model.addAttribute("worshipList", worshipList);
+		
+		model.addAttribute("msg", msg);
+		
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("id", id);
+		model.addAttribute("selectType", selectType);
+		model.addAttribute("nameParent", nameParent);
+		
+		return "people/editPeople";
+	}
+	
+	
+	//個人資料設定 - 修改
+	@RequestMapping(value = "/sign/updatepeople", method = RequestMethod.POST )
+	public String updatePeople(
+			@ModelAttribute People people,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));
+		String selectType = StringUtils.trimToEmpty(req.getParameter("selectType"));
+		String nameParent = StringUtils.trimToEmpty(req.getParameter("nameParent"));
+		
+		String resultValue = "";
+		
+		try {
+			
+			//修改
+			Boolean isCorrect = childrenService.createPeople(people);
+			
+			if(isCorrect){
+				resultValue="修改成功";
+				
+			}else{
+				resultValue="修改失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue);
+		attr.addFlashAttribute("pageNumber", pageNumber);
+		attr.addFlashAttribute("selectType", selectType);
+		attr.addFlashAttribute("name", nameParent);
+		
+		
+		return "redirect:/children/sign/querypeople";
+	}
+	
+	
+	//刪除個人資料設定
+	@RequestMapping(value = "/sign/deletepeople", method = RequestMethod.POST )
+	public String deletePeople( @RequestParam String id,
+			RedirectAttributes attr, Model model, HttpServletRequest req, 
+			HttpServletResponse res,  HttpSession session ) throws Exception{
+		
+		String selectType = StringUtils.trimToEmpty(req.getParameter("selectType"));
+		String nameParent = StringUtils.trimToEmpty(req.getParameter("nameParent"));
+		String pageNumber = StringUtils.trimToEmpty(req.getParameter("pageNumber"));//分頁點擊
+		String resultValue = "";
+		
+		try {
+			
+			//刪除
+			Boolean isCorrect = childrenService.deletePeople(id);
+			if(isCorrect){
+				resultValue = "刪除成功";
+			}else{
+				resultValue = "刪除失敗";
+			}
+			
+		} catch (Exception e) {
+			resultValue = "Message:"+e.getMessage();
+		}
+		
+		attr.addFlashAttribute("msg", resultValue); 
+		attr.addFlashAttribute("pageNumber", pageNumber); 
+		attr.addFlashAttribute("selectType", selectType);
+		attr.addFlashAttribute("name", nameParent);
+		
+		return "redirect:/children/sign/querypeople";
 	}
 	
 

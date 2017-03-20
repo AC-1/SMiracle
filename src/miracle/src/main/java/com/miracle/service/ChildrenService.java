@@ -10,7 +10,7 @@ import com.miracle.dao.DAOObjectNotFoundException;
 import com.miracle.mode.CareTime;
 import com.miracle.mode.Contact;
 import com.miracle.mode.Statement;
-import com.miracle.mode.jpa.CampActivity;
+import com.miracle.mode.jpa.Comm;
 import com.miracle.mode.jpa.People;
 import com.miracle.mode.jpa.PeopleGroup;
 import com.miracle.mode.jpa.PresentWorship;
@@ -86,6 +86,9 @@ public interface ChildrenService {
 	/** 查小組設定 - 分頁*/
 	public Page<PeopleGroup> queryPeopleGroupAllPage(Pageable pageable) throws DAOObjectNotFoundException;
 	
+	/** 查小組設定*/
+	public List<PeopleGroup> queryPeopleGroupAll() throws DAOObjectNotFoundException;
+	
 	/** 新增小組設定   */
 	public boolean createPeopleGroup(PeopleGroup peopleGroup) throws DAOObjectNotFoundException;
 
@@ -112,5 +115,44 @@ public interface ChildrenService {
 	
 	/** 刪除崇拜設定*/
 	public Boolean deleteWorship(String id) throws DAOObjectNotFoundException;
+	
+/**--------牧區設定------------------------------------------------------------*/
+	
+	/** 查牧區設定 - 分頁*/
+	public Page<Comm> queryCommAllPage(Pageable pageable) throws DAOObjectNotFoundException;
+	
+	/** 查牧區設定 */
+	public List<Comm> queryCommAll() throws DAOObjectNotFoundException;
+	
+	
+	/** 新增牧區設定   */
+	public boolean createComm(Comm comm) throws DAOObjectNotFoundException;
+	
+	/** 
+	 *  查詢牧區設定By Id
+	 */
+	public Comm queryComm(String id) throws DAOObjectNotFoundException;
+	
+	/** 刪除牧區設定*/
+	public Boolean deleteComm(String id) throws DAOObjectNotFoundException;
+	
+/**--------個人資料設定------------------------------------------------------------*/
+	
+	/** 查個人資料設定 - 分頁*/
+	public List<PeopleVO> queryPeopleAllPage(PageBounds pageBounds) throws DAOObjectNotFoundException;
+	
+	/** 查個人資料設定 - 分頁 By name*/
+	public List<PeopleVO> queryPeopleAllPageByName(PageBounds pageBounds, String name) throws DAOObjectNotFoundException;
+	
+	/** 新增個人資料設定   */
+	public boolean createPeople(People people) throws DAOObjectNotFoundException;
+	
+	/** 
+	 *  查詢個人資料By Id
+	 */
+	public People queryPeople(String id) throws DAOObjectNotFoundException;
+	
+	/** 刪除個人資料設定*/
+	public Boolean deletePeople(String id) throws DAOObjectNotFoundException;
 	
 }

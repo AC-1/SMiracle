@@ -57,4 +57,12 @@ public interface ChildrenQTrsDAO extends BaseDAO<CarJpa, Map<String, Object>> {
 	/** 查詢所有崇拜報到資料 - 分頁*/
 	public List<PresentWorshipVO> findPresentWorshipAllPage(PageBounds pageBounds, String beginTime, String endTime, String worshId) throws DAOObjectNotFoundException;
 
+	
+	/** 查詢所有個人資料*/
+	public List<PeopleVO> findAllPeople(PageBounds pageBounds)  throws DAOObjectNotFoundException;
+	
+	/** 查詢所有個人資料 By name*/
+	public List<PeopleVO> findAllPeopleByName(PageBounds pageBounds, String name)  throws DAOObjectNotFoundException;
+
+
 }

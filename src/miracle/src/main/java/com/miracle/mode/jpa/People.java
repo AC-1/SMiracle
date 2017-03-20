@@ -8,10 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 /**
  @author Joshua
- * 崇拜活動
+ * 個人資料
  */
 @Entity
 @Table(name="people",catalog="miracle")
