@@ -57,6 +57,8 @@
       <property name="maxIdleTime"><value>100</value></property>
       <property name="maxStatementsPerConnection"><value>0</value></property ><!--maxStatementsPerConnection定义了连接池内单个连接所拥有的最大缓存statements数。Default: 0 -->
       <property name="initialPoolSize"><value>1</value></property>
+      <property name="testConnectionOnCheckin"><value>true</value></property>
+      <property name="testConnectionOnCheckout"><value>false</value></property>
       <!-- <property name="acquireIncrement"><value>5</value></property> --><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
       <!-- <property name="idleConnectionTestPeriod"><value>60</value></property> --><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
       <!-- <property name="maxPoolSize"><value>100</value></property> --><!-- ?接池中保留的最大?接?。默??15； -->
@@ -146,6 +148,8 @@
       <property name="maxIdleTime"><value>100</value></property>
       <property name="maxStatementsPerConnection"><value>0</value></property ><!--maxStatementsPerConnection定义了连接池内单个连接所拥有的最大缓存statements数。Default: 0 -->
       <property name="initialPoolSize"><value>1</value></property>
+      <property name="testConnectionOnCheckin"><value>true</value></property>
+      <property name="testConnectionOnCheckout"><value>false</value></property>
       <!-- <property name="acquireIncrement"><value>5</value></property> --><!-- ??接池中的?接用完?，C3P0一次性?建新?接的?目 -->
       <!-- <property name="idleConnectionTestPeriod"><value>60</value></property> --><!-- 隔多少秒?查所有?接池中的空??接，默??0表示不?查 -->
       <!-- <property name="maxPoolSize"><value>100</value></property> --><!-- ?接池中保留的最大?接?。默??15； -->
